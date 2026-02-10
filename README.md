@@ -10,7 +10,7 @@ REST API service built with Python and FastAPI that provides animal information 
 ## Project Structure
 
 ```
-animal-service/
+animals-service/
 ├── app/
 │   ├── main.py                    # FastAPI app, middleware, startup
 │   ├── config.py                  # Settings loaded from .env
@@ -40,7 +40,7 @@ animal-service/
 ### 1. Clone and enter the project
 
 ```bash
-cd animal-service
+cd animals-service
 ```
 
 ### 2. Create a virtual environment
@@ -131,7 +131,7 @@ Response:
 ```json
 {
   "status": "healthy",
-  "service": "animal-service",
+  "service": "animals-service",
   "version": "1.0.0"
 }
 ```

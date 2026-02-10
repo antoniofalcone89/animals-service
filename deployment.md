@@ -54,21 +54,21 @@ exit
 
 ```bash
 cd /opt
-sudo git clone https://github.com/yourusername/animal-service.git
-cd animal-service
+sudo git clone https://github.com/yourusername/animals-service.git
+cd animals-service
 ```
 
 #### Option B: Using SCP (from your local machine)
 
 ```bash
 # On your local machine
-tar -czf animal-service.tar.gz animal-service/
-scp animal-service.tar.gz username@your-vps-ip:/opt/
+tar -czf animals-service.tar.gz animals-service/
+scp animals-service.tar.gz username@your-vps-ip:/opt/
 
 # On your VPS
 cd /opt
-sudo tar -xzf animal-service.tar.gz
-cd animal-service
+sudo tar -xzf animals-service.tar.gz
+cd animals-service
 ```
 
 ### 5. Create Docker Configuration Files
@@ -76,7 +76,7 @@ cd animal-service
 #### Create Dockerfile
 
 ```bash
-cd /opt/animal-service
+cd /opt/animals-service
 sudo nano Dockerfile
 ```
 
@@ -115,9 +115,9 @@ Paste the following:
 version: "3.8"
 
 services:
-  animal-service:
+  animals-service:
     build: .
-    container_name: animal-service
+    container_name: animals-service
     restart: always
     ports:
       - "8000:8000"
@@ -139,7 +139,7 @@ Save and exit.
 ### 6. Create Environment File
 
 ```bash
-cd /opt/animal-service
+cd /opt/animals-service
 sudo nano .env
 ```
 
@@ -188,7 +188,7 @@ The result should show your VPS IP address.
 ### 8. Build and Run Docker Container
 
 ```bash
-cd /opt/animal-service
+cd /opt/animals-service
 
 # Build the Docker image
 sudo docker-compose build
@@ -214,7 +214,7 @@ You should see a successful response from the health endpoint.
 Create Nginx configuration for your subdomain:
 
 ```bash
-sudo nano /etc/nginx/sites-available/animal-service
+sudo nano /etc/nginx/sites-available/animals-service
 ```
 
 Paste the following configuration:
@@ -235,7 +235,7 @@ server {
     }
 
     location /static/ {
-        alias /opt/animal-service/static/;
+        alias /opt/animals-service/static/;
         expires 30d;
         add_header Cache-Control "public, immutable";
     }
@@ -250,7 +250,7 @@ Save and exit.
 
 ```bash
 # Create symbolic link to enable the site
-sudo ln -s /etc/nginx/sites-available/animal-service /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/animals-service /etc/nginx/sites-enabled/
 
 # Test Nginx configuration
 sudo nginx -t
@@ -304,7 +304,7 @@ server {
     }
 
     location /static/ {
-        alias /opt/animal-service/static/;
+        alias /opt/animals-service/static/;
         expires 30d;
         add_header Cache-Control "public, immutable";
     }
@@ -397,11 +397,11 @@ If you see this response, your deployment is successful! 🎉
 
 ```bash
 # Docker container logs
-sudo docker-compose logs -f animal-service
+sudo docker-compose logs -f animals-service
 # Press Ctrl+C to exit
 
 # View last 100 lines
-sudo docker-compose logs --tail=100 animal-service
+sudo docker-compose logs --tail=100 animals-service
 
 # Nginx access logs
 sudo tail -f /var/log/nginx/access.log
@@ -426,10 +426,10 @@ sudo docker-compose restart
 sudo docker-compose ps
 
 # View container stats (CPU, memory usage)
-sudo docker stats animal-service
+sudo docker stats animals-service
 
 # Execute commands inside container
-sudo docker-compose exec animal-service bash
+sudo docker-compose exec animals-service bash
 ```
 
 ### Reload Nginx
@@ -448,7 +448,7 @@ sudo systemctl restart nginx
 ### Update Code
 
 ```bash
-cd /opt/animal-service
+cd /opt/animals-service
 
 # Pull latest changes (if using Git)
 sudo git pull
@@ -460,7 +460,7 @@ sudo git pull
 
 ```bash
 # Rebuild Docker image
-cd /opt/animal-service
+cd /opt/animals-service
 sudo docker-compose build
 
 # Restart with new image
@@ -471,14 +471,14 @@ sudo docker-compose up -d
 
 ```bash
 # If only code changed (no dependency changes)
-cd /opt/animal-service
+cd /opt/animals-service
 sudo docker-compose restart
 ```
 
 ### Full Rebuild and Restart
 
 ```bash
-cd /opt/animal-service
+cd /opt/animals-service
 
 # Stop and remove containers
 sudo docker-compose down
@@ -503,7 +503,7 @@ sudo docker-compose logs -f
 sudo docker-compose ps
 
 # View container logs
-sudo docker-compose logs animal-service
+sudo docker-compose logs animals-service
 
 # Check if port 8000 is already in use
 sudo lsof -i :8000
@@ -519,7 +519,7 @@ sudo docker-compose up -d
 
 ```bash
 # View logs to see error
-sudo docker-compose logs --tail=50 animal-service
+sudo docker-compose logs --tail=50 animals-service
 
 # Common issues:
 # - Missing .env file
@@ -528,7 +528,7 @@ sudo docker-compose logs --tail=50 animal-service
 # - Port already in use
 
 # Check if .env file exists
-ls -la /opt/animal-service/.env
+ls -la /opt/animals-service/.env
 
 # Verify environment variables are loaded
 sudo docker-compose config
@@ -587,10 +587,10 @@ dig api.yourdomain.com
 
 # 6. Check Nginx configuration
 sudo nginx -t
-cat /etc/nginx/sites-enabled/animal-service
+cat /etc/nginx/sites-enabled/animals-service
 
 # 7. Check Docker logs
-sudo docker-compose logs animal-service
+sudo docker-compose logs animals-service
 ```
 
 ### DNS Not Resolving
@@ -611,7 +611,7 @@ nslookup api.yourdomain.com 8.8.8.8
 
 ```bash
 # Check Docker container memory usage
-sudo docker stats animal-service
+sudo docker stats animals-service
 
 # Check system memory
 free -h
@@ -627,14 +627,14 @@ sudo docker-compose restart
 
 ```bash
 # Fix ownership of application directory
-sudo chown -R $USER:$USER /opt/animal-service
+sudo chown -R $USER:$USER /opt/animals-service
 
 # Fix Docker permissions
 sudo usermod -aG docker $USER
 # Log out and back in
 
 # Check file permissions
-ls -la /opt/animal-service
+ls -la /opt/animals-service
 ```
 
 ## Backup Strategy
@@ -642,24 +642,24 @@ ls -la /opt/animal-service
 ### Create Backup Script
 
 ```bash
-sudo nano /opt/backup-animal-service.sh
+sudo nano /opt/backup-animals-service.sh
 ```
 
 ```bash
 #!/bin/bash
-BACKUP_DIR="/opt/backups/animal-service"
+BACKUP_DIR="/opt/backups/animals-service"
 DATE=$(date +%Y%m%d_%H%M%S)
 
 mkdir -p $BACKUP_DIR
 
 # Backup data
-tar -czf $BACKUP_DIR/data-$DATE.tar.gz /opt/animal-service/data
+tar -czf $BACKUP_DIR/data-$DATE.tar.gz /opt/animals-service/data
 
 # Backup .env
-cp /opt/animal-service/.env $BACKUP_DIR/env-$DATE
+cp /opt/animals-service/.env $BACKUP_DIR/env-$DATE
 
 # Backup static files
-tar -czf $BACKUP_DIR/static-$DATE.tar.gz /opt/animal-service/static
+tar -czf $BACKUP_DIR/static-$DATE.tar.gz /opt/animals-service/static
 
 # Keep only last 7 backups
 cd $BACKUP_DIR
@@ -672,10 +672,10 @@ echo "Backup completed: $DATE"
 
 ```bash
 # Make executable
-sudo chmod +x /opt/backup-animal-service.sh
+sudo chmod +x /opt/backup-animals-service.sh
 
 # Test it
-sudo /opt/backup-animal-service.sh
+sudo /opt/backup-animals-service.sh
 ```
 
 ### Schedule Daily Backups
@@ -685,7 +685,7 @@ sudo /opt/backup-animal-service.sh
 sudo crontab -e
 
 # Add this line (runs daily at 2 AM)
-0 2 * * * /opt/backup-animal-service.sh
+0 2 * * * /opt/backup-animals-service.sh
 ```
 
 ## API Endpoints
@@ -745,7 +745,7 @@ Visit `https://api.yourdomain.com/docs` in your browser to see the Swagger UI wi
 Edit the Dockerfile to adjust workers based on your VPS CPU cores:
 
 ```bash
-sudo nano /opt/animal-service/Dockerfile
+sudo nano /opt/animals-service/Dockerfile
 ```
 
 Change the CMD line:
@@ -768,14 +768,14 @@ sudo docker-compose up -d
 ### Enable Nginx Caching
 
 ```bash
-sudo nano /etc/nginx/sites-available/animal-service
+sudo nano /etc/nginx/sites-available/animals-service
 ```
 
 Add caching configuration:
 
 ```nginx
 # Add at the top, before server block
-proxy_cache_path /var/cache/nginx/animal-service levels=1:2 keys_zone=animal_cache:10m max_size=100m inactive=60m;
+proxy_cache_path /var/cache/nginx/animals-service levels=1:2 keys_zone=animal_cache:10m max_size=100m inactive=60m;
 
 server {
     # ... existing configuration ...
@@ -800,8 +800,8 @@ server {
 Create cache directory:
 
 ```bash
-sudo mkdir -p /var/cache/nginx/animal-service
-sudo chown www-data:www-data /var/cache/nginx/animal-service
+sudo mkdir -p /var/cache/nginx/animals-service
+sudo chown www-data:www-data /var/cache/nginx/animals-service
 sudo nginx -t
 sudo systemctl reload nginx
 ```
@@ -811,16 +811,16 @@ sudo systemctl reload nginx
 Edit `docker-compose.yml` to add resource limits:
 
 ```bash
-sudo nano /opt/animal-service/docker-compose.yml
+sudo nano /opt/animals-service/docker-compose.yml
 ```
 
 ```yaml
 version: "3.8"
 
 services:
-  animal-service:
+  animals-service:
     build: .
-    container_name: animal-service
+    container_name: animals-service
     restart: always
     ports:
       - "8000:8000"
@@ -866,10 +866,10 @@ top
 df -h
 
 # Docker container resource usage
-sudo docker stats animal-service
+sudo docker stats animals-service
 
 # Container details
-sudo docker inspect animal-service
+sudo docker inspect animals-service
 ```
 
 ### Setup Container Health Checks
@@ -877,16 +877,16 @@ sudo docker inspect animal-service
 Edit `docker-compose.yml` to add health checks:
 
 ```bash
-sudo nano /opt/animal-service/docker-compose.yml
+sudo nano /opt/animals-service/docker-compose.yml
 ```
 
 ```yaml
 version: "3.8"
 
 services:
-  animal-service:
+  animals-service:
     build: .
-    container_name: animal-service
+    container_name: animals-service
     restart: always
     ports:
       - "8000:8000"
@@ -913,50 +913,50 @@ networks:
 
 ```bash
 # Create monitoring script
-sudo nano /opt/check-animal-service.sh
+sudo nano /opt/check-animals-service.sh
 ```
 
 ```bash
 #!/bin/bash
 
 # Check if container is running
-if ! sudo docker-compose -f /opt/animal-service/docker-compose.yml ps | grep -q "Up"; then
-    echo "$(date): Animal API container is down! Restarting..." >> /var/log/animal-service-monitor.log
-    cd /opt/animal-service
+if ! sudo docker-compose -f /opt/animals-service/docker-compose.yml ps | grep -q "Up"; then
+    echo "$(date): Animal API container is down! Restarting..." >> /var/log/animals-service-monitor.log
+    cd /opt/animals-service
     sudo docker-compose restart
-    echo "$(date): Container restarted" >> /var/log/animal-service-monitor.log
+    echo "$(date): Container restarted" >> /var/log/animals-service-monitor.log
 fi
 
 # Check if API responds
 if ! curl -s -f http://localhost:8000/api/v1/health > /dev/null; then
-    echo "$(date): API health check failed! Restarting container..." >> /var/log/animal-service-monitor.log
-    cd /opt/animal-service
+    echo "$(date): API health check failed! Restarting container..." >> /var/log/animals-service-monitor.log
+    cd /opt/animals-service
     sudo docker-compose restart
-    echo "$(date): Container restarted due to health check failure" >> /var/log/animal-service-monitor.log
+    echo "$(date): Container restarted due to health check failure" >> /var/log/animals-service-monitor.log
 fi
 ```
 
 ```bash
 # Make executable
-sudo chmod +x /opt/check-animal-service.sh
+sudo chmod +x /opt/check-animals-service.sh
 
 # Test it
-sudo /opt/check-animal-service.sh
+sudo /opt/check-animals-service.sh
 
 # Add to crontab (check every 5 minutes)
 sudo crontab -e
 # Add this line:
-*/5 * * * * /opt/check-animal-service.sh
+*/5 * * * * /opt/check-animals-service.sh
 ```
 
 ### View Monitoring Logs
 
 ```bash
 # View monitoring log
-sudo tail -f /var/log/animal-service-monitor.log
+sudo tail -f /var/log/animals-service-monitor.log
 
 # View container logs
-sudo docker-compose -f /opt/animal-service/docker-compose.yml logs -f --tail=100
+sudo docker-compose -f /opt/animals-service/docker-compose.yml logs -f --tail=100
 ```
 
 ## Support
@@ -966,7 +966,7 @@ If you encounter issues:
 1. **Check Docker container logs:**
 
    ```bash
-   sudo docker-compose logs animal-service
+   sudo docker-compose logs animals-service
    ```
 
 2. **Verify container is running:**
@@ -1002,19 +1002,19 @@ If you encounter issues:
 
 ```bash
 # Start service
-cd /opt/animal-service && sudo docker-compose up -d
+cd /opt/animals-service && sudo docker-compose up -d
 
 # Stop service
-cd /opt/animal-service && sudo docker-compose down
+cd /opt/animals-service && sudo docker-compose down
 
 # Restart service
-cd /opt/animal-service && sudo docker-compose restart
+cd /opt/animals-service && sudo docker-compose restart
 
 # View logs
-sudo docker-compose logs -f animal-service
+sudo docker-compose logs -f animals-service
 
 # Rebuild and restart
-cd /opt/animal-service && sudo docker-compose down && sudo docker-compose build && sudo docker-compose up -d
+cd /opt/animals-service && sudo docker-compose down && sudo docker-compose build && sudo docker-compose up -d
 
 # Check status
 sudo docker-compose ps
