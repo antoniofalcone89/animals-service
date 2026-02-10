@@ -39,7 +39,8 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             APP_DIR="/home/${{ secrets.VPS_USER }}/animals-service"
-            if [ ! -d "$APP_DIR" ]; then
+            if [ ! -d "$APP_DIR/.git" ]; then
+              rm -rf "$APP_DIR"
               git clone ${{ secrets.REPO_URL }} "$APP_DIR"
             fi
             cd "$APP_DIR"
