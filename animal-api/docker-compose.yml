@@ -1,0 +1,18 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app/app
+      - ./data:/app/data
+      - ./static:/app/static
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  # Redis for future distributed caching
+  # redis:
+  #   image: redis:7-alpine
+  #   ports:
+  #     - "6379:6379"
