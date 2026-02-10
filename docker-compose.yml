@@ -1,5 +1,6 @@
 services:
   api:
+    container_name: animals-service
     build: .
     ports:
       - "8000:8000"

@@ -40,6 +40,7 @@ jobs:
           script: |
             cd /home/${{ secrets.VPS_USER }}/animals-service
             git pull origin master
+            docker-compose down
             docker-compose build
             docker-compose up -d
             docker image prune -f
