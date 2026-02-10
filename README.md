@@ -10,7 +10,7 @@ REST API service built with Python and FastAPI that provides animal information 
 ## Project Structure
 
 ```
-animal-api/
+animal-service/
 ├── app/
 │   ├── main.py                    # FastAPI app, middleware, startup
 │   ├── config.py                  # Settings loaded from .env
@@ -40,7 +40,7 @@ animal-api/
 ### 1. Clone and enter the project
 
 ```bash
-cd animal-api
+cd animal-service
 ```
 
 ### 2. Create a virtual environment
@@ -72,13 +72,13 @@ CACHE_TTL=3600
 DEBUG=true
 ```
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `API_KEY` | `changeme` | Secret key clients must pass via `X-API-Key` header |
-| `ALLOWED_ORIGINS` | `http://localhost:3000,http://localhost:8080` | Comma-separated CORS allowed origins |
-| `RATE_LIMIT` | `100/minute` | Max requests per IP per time window |
-| `CACHE_TTL` | `3600` | Cache time-to-live in seconds |
-| `DEBUG` | `false` | Enable debug-level logging |
+| Variable          | Default                                       | Description                                         |
+| ----------------- | --------------------------------------------- | --------------------------------------------------- |
+| `API_KEY`         | `changeme`                                    | Secret key clients must pass via `X-API-Key` header |
+| `ALLOWED_ORIGINS` | `http://localhost:3000,http://localhost:8080` | Comma-separated CORS allowed origins                |
+| `RATE_LIMIT`      | `100/minute`                                  | Max requests per IP per time window                 |
+| `CACHE_TTL`       | `3600`                                        | Cache time-to-live in seconds                       |
+| `DEBUG`           | `false`                                       | Enable debug-level logging                          |
 
 ### 5. Start the development server
 
@@ -131,7 +131,7 @@ Response:
 ```json
 {
   "status": "healthy",
-  "service": "animal-api",
+  "service": "animal-service",
   "version": "1.0.0"
 }
 ```
@@ -221,25 +221,25 @@ All errors follow a consistent format:
 }
 ```
 
-| Status Code | Meaning |
-|-------------|---------|
-| 400 | Invalid input (e.g. level out of range) |
-| 401 | Missing or invalid API key |
-| 404 | Animal not found |
-| 422 | Validation error |
-| 429 | Rate limit exceeded |
+| Status Code | Meaning                                 |
+| ----------- | --------------------------------------- |
+| 400         | Invalid input (e.g. level out of range) |
+| 401         | Missing or invalid API key              |
+| 404         | Animal not found                        |
+| 422         | Validation error                        |
+| 429         | Rate limit exceeded                     |
 
 ## Rarity Levels
 
-| Level | Rarity | Example Animals |
-|-------|--------|-----------------|
-| 1 | Very Common | Dog, Cat, Chicken, Cow |
-| 2 | Common | Duck, Pigeon, Sparrow |
-| 3-4 | Uncommon | Fox, Deer, Eagle, Owl |
-| 5-6 | Moderate | Red Panda, Koala, Penguin, Capybara |
-| 7-8 | Rare | Snow Leopard, Pangolin, Axolotl, Cassowary |
-| 9 | Very Rare | Kakapo, Philippine Eagle, Amur Leopard |
-| 10 | Legendary | Vaquita, Javan Rhino, Hainan Gibbon |
+| Level | Rarity      | Example Animals                            |
+| ----- | ----------- | ------------------------------------------ |
+| 1     | Very Common | Dog, Cat, Chicken, Cow                     |
+| 2     | Common      | Duck, Pigeon, Sparrow                      |
+| 3-4   | Uncommon    | Fox, Deer, Eagle, Owl                      |
+| 5-6   | Moderate    | Red Panda, Koala, Penguin, Capybara        |
+| 7-8   | Rare        | Snow Leopard, Pangolin, Axolotl, Cassowary |
+| 9     | Very Rare   | Kakapo, Philippine Eagle, Amur Leopard     |
+| 10    | Legendary   | Vaquita, Javan Rhino, Hainan Gibbon        |
 
 ## Static Images
 
