@@ -1,7 +1,9 @@
 services:
   api:
     container_name: animals-service
-    build: .
+    build:
+      context: .
+      network: host
     ports:
       - "8000:8000"
     volumes:
