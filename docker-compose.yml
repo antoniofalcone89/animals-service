@@ -8,6 +8,7 @@ services:
       - ./app:/app/app
       - ./data:/app/data
       - ./static:/app/static
+      - ./firebase-credentials.json:/app/firebase-credentials.json:ro
     env_file:
       - .env
     restart: unless-stopped

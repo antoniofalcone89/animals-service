@@ -7,3 +7,4 @@ slowapi
 python-multipart
 pytest
 httpx
+firebase-admin

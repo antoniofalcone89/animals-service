@@ -12,6 +12,11 @@ from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 
 from app.api.v1.endpoints.animals import limiter, router as animals_router
+from app.api.v1.endpoints.auth import router as auth_router
+from app.api.v1.endpoints.leaderboard import router as leaderboard_router
+from app.api.v1.endpoints.levels import router as levels_router
+from app.api.v1.endpoints.quiz import router as quiz_router
+from app.api.v1.endpoints.users import router as users_router
 from app.config import settings
 
 # Configure logging
@@ -23,8 +28,8 @@ logger = logging.getLogger(__name__)
 
 # Create FastAPI app
 app = FastAPI(
-    title="Animal API",
-    description="REST API providing animal information including name, image, and rarity level.",
+    title="Animal Quiz Academy API",
+    description="Backend API for Animal Quiz Academy — an educational quiz app about animals with gamified progression.",
     version="1.0.0",
 )
 
@@ -40,7 +45,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.allowed_origins_list,
     allow_credentials=True,
-    allow_methods=["GET"],
+    allow_methods=["GET", "POST", "PATCH"],
     allow_headers=["*"],
 )
 
@@ -62,13 +67,27 @@ async def log_requests(request: Request, call_next) -> Response:
     return response
 
 
-# API key authentication
+# API key authentication (for legacy /animals endpoints only)
+# New endpoints use Bearer auth via FastAPI dependencies.
+_BEARER_AUTH_PREFIXES = (
+    "/api/v1/auth",
+    "/api/v1/levels",
+    "/api/v1/quiz",
+    "/api/v1/users",
+    "/api/v1/leaderboard",
+)
+
+
 @app.middleware("http")
 async def api_key_auth(request: Request, call_next) -> Response:
-    """Validate API key for protected endpoints."""
-    # Allow health check and docs without auth
+    """Validate API key for legacy animal endpoints."""
+    # Exempt paths that don't need API key auth
     exempt_paths = {"/api/v1/health", "/docs", "/redoc", "/openapi.json"}
     if request.url.path in exempt_paths or request.url.path.startswith("/static"):
+        return await call_next(request)
+
+    # New endpoints use Bearer auth (handled by FastAPI Depends), skip API key check
+    if any(request.url.path.startswith(prefix) for prefix in _BEARER_AUTH_PREFIXES):
         return await call_next(request)
 
     api_key = request.headers.get("X-API-Key")
@@ -86,5 +105,10 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Register routes
 app.include_router(animals_router, prefix="/api/v1", tags=["animals"])
+app.include_router(auth_router, prefix="/api/v1", tags=["Auth"])
+app.include_router(levels_router, prefix="/api/v1", tags=["Levels"])
+app.include_router(quiz_router, prefix="/api/v1", tags=["Quiz"])
+app.include_router(users_router, prefix="/api/v1", tags=["Users"])
+app.include_router(leaderboard_router, prefix="/api/v1", tags=["Leaderboard"])
 
-logger.info("Animal API started (debug=%s)", settings.DEBUG)
+logger.info("Animal Quiz Academy API started (debug=%s)", settings.DEBUG)

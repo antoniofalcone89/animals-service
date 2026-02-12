@@ -1,0 +1,466 @@
+openapi: 3.0.3
+info:
+  title: Animal Quiz Academy API
+  description: |
+    Backend API for Animal Quiz Academy — an educational quiz app about animals
+    with gamified progression.
+
+    ## Authentication
+
+    Authentication is handled **client-side** by Firebase Authentication.
+    The Flutter app signs in via Firebase (email/password, Google, Apple, etc.)
+    and receives a Firebase ID token.  That token is sent as a `Bearer` token
+    in the `Authorization` header on every API request.
+
+    The backend verifies the token using the Firebase Admin SDK.  No login or
+    sign-up endpoints exist on the server — the only auth endpoint is
+    `POST /auth/register`, which creates the user's **app profile** (username,
+    coins, progress) after they have already authenticated with Firebase.
+
+    ### Flow
+
+    1. Client authenticates with Firebase → receives ID token.
+    2. Client calls `POST /auth/register` with `Bearer {idToken}` and a chosen
+       username to create their app profile.
+    3. Client calls `GET /auth/me` (or any other endpoint) with the same token
+       for subsequent requests.
+
+    ### Development / Mock mode
+
+    When `FIREBASE_CREDENTIALS` is not set, the API runs in **mock auth mode**:
+    any non-empty Bearer token is accepted, and its value is used as the user
+    ID.  This is useful for local development and testing.
+  version: 1.0.0
+
+servers:
+  - url: https://api.example.com/api/v1
+    description: Production server
+
+tags:
+  - name: Auth
+    description: User registration and profile retrieval (Firebase handles actual authentication)
+  - name: Levels
+    description: Quiz levels and their animals
+  - name: Quiz
+    description: Answer submission and scoring
+  - name: Users
+    description: User progress and profile
+  - name: Leaderboard
+    description: Global rankings
+
+paths:
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Register a new user profile
+      operationId: register
+      description: |
+        Create an app profile after authenticating with Firebase.  The client
+        must first sign up via Firebase (email/password, Google, etc.) and then
+        call this endpoint with the Firebase ID token as a Bearer token.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username]
+              properties:
+                username:
+                  type: string
+                  minLength: 2
+                  maxLength: 30
+      responses:
+        "201":
+          description: User profile created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "409":
+          description: User profile already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/me:
+    get:
+      tags: [Auth]
+      summary: Get current authenticated user
+      operationId: getCurrentUser
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Current user info
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Not authenticated (invalid or expired token)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: User profile not found (call POST /auth/register first)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /levels:
+    get:
+      tags: [Levels]
+      summary: List all levels with user progress summary
+      operationId: getLevels
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: List of levels
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  levels:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Level"
+
+  /levels/{levelId}:
+    get:
+      tags: [Levels]
+      summary: Get level detail with animals and per-animal guessed status
+      operationId: getLevelDetail
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: levelId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Level detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LevelDetail"
+        "404":
+          description: Level not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /quiz/answer:
+    post:
+      tags: [Quiz]
+      summary: Submit an answer for an animal in a level
+      operationId: submitAnswer
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AnswerRequest"
+      responses:
+        "200":
+          description: Answer result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnswerResponse"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /users/me/progress:
+    get:
+      tags: [Users]
+      summary: Get all level progress for current user
+      operationId: getUserProgress
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: User progress per level
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  levels:
+                    type: object
+                    description: "Map of levelId (string) to array of booleans indicating guessed status per animal"
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: boolean
+                example:
+                  levels:
+                    "1":
+                      [
+                        true,
+                        false,
+                        true,
+                        false,
+                        false,
+                        false,
+                        false,
+                        false,
+                      ]
+                    "2":
+                      [
+                        false,
+                        false,
+                        false,
+                        false,
+                      ]
+
+  /users/me/coins:
+    get:
+      tags: [Users]
+      summary: Get current coin total
+      operationId: getUserCoins
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Coin total
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalCoins:
+                    type: integer
+                    example: 120
+
+  /users/me/profile:
+    patch:
+      tags: [Users]
+      summary: Update user profile (username)
+      operationId: updateProfile
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  minLength: 2
+                  maxLength: 30
+      responses:
+        "200":
+          description: Updated user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+
+  /leaderboard:
+    get:
+      tags: [Leaderboard]
+      summary: Get global leaderboard (paginated)
+      operationId: getLeaderboard
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+            maximum: 100
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        "200":
+          description: Leaderboard entries
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  entries:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/LeaderboardEntry"
+                  total:
+                    type: integer
+                    description: Total number of ranked users
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: "Firebase ID Token"
+      description: |
+        Firebase ID token obtained client-side via Firebase Authentication.
+        In mock mode (dev/test), any non-empty string is accepted.
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Firebase UID
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        totalCoins:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+      required: [id, username, email, totalCoins, createdAt]
+
+    Level:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        emoji:
+          type: string
+        animals:
+          type: array
+          items:
+            $ref: "#/components/schemas/Animal"
+      required: [id, title, emoji, animals]
+
+    LevelDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        emoji:
+          type: string
+        animals:
+          type: array
+          items:
+            $ref: "#/components/schemas/AnimalWithStatus"
+      required: [id, title, emoji, animals]
+
+    Animal:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        emoji:
+          type: string
+        imageUrl:
+          type: string
+          format: uri
+      required: [id, name, emoji, imageUrl]
+
+    AnimalWithStatus:
+      allOf:
+        - $ref: "#/components/schemas/Animal"
+        - type: object
+          properties:
+            guessed:
+              type: boolean
+              description: Whether the current user has correctly guessed this animal
+
+    AnswerRequest:
+      type: object
+      required: [levelId, animalIndex, answer]
+      properties:
+        levelId:
+          type: integer
+        animalIndex:
+          type: integer
+          description: Zero-based index of the animal within the level
+        answer:
+          type: string
+          description: The user's guess (case-insensitive comparison)
+
+    AnswerResponse:
+      type: object
+      properties:
+        correct:
+          type: boolean
+        coinsAwarded:
+          type: integer
+          description: Coins earned for this answer (0 if wrong or already guessed)
+        totalCoins:
+          type: integer
+          description: User's updated total coin count
+        correctAnswer:
+          type: string
+          nullable: true
+          description: The correct answer (only returned when wrong)
+      required: [correct, coinsAwarded, totalCoins]
+
+    LevelProgress:
+      type: object
+      properties:
+        levelId:
+          type: integer
+        guessed:
+          type: array
+          items:
+            type: boolean
+          description: Per-animal guessed status (ordered by animal index)
+      required: [levelId, guessed]
+
+    LeaderboardEntry:
+      type: object
+      properties:
+        rank:
+          type: integer
+        userId:
+          type: string
+        username:
+          type: string
+        totalCoins:
+          type: integer
+        levelsCompleted:
+          type: integer
+      required: [rank, userId, username, totalCoins, levelsCompleted]
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              description: Machine-readable error code
+              example: user_not_found
+            message:
+              type: string
+              description: Human-readable error message
+              example: User profile not found
+          required: [code, message]

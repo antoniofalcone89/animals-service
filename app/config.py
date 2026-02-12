@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     """Application settings loaded from environment variables."""
 
     API_KEY: str = "changeme"
+    FIREBASE_CREDENTIALS: str = ""
     ALLOWED_ORIGINS: str = "http://localhost:3000,http://localhost:8080"
     RATE_LIMIT: str = "100/minute"
     CACHE_TTL: int = 3600

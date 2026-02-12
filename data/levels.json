@@ -1,0 +1,12 @@
+[
+  {"id": 1, "title": "Farm Friends", "emoji": "\ud83d\udc04"},
+  {"id": 2, "title": "City Critters", "emoji": "\ud83d\udc26"},
+  {"id": 3, "title": "Woodland Wanderers", "emoji": "\ud83e\udd8a"},
+  {"id": 4, "title": "Sky & Stream", "emoji": "\ud83e\udd85"},
+  {"id": 5, "title": "Exotic Explorers", "emoji": "\ud83d\udc28"},
+  {"id": 6, "title": "Unusual Creatures", "emoji": "\ud83e\udd86"},
+  {"id": 7, "title": "Hidden Gems", "emoji": "\ud83d\udc06"},
+  {"id": 8, "title": "Rare Finds", "emoji": "\ud83e\udda4"},
+  {"id": 9, "title": "Critically Endangered", "emoji": "\ud83e\udd9c"},
+  {"id": 10, "title": "Rarest of the Rare", "emoji": "\ud83e\udd8f"}
+]

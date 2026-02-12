@@ -45,12 +45,15 @@ jobs:
             fi
             cd "$APP_DIR"
             git pull origin master
+            echo '${{ secrets.FIREBASE_CREDENTIALS_JSON }}' > firebase-credentials.json
+            chmod 600 firebase-credentials.json
             cat > .env << EOF
             API_KEY=${{ secrets.API_KEY }}
             ALLOWED_ORIGINS=${{ secrets.ALLOWED_ORIGINS }}
             RATE_LIMIT=${{ secrets.RATE_LIMIT }}
             CACHE_TTL=${{ secrets.CACHE_TTL }}
             DEBUG=${{ secrets.DEBUG }}
+            FIREBASE_CREDENTIALS=firebase-credentials.json
             EOF
             docker-compose down
             docker-compose build
