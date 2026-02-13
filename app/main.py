@@ -31,6 +31,9 @@ app = FastAPI(
     title="Animal Quiz Academy API",
     description="Backend API for Animal Quiz Academy — an educational quiz app about animals with gamified progression.",
     version="1.0.0",
+    docs_url="/api/v1/docs",
+    redoc_url="/api/v1/redoc",
+    openapi_url="/api/v1/openapi.json",
 )
 
 # --- Middleware ---
@@ -82,7 +85,7 @@ _BEARER_AUTH_PREFIXES = (
 async def api_key_auth(request: Request, call_next) -> Response:
     """Validate API key for legacy animal endpoints."""
     # Exempt paths that don't need API key auth
-    exempt_paths = {"/api/v1/health", "/docs", "/redoc", "/openapi.json"}
+    exempt_paths = {"/api/v1/health", "/api/v1/docs", "/api/v1/redoc", "/api/v1/openapi.json"}
     if request.url.path in exempt_paths or request.url.path.startswith("/static"):
         return await call_next(request)
 

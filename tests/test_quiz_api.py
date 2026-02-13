@@ -62,6 +62,18 @@ class TestAuthRegister:
         body, status = _register(token, username="other")
         assert status == 409
 
+    def test_register_duplicate_error_code(self):
+        token = _next_token()
+        _register(token)
+        resp = client.post(
+            "/api/v1/auth/register",
+            headers=_auth_header(token),
+            json={"username": "other"},
+        )
+        assert resp.status_code == 409
+        detail = resp.json()["detail"]
+        assert detail["error"]["code"] == "profile_exists"
+
     def test_register_short_username(self):
         token = _next_token()
         resp = client.post(
@@ -109,13 +121,13 @@ class TestLevels:
         assert resp.status_code == 200
         data = resp.json()
         assert "levels" in data
-        assert len(data["levels"]) == 10
+        assert len(data["levels"]) == 6
         for level in data["levels"]:
             assert "id" in level
             assert "title" in level
             assert "emoji" in level
             assert "animals" in level
-            assert len(level["animals"]) > 0
+            assert len(level["animals"]) == 20
 
     def test_list_levels_no_auth(self):
         resp = client.get("/api/v1/levels")
@@ -132,6 +144,7 @@ class TestLevelDetail:
         data = resp.json()
         assert data["id"] == 1
         assert data["title"] == "Farm Friends"
+        assert len(data["animals"]) == 20
         for animal in data["animals"]:
             assert "guessed" in animal
             assert animal["guessed"] is False
@@ -157,9 +170,9 @@ class TestQuizAnswer:
         assert resp.status_code == 200
         data = resp.json()
         assert data["correct"] is True
-        assert data["coinsAwarded"] == 1
-        assert data["totalCoins"] == 1
-        assert data.get("correctAnswer") is None
+        assert data["coinsAwarded"] == 10
+        assert data["totalCoins"] == 10
+        assert "correctAnswer" not in data
 
     def test_wrong_answer(self):
         headers = _register_and_header()
@@ -213,8 +226,9 @@ class TestUserProgress:
         assert resp.status_code == 200
         data = resp.json()
         assert "levels" in data
-        assert len(data["levels"]) == 10
+        assert len(data["levels"]) == 6
         for bools in data["levels"].values():
+            assert len(bools) == 20
             assert all(b is False for b in bools)
 
 

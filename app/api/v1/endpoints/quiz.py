@@ -21,6 +21,7 @@ limiter = Limiter(key_func=get_remote_address)
 @router.post(
     "/answer",
     response_model=AnswerResponse,
+    response_model_exclude_none=True,
     responses={400: {"model": ApiErrorResponse}},
     summary="Submit an answer for an animal in a level",
 )
