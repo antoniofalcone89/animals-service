@@ -29,7 +29,7 @@ jobs:
   deploy:
     needs: test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    if: (github.ref == 'refs/heads/master' && github.event_name == 'push') || github.event_name == 'workflow_dispatch'
 
     steps:
       - name: Deploy to VPS
@@ -46,7 +46,10 @@ jobs:
               git clone ${{ secrets.REPO_URL }} "$APP_DIR"
             fi
             cd "$APP_DIR"
-            git pull origin master
+            BRANCH="${{ github.ref_name }}"
+            git fetch origin "$BRANCH"
+            git checkout "$BRANCH"
+            git pull origin "$BRANCH"
             printf '%s\n' \
               'API_KEY=${{ secrets.API_KEY }}' \
               'ALLOWED_ORIGINS=${{ secrets.ALLOWED_ORIGINS }}' \
