@@ -1,0 +1,297 @@
+"""Pluggable user storage: in-memory for dev/test, Firestore for production.
+
+``get_store()`` returns a singleton whose concrete type depends on whether
+the app is running in mock mode.
+"""
+
+import abc
+import logging
+from datetime import datetime, timezone
+
+from google.cloud.firestore_v1 import DocumentReference, Transaction
+
+from app.db.firestore import get_firestore_client, is_mock_mode
+from app.services.level_service import get_level_animal_count, get_level_ids
+
+logger = logging.getLogger(__name__)
+
+
+def _empty_progress() -> dict[int, list[bool]]:
+    """Return fresh progress for every level (all False)."""
+    return {
+        lid: [False] * get_level_animal_count(lid)
+        for lid in get_level_ids()
+    }
+
+
+# ---------------------------------------------------------------------------
+# Abstract interface
+# ---------------------------------------------------------------------------
+
+class UserStore(abc.ABC):
+    """Common interface for user persistence."""
+
+    @abc.abstractmethod
+    def create_user(self, uid: str, email: str, username: str) -> dict:
+        """Create a new user profile. Raises ``ValueError`` if exists."""
+
+    @abc.abstractmethod
+    def get_user(self, uid: str) -> dict | None:
+        """Return user profile by UID."""
+
+    @abc.abstractmethod
+    def update_user(self, uid: str, **fields) -> dict | None:
+        """Update profile fields and return the updated document."""
+
+    @abc.abstractmethod
+    def get_all_users(self) -> dict[str, dict]:
+        """Return all users keyed by UID.
+
+        Each value must include ``username``, ``total_coins``, and
+        ``progress`` (``{level_id: [bool, ...]}``) so that callers can
+        compute leaderboard data without extra reads.
+        """
+
+    @abc.abstractmethod
+    def ensure_progress(self, uid: str) -> dict[int, list[bool]]:
+        """Lazy-init and return progress ``{level_id: [bool, ...]}``."""
+
+    @abc.abstractmethod
+    def submit_answer_update(
+        self, uid: str, level_id: int, animal_index: int, coins_per_correct: int,
+    ) -> tuple[int, int]:
+        """Atomically mark an animal as guessed and award coins.
+
+        Returns ``(coins_awarded, total_coins)``.
+        """
+
+    @abc.abstractmethod
+    def get_coins(self, uid: str) -> int:
+        """Return total coins for a user."""
+
+    @abc.abstractmethod
+    def count_completed(self, uid: str) -> int:
+        """Return the number of fully-completed levels."""
+
+
+# ---------------------------------------------------------------------------
+# In-memory implementation (mock / test mode)
+# ---------------------------------------------------------------------------
+
+class InMemoryUserStore(UserStore):
+    """Dict-backed store — identical behaviour to the original code."""
+
+    def __init__(self) -> None:
+        self._users: dict[str, dict] = {}
+        self._progress: dict[str, dict[int, list[bool]]] = {}
+        self._coins: dict[str, int] = {}
+
+    def create_user(self, uid: str, email: str, username: str) -> dict:
+        if uid in self._users:
+            raise ValueError("user_already_exists")
+        now = datetime.now(timezone.utc)
+        user_data = {
+            "id": uid,
+            "username": username,
+            "email": email,
+            "total_coins": 0,
+            "created_at": now,
+        }
+        self._users[uid] = user_data
+        logger.info("Created user profile for %s", uid)
+        return user_data
+
+    def get_user(self, uid: str) -> dict | None:
+        return self._users.get(uid)
+
+    def update_user(self, uid: str, **fields) -> dict | None:
+        user_data = self._users.get(uid)
+        if user_data is None:
+            return None
+        user_data.update(fields)
+        return user_data
+
+    def get_all_users(self) -> dict[str, dict]:
+        result: dict[str, dict] = {}
+        for uid, data in self._users.items():
+            result[uid] = {
+                **data,
+                "total_coins": self._coins.get(uid, 0),
+                "progress": self._ensure_progress(uid),
+            }
+        return result
+
+    # -- progress / quiz --
+
+    def _ensure_progress(self, uid: str) -> dict[int, list[bool]]:
+        if uid not in self._progress:
+            self._progress[uid] = _empty_progress()
+            self._coins.setdefault(uid, 0)
+        return self._progress[uid]
+
+    def ensure_progress(self, uid: str) -> dict[int, list[bool]]:
+        return self._ensure_progress(uid)
+
+    def submit_answer_update(
+        self, uid: str, level_id: int, animal_index: int, coins_per_correct: int,
+    ) -> tuple[int, int]:
+        progress = self._ensure_progress(uid)
+        level_progress = progress.get(level_id)
+        if level_progress is None or animal_index >= len(level_progress):
+            raise ValueError("invalid level/index")
+        coins_awarded = 0
+        if not level_progress[animal_index]:
+            level_progress[animal_index] = True
+            coins_awarded = coins_per_correct
+            self._coins[uid] = self._coins.get(uid, 0) + coins_awarded
+        return coins_awarded, self._coins.get(uid, 0)
+
+    def get_coins(self, uid: str) -> int:
+        self._ensure_progress(uid)
+        return self._coins.get(uid, 0)
+
+    def count_completed(self, uid: str) -> int:
+        progress = self._ensure_progress(uid)
+        return sum(1 for bools in progress.values() if bools and all(bools))
+
+
+# ---------------------------------------------------------------------------
+# Firestore implementation
+# ---------------------------------------------------------------------------
+
+class FirestoreUserStore(UserStore):
+    """Firestore-backed store using ``users/{uid}`` documents."""
+
+    COLLECTION = "users"
+
+    def _ref(self, uid: str) -> DocumentReference:
+        return get_firestore_client().collection(self.COLLECTION).document(uid)
+
+    def create_user(self, uid: str, email: str, username: str) -> dict:
+        ref = self._ref(uid)
+        snap = ref.get()
+        if snap.exists:
+            raise ValueError("user_already_exists")
+        now = datetime.now(timezone.utc)
+        progress = {str(lid): bools for lid, bools in _empty_progress().items()}
+        doc = {
+            "username": username,
+            "email": email,
+            "total_coins": 0,
+            "created_at": now,
+            "progress": progress,
+        }
+        ref.set(doc)
+        logger.info("Created Firestore user doc for %s", uid)
+        return {"id": uid, **doc, "created_at": now}
+
+    def get_user(self, uid: str) -> dict | None:
+        snap = self._ref(uid).get()
+        if not snap.exists:
+            return None
+        data = snap.to_dict()
+        data["id"] = uid
+        return data
+
+    def update_user(self, uid: str, **fields) -> dict | None:
+        ref = self._ref(uid)
+        snap = ref.get()
+        if not snap.exists:
+            return None
+        ref.update(fields)
+        updated = ref.get().to_dict()
+        updated["id"] = uid
+        return updated
+
+    def get_all_users(self) -> dict[str, dict]:
+        result: dict[str, dict] = {}
+        for doc in get_firestore_client().collection(self.COLLECTION).stream():
+            data = doc.to_dict()
+            data["id"] = doc.id
+            # Normalise progress keys to int for callers that expect int keys
+            raw_progress = data.get("progress", {})
+            data["progress"] = {int(k): v for k, v in raw_progress.items()}
+            result[doc.id] = data
+        return result
+
+    def ensure_progress(self, uid: str) -> dict[int, list[bool]]:
+        ref = self._ref(uid)
+        snap = ref.get()
+        if not snap.exists:
+            progress = _empty_progress()
+            ref.set({"progress": {str(k): v for k, v in progress.items()}, "total_coins": 0}, merge=True)
+            return progress
+        raw = snap.to_dict().get("progress", {})
+        if not raw:
+            progress = _empty_progress()
+            ref.update({"progress": {str(k): v for k, v in progress.items()}})
+            return progress
+        return {int(k): v for k, v in raw.items()}
+
+    def submit_answer_update(
+        self, uid: str, level_id: int, animal_index: int, coins_per_correct: int,
+    ) -> tuple[int, int]:
+        ref = self._ref(uid)
+        db = get_firestore_client()
+
+        @firestore_transaction
+        def _update(transaction: Transaction) -> tuple[int, int]:
+            snap = ref.get(transaction=transaction)
+            data = snap.to_dict() if snap.exists else {}
+            progress = data.get("progress", {})
+            level_key = str(level_id)
+            level_progress = progress.get(level_key, [False] * get_level_animal_count(level_id))
+            if animal_index >= len(level_progress):
+                raise ValueError("invalid animal_index")
+
+            coins_awarded = 0
+            if not level_progress[animal_index]:
+                level_progress[animal_index] = True
+                coins_awarded = coins_per_correct
+
+            total_coins = data.get("total_coins", 0) + coins_awarded
+            transaction.update(ref, {
+                f"progress.{level_key}": level_progress,
+                "total_coins": total_coins,
+            })
+            return coins_awarded, total_coins
+
+        return _update(db.transaction())
+
+    def get_coins(self, uid: str) -> int:
+        snap = self._ref(uid).get()
+        if not snap.exists:
+            return 0
+        return snap.to_dict().get("total_coins", 0)
+
+    def count_completed(self, uid: str) -> int:
+        snap = self._ref(uid).get()
+        if not snap.exists:
+            return 0
+        raw = snap.to_dict().get("progress", {})
+        return sum(1 for bools in raw.values() if bools and all(bools))
+
+
+def firestore_transaction(func):
+    """Decorator to run *func* inside a Firestore transaction."""
+    from google.cloud.firestore_v1 import transactional
+    return transactional(func)
+
+
+# ---------------------------------------------------------------------------
+# Singleton factory
+# ---------------------------------------------------------------------------
+_store: UserStore | None = None
+
+
+def get_store() -> UserStore:
+    """Return the singleton ``UserStore`` instance."""
+    global _store
+    if _store is None:
+        if is_mock_mode():
+            logger.info("Using InMemoryUserStore (mock mode)")
+            _store = InMemoryUserStore()
+        else:
+            logger.info("Using FirestoreUserStore")
+            _store = FirestoreUserStore()
+    return _store

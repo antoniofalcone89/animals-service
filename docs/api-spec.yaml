@@ -412,14 +412,13 @@ components:
           type: boolean
         coinsAwarded:
           type: integer
-          description: Coins earned for this answer (0 if wrong or already guessed)
+          description: "Flat 10 coins for a correct first-time answer, 0 if wrong or already guessed"
         totalCoins:
           type: integer
           description: User's updated total coin count
         correctAnswer:
           type: string
-          nullable: true
-          description: The correct answer (only returned when wrong)
+          description: The correct answer — only present when the answer is wrong (omitted when correct)
       required: [correct, coinsAwarded, totalCoins]
 
     LevelProgress:
@@ -458,7 +457,7 @@ components:
             code:
               type: string
               description: Machine-readable error code
-              example: user_not_found
+              example: profile_exists
             message:
               type: string
               description: Human-readable error message

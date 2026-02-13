@@ -10,7 +10,6 @@ from app.config import settings
 from app.dependencies import get_current_user_id
 from app.models.quiz import LeaderboardEntry
 from app.services import auth_service
-from app.services.quiz_service import count_completed_levels, get_user_coins
 
 logger = logging.getLogger(__name__)
 
@@ -31,14 +30,15 @@ async def leaderboard(
 ) -> dict:
     """Return paginated global leaderboard ranked by total coins.
 
-    TODO: Replace with a Firestore query ordered by totalCoins once persistence is added.
-    The current implementation reads from the in-memory user store.
+    Reads all data from a single ``get_all_users()`` call (which includes
+    ``total_coins`` and ``progress``) so that no extra per-user reads are
+    needed.
     """
-    # Build entries from all known users
     all_users = []
     for uid, user_data in auth_service.get_all_users().items():
-        coins = get_user_coins(uid)
-        completed = count_completed_levels(uid)
+        coins = user_data.get("total_coins", 0)
+        progress = user_data.get("progress", {})
+        completed = sum(1 for bools in progress.values() if bools and all(bools))
         all_users.append((uid, user_data.get("username", ""), coins, completed))
 
     # Sort by coins descending

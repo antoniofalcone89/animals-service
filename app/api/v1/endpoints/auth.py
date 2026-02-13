@@ -55,7 +55,7 @@ async def register(
     except ValueError:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail={"error": {"code": "user_already_exists", "message": "User profile already exists"}},
+            detail={"error": {"code": "profile_exists", "message": "User profile already exists"}},
         )
     return User(**user_data)
 
