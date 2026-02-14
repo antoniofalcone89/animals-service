@@ -26,9 +26,8 @@ def get_all_levels() -> list[Level]:
         Level(
             id=lvl["id"],
             title=lvl["title"],
-            emoji=lvl["emoji"],
             animals=[
-                QuizAnimal(id=a["id"], name=a["name"], emoji=a["emoji"], image_url=a["imageUrl"])
+                QuizAnimal(id=a["id"], name=a["name"], image_url=a["imageUrl"])
                 for a in lvl["animals"]
             ],
         )
@@ -47,7 +46,7 @@ def get_level_detail(level_id: int, guessed: list[bool] | None = None) -> LevelD
     guessed = guessed or [False] * len(animals)
     animals_with_status = [
         AnimalWithStatus(
-            id=a["id"], name=a["name"], emoji=a["emoji"], image_url=a["imageUrl"],
+            id=a["id"], name=a["name"], image_url=a["imageUrl"],
             guessed=guessed[i] if i < len(guessed) else False,
         )
         for i, a in enumerate(animals)
@@ -55,7 +54,6 @@ def get_level_detail(level_id: int, guessed: list[bool] | None = None) -> LevelD
     return LevelDetail(
         id=lvl["id"],
         title=lvl["title"],
-        emoji=lvl["emoji"],
         animals=animals_with_status,
     )
 

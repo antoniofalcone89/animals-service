@@ -125,7 +125,6 @@ class TestLevels:
         for level in data["levels"]:
             assert "id" in level
             assert "title" in level
-            assert "emoji" in level
             assert "animals" in level
             assert len(level["animals"]) == 20
 
@@ -227,9 +226,14 @@ class TestUserProgress:
         data = resp.json()
         assert "levels" in data
         assert len(data["levels"]) == 6
-        for bools in data["levels"].values():
-            assert len(bools) == 20
-            assert all(b is False for b in bools)
+        for animals in data["levels"].values():
+            assert len(animals) == 20
+            for animal in animals:
+                assert "id" in animal
+                assert "name" in animal
+                assert "imageUrl" in animal
+                assert "emoji" not in animal
+                assert animal["guessed"] is False
 
 
 class TestUserCoins:

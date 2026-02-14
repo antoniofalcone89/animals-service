@@ -4,7 +4,7 @@ import logging
 
 from app.db.user_store import get_store
 from app.models.quiz import AnswerResponse
-from app.services.level_service import get_animal_name_at
+from app.services.level_service import get_animal_name_at, get_level_detail
 
 logger = logging.getLogger(__name__)
 
@@ -44,10 +44,17 @@ def submit_answer(user_id: str, level_id: int, animal_index: int, answer: str) -
     )
 
 
-def get_user_progress(user_id: str) -> dict[str, list[bool]]:
-    """Return progress per level as ``{level_id_str: [bool, ...]}``."""
+def get_user_progress(user_id: str) -> dict[str, list[dict]]:
+    """Return progress per level enriched with full animal objects."""
     progress = get_store().ensure_progress(user_id)
-    return {str(lid): bools for lid, bools in progress.items()}
+    result: dict[str, list[dict]] = {}
+    for lid, bools in progress.items():
+        detail = get_level_detail(lid, bools)
+        if detail is not None:
+            result[str(lid)] = [
+                a.model_dump(by_alias=True) for a in detail.animals
+            ]
+    return result
 
 
 def get_user_coins(user_id: str) -> int:

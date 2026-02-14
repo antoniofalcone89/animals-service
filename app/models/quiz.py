@@ -13,7 +13,6 @@ class QuizAnimal(BaseModel):
 
     id: int = Field(..., description="Animal ID")
     name: str = Field(..., description="Animal name")
-    emoji: str = Field(..., description="Animal emoji")
     image_url: str = Field(..., description="URL to animal image")
 
 
@@ -28,7 +27,6 @@ class Level(BaseModel):
 
     id: int = Field(..., description="Level ID")
     title: str = Field(..., description="Level title")
-    emoji: str = Field(..., description="Level emoji")
     animals: list[QuizAnimal] = Field(..., description="Animals in this level")
 
 
@@ -37,7 +35,6 @@ class LevelDetail(BaseModel):
 
     id: int = Field(..., description="Level ID")
     title: str = Field(..., description="Level title")
-    emoji: str = Field(..., description="Level emoji")
     animals: list[AnimalWithStatus] = Field(..., description="Animals with guessed status")
 
 
