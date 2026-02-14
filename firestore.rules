@@ -1,0 +1,27 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Users collection: each document is keyed by Firebase Auth UID.
+    match /users/{uid} {
+      // Users can only read and update their own document.
+      // Creation is handled by the backend (Admin SDK bypasses rules).
+      allow read, update: if request.auth != null && request.auth.uid == uid;
+
+      // Prevent client-side writes to sensitive fields.
+      allow update: if request.auth != null
+                    && request.auth.uid == uid
+                    && !request.resource.data.diff(resource.data).affectedKeys()
+                        .hasAny(['email', 'created_at']);
+
+      // Block client-side document creation and deletion.
+      allow create, delete: if false;
+    }
+
+    // Deny all access to any other collection.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
