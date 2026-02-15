@@ -1,11 +1,11 @@
 {
   "levels": {
-    "1": "Amici della Fattoria",
-    "2": "Animali del Cortile",
-    "3": "Meraviglie dell'Oceano",
-    "4": "Esploratori della Giungla",
-    "5": "Artici e Desertici",
-    "6": "Rarità Leggendarie"
+    "1": "Livello 1",
+    "2": "Livello 2",
+    "3": "Livello 3",
+    "4": "Livello 4",
+    "5": "Livello 5",
+    "6": "Livello 6"
   },
   "animals": {
     "1": "Cane",

@@ -142,7 +142,7 @@ class TestLevelDetail:
         assert resp.status_code == 200
         data = resp.json()
         assert data["id"] == 1
-        assert data["title"] == "Amici della Fattoria"
+        assert data["title"] == "Livello 1"
         assert len(data["animals"]) == 20
         assert data["animals"][0]["name"] == "Cane"
         for animal in data["animals"]:
@@ -154,7 +154,7 @@ class TestLevelDetail:
         resp = client.get("/api/v1/levels/1", headers=headers)
         assert resp.status_code == 200
         data = resp.json()
-        assert data["title"] == "Farm Friends"
+        assert data["title"] == "Level 1"
         assert data["animals"][0]["name"] == "Dog"
 
     def test_get_level_not_found(self):
