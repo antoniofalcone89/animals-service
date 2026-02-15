@@ -136,17 +136,26 @@ class TestLevels:
 class TestLevelDetail:
     """GET /api/v1/levels/{levelId} tests."""
 
-    def test_get_level_detail(self):
+    def test_get_level_detail_default_italian(self):
         headers = _register_and_header()
         resp = client.get("/api/v1/levels/1", headers=headers)
         assert resp.status_code == 200
         data = resp.json()
         assert data["id"] == 1
-        assert data["title"] == "Farm Friends"
+        assert data["title"] == "Amici della Fattoria"
         assert len(data["animals"]) == 20
+        assert data["animals"][0]["name"] == "Cane"
         for animal in data["animals"]:
             assert "guessed" in animal
             assert animal["guessed"] is False
+
+    def test_get_level_detail_english(self):
+        headers = {**_register_and_header(), "Accept-Language": "en"}
+        resp = client.get("/api/v1/levels/1", headers=headers)
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["title"] == "Farm Friends"
+        assert data["animals"][0]["name"] == "Dog"
 
     def test_get_level_not_found(self):
         headers = _register_and_header()
@@ -161,10 +170,10 @@ class TestLevelDetail:
 class TestQuizAnswer:
     """POST /api/v1/quiz/answer tests."""
 
-    def test_correct_answer(self):
+    def test_correct_answer_italian(self):
         headers = _register_and_header()
         resp = client.post("/api/v1/quiz/answer", headers=headers, json={
-            "levelId": 1, "animalIndex": 0, "answer": "Dog",
+            "levelId": 1, "animalIndex": 0, "answer": "Cane",
         })
         assert resp.status_code == 200
         data = resp.json()
@@ -173,21 +182,31 @@ class TestQuizAnswer:
         assert data["totalCoins"] == 10
         assert "correctAnswer" not in data
 
+    def test_correct_answer_english(self):
+        headers = {**_register_and_header(), "Accept-Language": "en"}
+        resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Dog",
+        })
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["correct"] is True
+        assert data["coinsAwarded"] == 10
+
     def test_wrong_answer(self):
         headers = _register_and_header()
         resp = client.post("/api/v1/quiz/answer", headers=headers, json={
-            "levelId": 1, "animalIndex": 0, "answer": "Cat",
+            "levelId": 1, "animalIndex": 0, "answer": "Gatto",
         })
         assert resp.status_code == 200
         data = resp.json()
         assert data["correct"] is False
         assert data["coinsAwarded"] == 0
-        assert data["correctAnswer"] == "Dog"
+        assert data["correctAnswer"] == "Cane"
 
     def test_case_insensitive_answer(self):
         headers = _register_and_header()
         resp = client.post("/api/v1/quiz/answer", headers=headers, json={
-            "levelId": 1, "animalIndex": 0, "answer": "dog",
+            "levelId": 1, "animalIndex": 0, "answer": "cane",
         })
         assert resp.status_code == 200
         assert resp.json()["correct"] is True
@@ -195,10 +214,10 @@ class TestQuizAnswer:
     def test_already_guessed_no_coins(self):
         headers = _register_and_header()
         client.post("/api/v1/quiz/answer", headers=headers, json={
-            "levelId": 1, "animalIndex": 0, "answer": "Dog",
+            "levelId": 1, "animalIndex": 0, "answer": "Cane",
         })
         resp = client.post("/api/v1/quiz/answer", headers=headers, json={
-            "levelId": 1, "animalIndex": 0, "answer": "Dog",
+            "levelId": 1, "animalIndex": 0, "answer": "Cane",
         })
         data = resp.json()
         assert data["correct"] is True
@@ -207,7 +226,7 @@ class TestQuizAnswer:
     def test_invalid_level(self):
         headers = _register_and_header()
         resp = client.post("/api/v1/quiz/answer", headers=headers, json={
-            "levelId": 999, "animalIndex": 0, "answer": "Dog",
+            "levelId": 999, "animalIndex": 0, "answer": "Cane",
         })
         assert resp.status_code == 400
 
@@ -219,13 +238,15 @@ class TestQuizAnswer:
 class TestUserProgress:
     """GET /api/v1/users/me/progress tests."""
 
-    def test_get_progress(self):
+    def test_get_progress_default_italian(self):
         headers = _register_and_header()
         resp = client.get("/api/v1/users/me/progress", headers=headers)
         assert resp.status_code == 200
         data = resp.json()
         assert "levels" in data
         assert len(data["levels"]) == 6
+        # First animal of level 1 should be Italian
+        assert data["levels"]["1"][0]["name"] == "Cane"
         for animals in data["levels"].values():
             assert len(animals) == 20
             for animal in animals:
@@ -234,6 +255,13 @@ class TestUserProgress:
                 assert "imageUrl" in animal
                 assert "emoji" not in animal
                 assert animal["guessed"] is False
+
+    def test_get_progress_english(self):
+        headers = {**_register_and_header(), "Accept-Language": "en"}
+        resp = client.get("/api/v1/users/me/progress", headers=headers)
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["levels"]["1"][0]["name"] == "Dog"
 
 
 class TestUserCoins:

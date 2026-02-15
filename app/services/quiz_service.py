@@ -12,12 +12,14 @@ logger = logging.getLogger(__name__)
 COINS_PER_CORRECT = 10
 
 
-def submit_answer(user_id: str, level_id: int, animal_index: int, answer: str) -> AnswerResponse | None:
+def submit_answer(
+    user_id: str, level_id: int, animal_index: int, answer: str, locale: str = "it",
+) -> AnswerResponse | None:
     """Check an answer and update progress / coins.
 
     Returns None if level_id or animal_index is invalid.
     """
-    correct_name = get_animal_name_at(level_id, animal_index)
+    correct_name = get_animal_name_at(level_id, animal_index, locale=locale)
     if correct_name is None:
         return None
 
@@ -44,12 +46,12 @@ def submit_answer(user_id: str, level_id: int, animal_index: int, answer: str) -
     )
 
 
-def get_user_progress(user_id: str) -> dict[str, list[dict]]:
+def get_user_progress(user_id: str, locale: str = "it") -> dict[str, list[dict]]:
     """Return progress per level enriched with full animal objects."""
     progress = get_store().ensure_progress(user_id)
     result: dict[str, list[dict]] = {}
     for lid, bools in progress.items():
-        detail = get_level_detail(lid, bools)
+        detail = get_level_detail(lid, bools, locale=locale)
         if detail is not None:
             result[str(lid)] = [
                 a.model_dump(by_alias=True) for a in detail.animals

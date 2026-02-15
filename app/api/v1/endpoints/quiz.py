@@ -7,7 +7,7 @@ from slowapi import Limiter
 from slowapi.util import get_remote_address
 
 from app.config import settings
-from app.dependencies import get_current_user_id
+from app.dependencies import get_current_user_id, get_locale
 from app.models.auth import ApiErrorResponse
 from app.models.quiz import AnswerRequest, AnswerResponse
 from app.services.quiz_service import submit_answer
@@ -30,9 +30,10 @@ async def post_answer(
     request: Request,
     body: AnswerRequest,
     user_id: str = Depends(get_current_user_id),
+    locale: str = Depends(get_locale),
 ) -> AnswerResponse:
     """Submit a quiz answer. Returns whether the answer is correct and coins awarded."""
-    result = submit_answer(user_id, body.level_id, body.animal_index, body.answer)
+    result = submit_answer(user_id, body.level_id, body.animal_index, body.answer, locale=locale)
     if result is None:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

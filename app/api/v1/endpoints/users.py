@@ -7,7 +7,7 @@ from slowapi import Limiter
 from slowapi.util import get_remote_address
 
 from app.config import settings
-from app.dependencies import get_current_user_id
+from app.dependencies import get_current_user_id, get_locale
 from app.models.auth import ApiErrorResponse, UpdateProfileRequest, User
 from app.services import auth_service
 from app.services.quiz_service import get_user_coins, get_user_progress
@@ -26,9 +26,10 @@ limiter = Limiter(key_func=get_remote_address)
 async def user_progress(
     request: Request,
     user_id: str = Depends(get_current_user_id),
+    locale: str = Depends(get_locale),
 ) -> dict:
     """Return per-level guessed status for the current user."""
-    levels = get_user_progress(user_id)
+    levels = get_user_progress(user_id, locale=locale)
     return {"levels": levels}
 
 

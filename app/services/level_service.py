@@ -10,6 +10,9 @@ from app.models.quiz import AnimalWithStatus, Level, LevelDetail, QuizAnimal
 logger = logging.getLogger(__name__)
 
 QUIZ_LEVELS_FILE = Path(__file__).resolve().parent.parent.parent / "data" / "quiz_levels.json"
+TRANSLATIONS_DIR = Path(__file__).resolve().parent.parent.parent / "data" / "translations"
+
+DEFAULT_LOCALE = "it"
 
 
 @lru_cache(maxsize=1)
@@ -19,15 +22,49 @@ def _load_quiz_levels() -> list[dict]:
         return json.load(f)
 
 
-def get_all_levels() -> list[Level]:
+@lru_cache(maxsize=4)
+def _load_translations(locale: str) -> dict | None:
+    """Load translation file for a locale, or None if not available."""
+    path = TRANSLATIONS_DIR / f"{locale}.json"
+    if not path.exists():
+        return None
+    with open(path, "r") as f:
+        return json.load(f)
+
+
+def _translate_animal_name(animal_id: int, english_name: str, locale: str) -> str:
+    """Resolve the localized name for an animal."""
+    if locale == "en":
+        return english_name
+    translations = _load_translations(locale)
+    if translations is None:
+        return english_name
+    return translations.get("animals", {}).get(str(animal_id), english_name)
+
+
+def _translate_level_title(level_id: int, english_title: str, locale: str) -> str:
+    """Resolve the localized title for a level."""
+    if locale == "en":
+        return english_title
+    translations = _load_translations(locale)
+    if translations is None:
+        return english_title
+    return translations.get("levels", {}).get(str(level_id), english_title)
+
+
+def get_all_levels(locale: str = DEFAULT_LOCALE) -> list[Level]:
     """Return all levels with their animals."""
     raw_levels = _load_quiz_levels()
     return [
         Level(
             id=lvl["id"],
-            title=lvl["title"],
+            title=_translate_level_title(lvl["id"], lvl["title"], locale),
             animals=[
-                QuizAnimal(id=a["id"], name=a["name"], image_url=a["imageUrl"])
+                QuizAnimal(
+                    id=a["id"],
+                    name=_translate_animal_name(a["id"], a["name"], locale),
+                    image_url=a["imageUrl"],
+                )
                 for a in lvl["animals"]
             ],
         )
@@ -35,7 +72,11 @@ def get_all_levels() -> list[Level]:
     ]
 
 
-def get_level_detail(level_id: int, guessed: list[bool] | None = None) -> LevelDetail | None:
+def get_level_detail(
+    level_id: int,
+    guessed: list[bool] | None = None,
+    locale: str = DEFAULT_LOCALE,
+) -> LevelDetail | None:
     """Return level detail with per-animal guessed status."""
     raw_levels = _load_quiz_levels()
     lvl = next((l for l in raw_levels if l["id"] == level_id), None)
@@ -46,27 +87,30 @@ def get_level_detail(level_id: int, guessed: list[bool] | None = None) -> LevelD
     guessed = guessed or [False] * len(animals)
     animals_with_status = [
         AnimalWithStatus(
-            id=a["id"], name=a["name"], image_url=a["imageUrl"],
+            id=a["id"],
+            name=_translate_animal_name(a["id"], a["name"], locale),
+            image_url=a["imageUrl"],
             guessed=guessed[i] if i < len(guessed) else False,
         )
         for i, a in enumerate(animals)
     ]
     return LevelDetail(
         id=lvl["id"],
-        title=lvl["title"],
+        title=_translate_level_title(lvl["id"], lvl["title"], locale),
         animals=animals_with_status,
     )
 
 
-def get_animal_name_at(level_id: int, animal_index: int) -> str | None:
-    """Return the animal name at the given index within a level, or None."""
+def get_animal_name_at(level_id: int, animal_index: int, locale: str = DEFAULT_LOCALE) -> str | None:
+    """Return the localized animal name at the given index within a level, or None."""
     raw_levels = _load_quiz_levels()
     lvl = next((l for l in raw_levels if l["id"] == level_id), None)
     if lvl is None:
         return None
     animals = lvl["animals"]
     if 0 <= animal_index < len(animals):
-        return animals[animal_index]["name"]
+        a = animals[animal_index]
+        return _translate_animal_name(a["id"], a["name"], locale)
     return None
 
 

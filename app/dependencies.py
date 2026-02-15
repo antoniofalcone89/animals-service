@@ -2,10 +2,13 @@
 
 import logging
 
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, Header, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from app.services.auth_service import verify_token
+
+SUPPORTED_LOCALES = {"it", "en"}
+DEFAULT_LOCALE = "it"
 
 logger = logging.getLogger(__name__)
 
@@ -37,3 +40,12 @@ async def get_current_user_id(
     Standard dependency for all protected endpoints.
     """
     return claims["uid"]
+
+
+async def get_locale(accept_language: str | None = Header(None)) -> str:
+    """Extract locale from Accept-Language header, defaulting to Italian."""
+    if accept_language:
+        lang = accept_language.strip().split(",")[0].split("-")[0].lower()
+        if lang in SUPPORTED_LOCALES:
+            return lang
+    return DEFAULT_LOCALE
