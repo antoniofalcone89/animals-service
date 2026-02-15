@@ -2,441 +2,441 @@
   {
     "name": "Dog",
     "level": 1,
-    "image_url": "/static/images/dog.jpg",
+    "image_url": "/static/images/Dog.png",
     "description": "Loyal domesticated companion, one of the most popular pets worldwide.",
     "scientific_name": "Canis lupus familiaris"
   },
   {
     "name": "Cat",
     "level": 1,
-    "image_url": "/static/images/cat.jpg",
+    "image_url": "/static/images/Cat.png",
     "description": "Independent and graceful domesticated feline.",
     "scientific_name": "Felis catus"
   },
   {
     "name": "Chicken",
     "level": 1,
-    "image_url": "/static/images/chicken.jpg",
+    "image_url": "/static/images/Chicken.png",
     "description": "The most common domesticated bird raised for eggs and meat.",
     "scientific_name": "Gallus gallus domesticus"
   },
   {
     "name": "Cow",
     "level": 1,
-    "image_url": "/static/images/cow.jpg",
+    "image_url": "/static/images/Cow.png",
     "description": "Large domesticated bovine raised for dairy and beef.",
     "scientific_name": "Bos taurus"
   },
   {
     "name": "Sheep",
     "level": 1,
-    "image_url": "/static/images/sheep.jpg",
+    "image_url": "/static/images/Sheep.png",
     "description": "Woolly domesticated ruminant kept for fleece and meat.",
     "scientific_name": "Ovis aries"
   },
   {
     "name": "Pig",
     "level": 1,
-    "image_url": "/static/images/pig.jpg",
+    "image_url": "/static/images/Pig.png",
     "description": "Intelligent domesticated animal raised for pork.",
     "scientific_name": "Sus scrofa domesticus"
   },
   {
     "name": "Horse",
     "level": 1,
-    "image_url": "/static/images/horse.jpg",
+    "image_url": "/static/images/Horse.png",
     "description": "Large domesticated equine used for riding and work.",
     "scientific_name": "Equus ferus caballus"
   },
   {
     "name": "Goat",
     "level": 1,
-    "image_url": "/static/images/goat.jpg",
+    "image_url": "/static/images/Goat.png",
     "description": "Hardy domesticated ruminant kept for milk and meat.",
     "scientific_name": "Capra aegagrus hircus"
   },
   {
     "name": "Duck",
     "level": 2,
-    "image_url": "/static/images/duck.jpg",
+    "image_url": "/static/images/Duck.png",
     "description": "Waterfowl found on every continent except Antarctica.",
     "scientific_name": "Anas platyrhynchos"
   },
   {
     "name": "Pigeon",
     "level": 2,
-    "image_url": "/static/images/pigeon.jpg",
+    "image_url": "/static/images/Pigeon.png",
     "description": "Common urban bird found in cities worldwide.",
     "scientific_name": "Columba livia"
   },
   {
     "name": "Sparrow",
     "level": 2,
-    "image_url": "/static/images/sparrow.jpg",
+    "image_url": "/static/images/Sparrow.png",
     "description": "Small passerine bird commonly seen near human habitation.",
     "scientific_name": "Passer domesticus"
   },
   {
     "name": "Rat",
     "level": 2,
-    "image_url": "/static/images/rat.jpg",
+    "image_url": "/static/images/Rat.png",
     "description": "Highly adaptable rodent found globally near human settlements.",
     "scientific_name": "Rattus norvegicus"
   },
   {
     "name": "Fox",
     "level": 3,
-    "image_url": "/static/images/fox.jpg",
+    "image_url": "/static/images/Fox.png",
     "description": "Cunning omnivorous canine found across the Northern Hemisphere.",
     "scientific_name": "Vulpes vulpes"
   },
   {
     "name": "Deer",
     "level": 3,
-    "image_url": "/static/images/deer.jpg",
+    "image_url": "/static/images/Deer.png",
     "description": "Graceful herbivore known for antlered males.",
     "scientific_name": "Cervus elaphus"
   },
   {
     "name": "Rabbit",
     "level": 3,
-    "image_url": "/static/images/rabbit.jpg",
+    "image_url": "/static/images/Rabbit.png",
     "description": "Small herbivorous mammal with long ears and powerful hind legs.",
     "scientific_name": "Oryctolagus cuniculus"
   },
   {
     "name": "Squirrel",
     "level": 3,
-    "image_url": "/static/images/squirrel.jpg",
+    "image_url": "/static/images/Squirrel.png",
     "description": "Agile rodent known for hoarding nuts in trees.",
     "scientific_name": "Sciurus carolinensis"
   },
   {
     "name": "Raccoon",
     "level": 3,
-    "image_url": "/static/images/raccoon.jpg",
+    "image_url": "/static/images/Raccoon.png",
     "description": "Nocturnal mammal with a distinctive black face mask.",
     "scientific_name": "Procyon lotor"
   },
   {
     "name": "Hedgehog",
     "level": 3,
-    "image_url": "/static/images/hedgehog.jpg",
+    "image_url": "/static/images/Hedgehog.png",
     "description": "Small spiny mammal that curls into a ball for defense.",
     "scientific_name": "Erinaceus europaeus"
   },
   {
     "name": "Badger",
     "level": 4,
-    "image_url": "/static/images/badger.jpg",
+    "image_url": "/static/images/Badger.png",
     "description": "Stocky burrowing mammal with distinctive facial markings.",
     "scientific_name": "Meles meles"
   },
   {
     "name": "Coyote",
     "level": 4,
-    "image_url": "/static/images/coyote.jpg",
+    "image_url": "/static/images/Coyote.png",
     "description": "Adaptable canine native to North America.",
     "scientific_name": "Canis latrans"
   },
   {
     "name": "Eagle",
     "level": 4,
-    "image_url": "/static/images/eagle.jpg",
+    "image_url": "/static/images/Eagle.png",
     "description": "Powerful raptor and apex avian predator.",
     "scientific_name": "Aquila chrysaetos"
   },
   {
     "name": "Owl",
     "level": 4,
-    "image_url": "/static/images/owl.jpg",
+    "image_url": "/static/images/Owl.png",
     "description": "Nocturnal bird of prey with exceptional hearing and silent flight.",
     "scientific_name": "Strix aluco"
   },
   {
     "name": "Beaver",
     "level": 4,
-    "image_url": "/static/images/beaver.jpg",
+    "image_url": "/static/images/Beaver.png",
     "description": "Large rodent known for building dams and lodges.",
     "scientific_name": "Castor canadensis"
   },
   {
     "name": "Flamingo",
     "level": 4,
-    "image_url": "/static/images/flamingo.jpg",
+    "image_url": "/static/images/Flamingo.png",
     "description": "Tall wading bird known for its pink plumage and one-legged stance.",
     "scientific_name": "Phoenicopterus roseus"
   },
   {
     "name": "Red Panda",
     "level": 5,
-    "image_url": "/static/images/red_panda.jpg",
+    "image_url": "/static/images/Red_Panda.png",
     "description": "Charming arboreal mammal native to the eastern Himalayas.",
     "scientific_name": "Ailurus fulgens"
   },
   {
     "name": "Koala",
     "level": 5,
-    "image_url": "/static/images/koala.jpg",
+    "image_url": "/static/images/Koala.png",
     "description": "Arboreal marsupial that feeds exclusively on eucalyptus leaves.",
     "scientific_name": "Phascolarctos cinereus"
   },
   {
     "name": "Penguin",
     "level": 5,
-    "image_url": "/static/images/penguin.jpg",
+    "image_url": "/static/images/Penguin.png",
     "description": "Flightless seabird adapted to life in cold waters.",
     "scientific_name": "Aptenodytes forsteri"
   },
   {
     "name": "Otter",
     "level": 5,
-    "image_url": "/static/images/otter.jpg",
+    "image_url": "/static/images/Otter.png",
     "description": "Playful semi-aquatic mammal known for floating on its back.",
     "scientific_name": "Lutra lutra"
   },
   {
     "name": "Sloth",
     "level": 5,
-    "image_url": "/static/images/sloth.jpg",
+    "image_url": "/static/images/Sloth.png",
     "description": "Slow-moving arboreal mammal found in Central and South America.",
     "scientific_name": "Bradypus variegatus"
   },
   {
     "name": "Chameleon",
     "level": 5,
-    "image_url": "/static/images/chameleon.jpg",
+    "image_url": "/static/images/Chameleon.png",
     "description": "Color-changing lizard with independently moving eyes.",
     "scientific_name": "Chamaeleo chamaeleon"
   },
   {
     "name": "Porcupine",
     "level": 5,
-    "image_url": "/static/images/porcupine.jpg",
+    "image_url": "/static/images/Porcupine.png",
     "description": "Large rodent covered in sharp protective quills.",
     "scientific_name": "Erethizon dorsatum"
   },
   {
     "name": "Toucan",
     "level": 6,
-    "image_url": "/static/images/toucan.jpg",
+    "image_url": "/static/images/Toucan.png",
     "description": "Tropical bird with an oversized colorful bill.",
     "scientific_name": "Ramphastos toco"
   },
   {
     "name": "Capybara",
     "level": 6,
-    "image_url": "/static/images/capybara.jpg",
+    "image_url": "/static/images/Capybara.png",
     "description": "The world's largest living rodent, native to South America.",
     "scientific_name": "Hydrochoerus hydrochaeris"
   },
   {
     "name": "Manta Ray",
     "level": 6,
-    "image_url": "/static/images/manta_ray.jpg",
+    "image_url": "/static/images/Manta_Ray.png",
     "description": "Majestic ocean giant with a wingspan up to 7 meters.",
     "scientific_name": "Mobula birostris"
   },
   {
     "name": "Platypus",
     "level": 6,
-    "image_url": "/static/images/platypus.jpg",
+    "image_url": "/static/images/Platypus.png",
     "description": "Egg-laying mammal with a duck bill and venomous spur.",
     "scientific_name": "Ornithorhynchus anatinus"
   },
   {
     "name": "Seahorse",
     "level": 6,
-    "image_url": "/static/images/seahorse.jpg",
+    "image_url": "/static/images/Seahorse.png",
     "description": "Unique fish where the male carries and births the young.",
     "scientific_name": "Hippocampus abdominalis"
   },
   {
     "name": "Armadillo",
     "level": 6,
-    "image_url": "/static/images/armadillo.jpg",
+    "image_url": "/static/images/Armadillo.png",
     "description": "Armored mammal that can roll into a protective ball.",
     "scientific_name": "Dasypus novemcinctus"
   },
   {
     "name": "Wolf",
     "level": 6,
-    "image_url": "/static/images/wolf.jpg",
+    "image_url": "/static/images/Wolf.png",
     "description": "Apex pack predator and ancestor of the domestic dog.",
     "scientific_name": "Canis lupus"
   },
   {
     "name": "Snow Leopard",
     "level": 7,
-    "image_url": "/static/images/snow_leopard.jpg",
+    "image_url": "/static/images/Snow_Leopard.png",
     "description": "Elusive big cat adapted to the high mountains of Central Asia.",
     "scientific_name": "Panthera uncia"
   },
   {
     "name": "Pangolin",
     "level": 7,
-    "image_url": "/static/images/pangolin.jpg",
+    "image_url": "/static/images/Pangolin.png",
     "description": "Scaly anteater and the world's most trafficked mammal.",
     "scientific_name": "Manis javanica"
   },
   {
     "name": "Axolotl",
     "level": 7,
-    "image_url": "/static/images/axolotl.jpg",
+    "image_url": "/static/images/Axolotl.png",
     "description": "Mexican salamander that retains larval features throughout life.",
     "scientific_name": "Ambystoma mexicanum"
   },
   {
     "name": "Narwhal",
     "level": 7,
-    "image_url": "/static/images/narwhal.jpg",
+    "image_url": "/static/images/Narwhal.png",
     "description": "Arctic whale known for its long spiral tusk.",
     "scientific_name": "Monodon monoceros"
   },
   {
     "name": "Okapi",
     "level": 7,
-    "image_url": "/static/images/okapi.jpg",
+    "image_url": "/static/images/Okapi.png",
     "description": "Forest giraffe with zebra-striped legs, native to the Congo.",
     "scientific_name": "Okapia johnstoni"
   },
   {
     "name": "Clouded Leopard",
     "level": 7,
-    "image_url": "/static/images/clouded_leopard.jpg",
+    "image_url": "/static/images/Clouded_Leopard.png",
     "description": "Medium-sized wild cat with cloud-shaped spots, found in Southeast Asia.",
     "scientific_name": "Neofelis nebulosa"
   },
   {
     "name": "Quokka",
     "level": 7,
-    "image_url": "/static/images/quokka.jpg",
+    "image_url": "/static/images/Quokka.png",
     "description": "Small marsupial known as the happiest animal on Earth.",
     "scientific_name": "Setonix brachyurus"
   },
   {
     "name": "Cassowary",
     "level": 8,
-    "image_url": "/static/images/cassowary.jpg",
+    "image_url": "/static/images/Cassowary.png",
     "description": "Large flightless bird with a casque and vibrant neck colors.",
     "scientific_name": "Casuarius casuarius"
   },
   {
     "name": "Gharial",
     "level": 8,
-    "image_url": "/static/images/gharial.jpg",
+    "image_url": "/static/images/Gharial.png",
     "description": "Critically endangered fish-eating crocodilian with a narrow snout.",
     "scientific_name": "Gavialis gangeticus"
   },
   {
     "name": "Saola",
     "level": 8,
-    "image_url": "/static/images/saola.jpg",
+    "image_url": "/static/images/Saola.png",
     "description": "Rare forest-dwelling bovine discovered in Vietnam in 1992.",
     "scientific_name": "Pseudoryx nghetinhensis"
   },
   {
     "name": "Fossa",
     "level": 8,
-    "image_url": "/static/images/fossa.jpg",
+    "image_url": "/static/images/Fossa.png",
     "description": "Cat-like predator found only in Madagascar.",
     "scientific_name": "Cryptoprocta ferox"
   },
   {
     "name": "Aye-Aye",
     "level": 8,
-    "image_url": "/static/images/aye-aye.jpg",
+    "image_url": "/static/images/Aye-Aye.png",
     "description": "Nocturnal primate from Madagascar with an elongated middle finger.",
     "scientific_name": "Daubentonia madagascariensis"
   },
   {
     "name": "Numbat",
     "level": 8,
-    "image_url": "/static/images/numbat.jpg",
+    "image_url": "/static/images/Numbat.png",
     "description": "Striped marsupial anteater endemic to Western Australia.",
     "scientific_name": "Myrmecobius fasciatus"
   },
   {
     "name": "Dugong",
     "level": 8,
-    "image_url": "/static/images/dugong.jpg",
+    "image_url": "/static/images/Dugong.png",
     "description": "Gentle marine herbivore closely related to manatees.",
     "scientific_name": "Dugong dugon"
   },
   {
     "name": "Kakapo",
     "level": 9,
-    "image_url": "/static/images/kakapo.jpg",
+    "image_url": "/static/images/Kakapo.png",
     "description": "Critically endangered flightless nocturnal parrot from New Zealand.",
     "scientific_name": "Strigops habroptilus"
   },
   {
     "name": "Vaquita",
     "level": 10,
-    "image_url": "/static/images/vaquita.jpg",
+    "image_url": "/static/images/Vaquita.png",
     "description": "World's rarest marine mammal, fewer than 10 individuals remain.",
     "scientific_name": "Phocoena sinus"
   },
   {
     "name": "Javan Rhino",
     "level": 10,
-    "image_url": "/static/images/javan_rhino.jpg",
+    "image_url": "/static/images/Javan_Rhino.png",
     "description": "One of the rarest large mammals on Earth, found only in Java.",
     "scientific_name": "Rhinoceros sondaicus"
   },
   {
     "name": "Philippine Eagle",
     "level": 9,
-    "image_url": "/static/images/philippine_eagle.jpg",
+    "image_url": "/static/images/Philippine_Eagle.png",
     "description": "One of the largest and most powerful eagles in the world.",
     "scientific_name": "Pithecophaga jefferyi"
   },
   {
     "name": "Amur Leopard",
     "level": 9,
-    "image_url": "/static/images/amur_leopard.jpg",
+    "image_url": "/static/images/Amur_Leopard.png",
     "description": "World's rarest big cat, found in the Russian Far East.",
     "scientific_name": "Panthera pardus orientalis"
   },
   {
     "name": "Sumatran Orangutan",
     "level": 9,
-    "image_url": "/static/images/sumatran_orangutan.jpg",
+    "image_url": "/static/images/Sumatran_Orangutan.png",
     "description": "Critically endangered great ape endemic to Sumatra.",
     "scientific_name": "Pongo abelii"
   },
   {
     "name": "Red Wolf",
     "level": 9,
-    "image_url": "/static/images/red_wolf.jpg",
+    "image_url": "/static/images/Red_Wolf.png",
     "description": "Critically endangered canid native to the southeastern United States.",
     "scientific_name": "Canis rufus"
   },
   {
     "name": "Yangtze Finless Porpoise",
     "level": 10,
-    "image_url": "/static/images/yangtze_finless_porpoise.jpg",
+    "image_url": "/static/images/Yangtze_Finless_Porpoise.png",
     "description": "Critically endangered freshwater porpoise from China's Yangtze River.",
     "scientific_name": "Neophocaena asiaeorientalis asiaeorientalis"
   },
   {
     "name": "Northern Hairy-Nosed Wombat",
     "level": 10,
-    "image_url": "/static/images/northern_hairy-nosed_wombat.jpg",
+    "image_url": "/static/images/Northern_Hairy-Nosed_Wombat.png",
     "description": "One of the rarest mammals, with fewer than 300 individuals.",
     "scientific_name": "Lasiorhinus krefftii"
   },
   {
     "name": "Cross River Gorilla",
     "level": 10,
-    "image_url": "/static/images/cross_river_gorilla.jpg",
+    "image_url": "/static/images/Cross_River_Gorilla.png",
     "description": "World's rarest great ape, found on the Nigeria-Cameroon border.",
     "scientific_name": "Gorilla gorilla diehli"
   },
   {
     "name": "Hainan Gibbon",
     "level": 10,
-    "image_url": "/static/images/hainan_gibbon.jpg",
+    "image_url": "/static/images/Hainan_Gibbon.png",
     "description": "World's rarest primate with around 35 individuals remaining.",
     "scientific_name": "Nomascus hainanus"
   }

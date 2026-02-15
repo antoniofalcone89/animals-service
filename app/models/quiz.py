@@ -13,7 +13,7 @@ class QuizAnimal(BaseModel):
 
     id: int = Field(..., description="Animal ID")
     name: str = Field(..., description="Animal name")
-    image_url: str = Field(..., description="URL to animal image")
+    image_url: Optional[str] = Field(None, description="URL to animal image")
 
 
 class AnimalWithStatus(QuizAnimal):
