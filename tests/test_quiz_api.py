@@ -274,6 +274,50 @@ class TestUserCoins:
         assert resp.json()["totalCoins"] == 0
 
 
+class TestSpendCoins:
+    """POST /api/v1/users/me/spend-coins tests."""
+
+    def test_spend_coins_success(self):
+        headers = _register_and_header()
+        # Earn 10 coins via a correct answer
+        client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Cane",
+        })
+        # Spend 5 coins
+        resp = client.post("/api/v1/users/me/spend-coins", headers=headers, json={
+            "amount": 5,
+        })
+        assert resp.status_code == 200
+        assert resp.json()["totalCoins"] == 5
+        # Verify via GET /users/me/coins
+        resp2 = client.get("/api/v1/users/me/coins", headers=headers)
+        assert resp2.json()["totalCoins"] == 5
+
+    def test_spend_coins_insufficient(self):
+        headers = _register_and_header()
+        resp = client.post("/api/v1/users/me/spend-coins", headers=headers, json={
+            "amount": 100,
+        })
+        assert resp.status_code == 400
+        detail = resp.json()["detail"]
+        assert detail["error"]["code"] == "insufficient_coins"
+
+    def test_spend_coins_invalid_amount(self):
+        headers = _register_and_header()
+        resp = client.post("/api/v1/users/me/spend-coins", headers=headers, json={
+            "amount": 0,
+        })
+        assert resp.status_code == 422
+        resp2 = client.post("/api/v1/users/me/spend-coins", headers=headers, json={
+            "amount": -5,
+        })
+        assert resp2.status_code == 422
+
+    def test_spend_coins_no_auth(self):
+        resp = client.post("/api/v1/users/me/spend-coins", json={"amount": 5})
+        assert resp.status_code in (401, 403)
+
+
 class TestUpdateProfile:
     """PATCH /api/v1/users/me/profile tests."""
 

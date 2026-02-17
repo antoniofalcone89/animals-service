@@ -61,6 +61,22 @@ class AnswerResponse(BaseModel):
     correct_answer: Optional[str] = Field(None, description="The correct answer (only returned when wrong)")
 
 
+class SpendCoinsRequest(BaseModel):
+    """Request schema for spending coins."""
+
+    model_config = ConfigDict(populate_by_name=True, alias_generator=to_camel)
+
+    amount: int = Field(..., gt=0, description="Number of coins to deduct")
+
+
+class SpendCoinsResponse(BaseModel):
+    """Response schema for a coin spending operation."""
+
+    model_config = ConfigDict(populate_by_name=True, alias_generator=to_camel)
+
+    total_coins: int = Field(..., description="Updated coin balance after deduction")
+
+
 class LeaderboardEntry(BaseModel):
     """A single entry on the leaderboard."""
 

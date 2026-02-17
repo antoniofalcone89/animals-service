@@ -70,6 +70,10 @@ class UserStore(abc.ABC):
         """Return total coins for a user."""
 
     @abc.abstractmethod
+    def spend_coins(self, uid: str, amount: int) -> int:
+        """Atomically deduct coins. Returns new total. Raises ValueError if insufficient."""
+
+    @abc.abstractmethod
     def count_completed(self, uid: str) -> int:
         """Return the number of fully-completed levels."""
 
@@ -149,6 +153,14 @@ class InMemoryUserStore(UserStore):
     def get_coins(self, uid: str) -> int:
         self._ensure_progress(uid)
         return self._coins.get(uid, 0)
+
+    def spend_coins(self, uid: str, amount: int) -> int:
+        self._ensure_progress(uid)
+        current = self._coins.get(uid, 0)
+        if current < amount:
+            raise ValueError("insufficient_coins")
+        self._coins[uid] = current - amount
+        return self._coins[uid]
 
     def count_completed(self, uid: str) -> int:
         progress = self._ensure_progress(uid)
@@ -263,6 +275,23 @@ class FirestoreUserStore(UserStore):
         if not snap.exists:
             return 0
         return snap.to_dict().get("total_coins", 0)
+
+    def spend_coins(self, uid: str, amount: int) -> int:
+        ref = self._ref(uid)
+        db = get_firestore_client()
+
+        @firestore_transaction
+        def _spend(transaction: Transaction) -> int:
+            snap = ref.get(transaction=transaction)
+            data = snap.to_dict() if snap.exists else {}
+            total_coins = data.get("total_coins", 0)
+            if total_coins < amount:
+                raise ValueError("insufficient_coins")
+            new_total = total_coins - amount
+            transaction.update(ref, {"total_coins": new_total})
+            return new_total
+
+        return _spend(db.transaction())
 
     def count_completed(self, uid: str) -> int:
         snap = self._ref(uid).get()

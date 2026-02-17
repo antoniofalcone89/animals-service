@@ -70,6 +70,11 @@ def get_user_level_guessed(user_id: str, level_id: int) -> list[bool]:
     return progress.get(level_id, [])
 
 
+def spend_coins(user_id: str, amount: int) -> int:
+    """Deduct coins from user balance. Returns new total. Raises ValueError."""
+    return get_store().spend_coins(user_id, amount)
+
+
 def count_completed_levels(user_id: str) -> int:
     """Return the number of levels where all animals are guessed."""
     return get_store().count_completed(user_id)
