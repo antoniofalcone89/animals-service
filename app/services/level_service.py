@@ -52,6 +52,28 @@ def _translate_level_title(level_id: int, english_title: str, locale: str) -> st
     return translations.get("levels", {}).get(str(level_id), english_title)
 
 
+def _translate_hints(animal_id: int, locale: str) -> list[str]:
+    """Resolve the localized hints for an animal."""
+    translations = _load_translations(locale)
+    if translations is None:
+        # Fall back to English hints
+        translations = _load_translations("en")
+    if translations is None:
+        return []
+    return translations.get("hints", {}).get(str(animal_id), [])
+
+
+def _translate_fun_facts(animal_id: int, locale: str) -> list[str]:
+    """Resolve the localized fun facts for an animal."""
+    translations = _load_translations(locale)
+    if translations is None:
+        # Fall back to English fun facts
+        translations = _load_translations("en")
+    if translations is None:
+        return []
+    return translations.get("funFacts", {}).get(str(animal_id), [])
+
+
 def get_all_levels(locale: str = DEFAULT_LOCALE) -> list[Level]:
     """Return all levels with their animals."""
     raw_levels = _load_quiz_levels()
@@ -64,6 +86,8 @@ def get_all_levels(locale: str = DEFAULT_LOCALE) -> list[Level]:
                     id=a["id"],
                     name=_translate_animal_name(a["id"], a["name"], locale),
                     image_url=a["imageUrl"],
+                    hints=_translate_hints(a["id"], locale),
+                    fun_facts=_translate_fun_facts(a["id"], locale),
                 )
                 for a in lvl["animals"]
             ],
@@ -90,6 +114,8 @@ def get_level_detail(
             id=a["id"],
             name=_translate_animal_name(a["id"], a["name"], locale),
             image_url=a["imageUrl"],
+            hints=_translate_hints(a["id"], locale),
+            fun_facts=_translate_fun_facts(a["id"], locale),
             guessed=guessed[i] if i < len(guessed) else False,
         )
         for i, a in enumerate(animals)

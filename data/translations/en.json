@@ -1,0 +1,1216 @@
+{
+  "levels": {
+    "1": "Level 1",
+    "2": "Level 2",
+    "3": "Level 3",
+    "4": "Level 4",
+    "5": "Level 5",
+    "6": "Level 6"
+  },
+  "animals": {
+    "1": "Dog",
+    "2": "Cat",
+    "3": "Chicken",
+    "4": "Cow",
+    "5": "Sheep",
+    "6": "Pig",
+    "7": "Horse",
+    "8": "Goat",
+    "9": "Donkey",
+    "10": "Turkey",
+    "11": "Rabbit",
+    "12": "Duck",
+    "13": "Goose",
+    "14": "Llama",
+    "15": "Alpaca",
+    "16": "Guinea Pig",
+    "17": "Hamster",
+    "18": "Goldfish",
+    "19": "Parakeet",
+    "20": "Turtle",
+    "21": "Squirrel",
+    "22": "Robin",
+    "23": "Deer",
+    "24": "Fox",
+    "25": "Raccoon",
+    "26": "Hedgehog",
+    "27": "Frog",
+    "28": "Butterfly",
+    "29": "Ladybug",
+    "30": "Bee",
+    "31": "Snail",
+    "32": "Pigeon",
+    "33": "Sparrow",
+    "34": "Bat",
+    "35": "Mouse",
+    "36": "Mole",
+    "37": "Dragonfly",
+    "38": "Chipmunk",
+    "39": "Owl",
+    "40": "Woodpecker",
+    "41": "Dolphin",
+    "42": "Whale",
+    "43": "Shark",
+    "44": "Octopus",
+    "45": "Seahorse",
+    "46": "Jellyfish",
+    "47": "Sea Turtle",
+    "48": "Clownfish",
+    "49": "Starfish",
+    "50": "Crab",
+    "51": "Lobster",
+    "52": "Seal",
+    "53": "Walrus",
+    "54": "Penguin",
+    "55": "Pufferfish",
+    "56": "Manta Ray",
+    "57": "Eel",
+    "58": "Squid",
+    "59": "Orca",
+    "60": "Narwhal",
+    "61": "Lion",
+    "62": "Tiger",
+    "63": "Elephant",
+    "64": "Giraffe",
+    "65": "Monkey",
+    "66": "Gorilla",
+    "67": "Parrot",
+    "68": "Toucan",
+    "69": "Jaguar",
+    "70": "Snake",
+    "71": "Crocodile",
+    "72": "Hippo",
+    "73": "Rhino",
+    "74": "Zebra",
+    "75": "Chameleon",
+    "76": "Sloth",
+    "77": "Orangutan",
+    "78": "Panther",
+    "79": "Flamingo",
+    "80": "Peacock",
+    "81": "Polar Bear",
+    "82": "Arctic Fox",
+    "83": "Snowy Owl",
+    "84": "Camel",
+    "85": "Scorpion",
+    "86": "Rattlesnake",
+    "87": "Meerkat",
+    "88": "Fennec Fox",
+    "89": "Reindeer",
+    "90": "Husky",
+    "91": "Lemming",
+    "92": "Armadillo",
+    "93": "Roadrunner",
+    "94": "Vulture",
+    "95": "Coyote",
+    "96": "Iguana",
+    "97": "Hyena",
+    "98": "Tortoise",
+    "99": "Pronghorn",
+    "100": "Jerboa",
+    "101": "Axolotl",
+    "102": "Pangolin",
+    "103": "Red Panda",
+    "104": "Koala",
+    "105": "Platypus",
+    "106": "Snow Leopard",
+    "107": "Okapi",
+    "108": "Quokka",
+    "109": "Cassowary",
+    "110": "Aye-Aye",
+    "111": "Kakapo",
+    "112": "Vaquita",
+    "113": "Capybara",
+    "114": "Numbat",
+    "115": "Fossa",
+    "116": "Gharial",
+    "117": "Saola",
+    "118": "Dugong",
+    "119": "Clouded Leopard",
+    "120": "Hainan Gibbon"
+  },
+  "hints": {
+    "1": [
+      "I'm a very popular pet that lives in people's homes.",
+      "I love to play fetch and go for walks with my owner.",
+      "I wag my tail when I'm happy and I say 'woof woof'!"
+    ],
+    "2": [
+      "I'm a small furry pet that many families love.",
+      "I like to nap in sunny spots and chase little toys.",
+      "I purr when I'm happy and I say 'meow'!"
+    ],
+    "3": [
+      "I'm a bird that lives on farms.",
+      "I peck at seeds on the ground and have a red comb on my head.",
+      "I lay eggs and wake everyone up in the morning with my crowing!"
+    ],
+    "4": [
+      "I'm a large farm animal.",
+      "I spend my days grazing in green pastures.",
+      "I give milk and I say 'moo'!"
+    ],
+    "5": [
+      "I'm a farm animal known for my soft coat.",
+      "Farmers shear my fluffy wool once a year.",
+      "I say 'baa baa' and my wool is used to make sweaters!"
+    ],
+    "6": [
+      "I'm a farm animal that loves to eat.",
+      "I have a curly tail and a flat snout.",
+      "I love rolling in mud and I say 'oink oink'!"
+    ],
+    "7": [
+      "I'm a large animal that has been helping humans for thousands of years.",
+      "People ride on my back and I can run very fast.",
+      "I gallop through fields, have a flowing mane, and I say 'neigh'!"
+    ],
+    "8": [
+      "I'm a farm animal that lives on hillsides.",
+      "I have a beard and I love to climb on rocks.",
+      "I have horns and I say 'maa'!"
+    ],
+    "9": [
+      "I'm a strong animal related to the horse.",
+      "I have long ears and I'm known for being very stubborn.",
+      "I carry heavy loads and I say 'hee-haw'!"
+    ],
+    "10": [
+      "I'm a large bird that lives on farms.",
+      "I have a fan-shaped tail and a red wattle under my chin.",
+      "I'm the star of Thanksgiving dinner and I say 'gobble gobble'!"
+    ],
+    "11": [
+      "I'm a small, soft animal that can be a pet.",
+      "I have very long ears and I love munching on carrots.",
+      "I hop around and my nose wiggles all the time!"
+    ],
+    "12": [
+      "I'm a bird that lives near water.",
+      "I have webbed feet that help me swim.",
+      "I waddle when I walk and I say 'quack quack'!"
+    ],
+    "13": [
+      "I'm a farm bird that's bigger than a duck.",
+      "I have a long neck and I can be a very good guard animal.",
+      "I honk loudly and I sometimes chase people away!"
+    ],
+    "14": [
+      "I'm a tall animal from South America.",
+      "I have a long neck, soft fur, and I'm related to camels.",
+      "I'm known for spitting when I'm annoyed!"
+    ],
+    "15": [
+      "I come from the mountains of South America.",
+      "I look like a smaller, fluffier version of a llama.",
+      "My super soft wool is used to make the coziest sweaters!"
+    ],
+    "16": [
+      "I'm a small, cuddly pet that's not actually from a farm.",
+      "I make adorable squeaking sounds when I'm happy.",
+      "Despite my name, I'm not a pig at all -- I'm a rodent from South America!"
+    ],
+    "17": [
+      "I'm a tiny pet that lives in a cage.",
+      "I love running on my exercise wheel at night.",
+      "I store food in my big, puffy cheek pouches!"
+    ],
+    "18": [
+      "I'm a pet that lives in water.",
+      "I swim around in a bowl or a tank all day.",
+      "I'm a shiny orange fish that's often won as a prize at fairs!"
+    ],
+    "19": [
+      "I'm a small, colorful bird kept as a pet.",
+      "I can learn to repeat words and sounds people make.",
+      "I'm also called a budgie, and I come in green, blue, and yellow!"
+    ],
+    "20": [
+      "I'm a reptile that moves very slowly.",
+      "I carry my home on my back wherever I go.",
+      "I can pull my head and legs inside my hard shell for protection!"
+    ],
+    "21": [
+      "I'm a small, furry animal you can see in parks and backyards.",
+      "I have a big, bushy tail and I love climbing trees.",
+      "I collect and bury acorns and nuts to eat later!"
+    ],
+    "22": [
+      "I'm a small songbird you might spot in your garden.",
+      "I'm one of the first birds to sing in the morning.",
+      "I have a bright red-orange breast that makes me easy to recognize!"
+    ],
+    "23": [
+      "I'm a graceful animal that lives in forests.",
+      "I have long legs and I'm very good at jumping over fences.",
+      "The males grow beautiful antlers that fall off every year!"
+    ],
+    "24": [
+      "I'm a clever wild animal with a bushy tail.",
+      "I come out mostly at night and I'm known for being very sneaky.",
+      "I have red-orange fur and a white-tipped tail!"
+    ],
+    "25": [
+      "I'm a clever animal that comes out at night.",
+      "I wash my food in water before eating it.",
+      "I have a black mask across my eyes like a little bandit!"
+    ],
+    "26": [
+      "I'm a small animal that comes out at night.",
+      "I eat insects and snails in gardens.",
+      "I'm covered in sharp spines and I curl into a ball for protection!"
+    ],
+    "27": [
+      "I'm a small animal that lives near ponds and lakes.",
+      "I start my life as a tadpole swimming in water.",
+      "I hop around on long back legs and say 'ribbit ribbit'!"
+    ],
+    "28": [
+      "I'm a flying insect with a very special life cycle.",
+      "I start life as a caterpillar before I transform.",
+      "I have large, colorful wings with beautiful patterns!"
+    ],
+    "29": [
+      "I'm a tiny insect that gardeners love to see.",
+      "I'm considered to be very lucky in many countries.",
+      "I'm red with black spots and I eat pesky aphids!"
+    ],
+    "30": [
+      "I'm a small flying insect that lives in a big colony.",
+      "I visit flowers all day to collect something sweet.",
+      "I make honey and I live in a hive with my queen!"
+    ],
+    "31": [
+      "I'm a very slow creature you find in gardens.",
+      "I leave a slimy trail wherever I go.",
+      "I carry a spiral shell on my back and hide inside when scared!"
+    ],
+    "32": [
+      "I'm a bird that lives in cities all around the world.",
+      "I bob my head when I walk and I eat breadcrumbs in parks.",
+      "I coo softly and people sometimes call me a 'city dove'!"
+    ],
+    "33": [
+      "I'm a small, brown bird seen almost everywhere.",
+      "I hop along the ground looking for seeds and crumbs.",
+      "I'm one of the most common birds in the world and I chirp a lot!"
+    ],
+    "34": [
+      "I'm a flying animal but I'm not a bird.",
+      "I hang upside down to sleep during the day.",
+      "I use sound echoes to find my way in the dark!"
+    ],
+    "35": [
+      "I'm a very small animal that sneaks into houses.",
+      "I have large round ears and a thin, long tail.",
+      "I love cheese and I say 'squeak squeak'!"
+    ],
+    "36": [
+      "I'm a small mammal that lives underground.",
+      "I dig tunnels with my big, powerful front paws.",
+      "I'm nearly blind and I push up little hills of dirt in your yard!"
+    ],
+    "37": [
+      "I'm a flying insect found near ponds and streams.",
+      "I have two pairs of wings and I can fly in any direction.",
+      "I have a long, thin body and huge eyes, and I catch bugs mid-flight!"
+    ],
+    "38": [
+      "I'm a small, furry animal that lives in forests.",
+      "I have puffy cheeks and I love gathering nuts.",
+      "I have brown fur with black and white stripes on my back!"
+    ],
+    "39": [
+      "I'm a bird that hunts at night.",
+      "I can turn my head almost all the way around.",
+      "I have huge eyes, I'm very wise, and I say 'hoo hoo'!"
+    ],
+    "40": [
+      "I'm a bird that lives in forests.",
+      "I have a very strong beak that I use to find food.",
+      "I peck holes in tree trunks to find insects, and you can hear me drumming from far away!"
+    ],
+    "41": [
+      "I'm a friendly sea creature.",
+      "I'm one of the smartest animals in the ocean.",
+      "I jump out of the water playfully and I communicate with clicks and whistles!"
+    ],
+    "42": [
+      "I'm the biggest creature in the ocean.",
+      "I breathe air even though I live in water.",
+      "I spray water from a blowhole on top of my head and I sing long, beautiful songs!"
+    ],
+    "43": [
+      "I'm a powerful predator that lives in the ocean.",
+      "I have rows and rows of sharp teeth that keep growing back.",
+      "I have a pointed dorsal fin that sticks out of the water!"
+    ],
+    "44": [
+      "I'm a sea creature with no bones at all.",
+      "I'm super smart and can solve puzzles and open jars.",
+      "I have eight arms with suction cups and I can squirt ink!"
+    ],
+    "45": [
+      "I'm a tiny ocean creature with an unusual shape.",
+      "I swim upright and I'm not a very fast swimmer.",
+      "My head looks like a tiny horse and the dad carries the babies!"
+    ],
+    "46": [
+      "I'm a sea creature that drifts through the ocean.",
+      "I don't have a brain, heart, or bones.",
+      "I have a see-through, squishy body with long stinging tentacles!"
+    ],
+    "47": [
+      "I'm a large reptile that lives in the ocean.",
+      "I travel thousands of miles to lay my eggs on sandy beaches.",
+      "I have flippers instead of legs and a big, beautiful shell!"
+    ],
+    "48": [
+      "I'm a small, colorful fish that lives in warm oceans.",
+      "I make my home among the stinging tentacles of an anemone.",
+      "I'm orange with white stripes, and I was the star of a famous movie about being found!"
+    ],
+    "49": [
+      "I'm a sea creature that lives on the ocean floor.",
+      "I can have five or more arms and I don't have a brain.",
+      "I'm shaped like a star and I can regrow my arms if I lose one!"
+    ],
+    "50": [
+      "I'm a sea creature with a hard outer body.",
+      "I walk sideways along the beach and ocean floor.",
+      "I have two big pinching claws and ten legs!"
+    ],
+    "51": [
+      "I'm a sea creature with a hard shell.",
+      "I live on the ocean floor and I can live for over 100 years.",
+      "I have two large claws and I turn bright red when cooked!"
+    ],
+    "52": [
+      "I'm a marine mammal that loves cold water.",
+      "I'm very playful and I can balance a ball on my nose.",
+      "I have smooth skin, flippers, and I bark like a dog!"
+    ],
+    "53": [
+      "I'm a very large marine mammal from the Arctic.",
+      "I have thick, wrinkly skin and lots of blubber to stay warm.",
+      "I have two long ivory tusks and big whiskers!"
+    ],
+    "54": [
+      "I'm a bird that cannot fly.",
+      "I live in very cold places and I love to swim.",
+      "I waddle on ice, have a black and white tuxedo look, and I slide on my belly!"
+    ],
+    "55": [
+      "I'm a fish with a very unusual defense.",
+      "When scared, I can make myself much bigger.",
+      "I puff up into a spiky ball and some parts of me are very poisonous!"
+    ],
+    "56": [
+      "I'm a very large, flat sea creature.",
+      "I glide gracefully through the water like I'm flying.",
+      "I have huge wing-like fins and a long, thin tail!"
+    ],
+    "57": [
+      "I'm a long, slippery fish that lives in the ocean.",
+      "I hide in crevices and come out at night to hunt.",
+      "I look like an underwater snake and some of my relatives can make electricity!"
+    ],
+    "58": [
+      "I'm a sea creature related to the octopus.",
+      "I have a long, torpedo-shaped body built for speed.",
+      "I have ten arms, big eyes, and I can squirt ink to escape predators!"
+    ],
+    "59": [
+      "I'm a large, powerful ocean predator.",
+      "I'm actually a member of the dolphin family, not a whale.",
+      "I'm black and white and I'm called the 'killer whale'!"
+    ],
+    "60": [
+      "I'm a mysterious sea creature from the Arctic.",
+      "I have a unique feature growing from my head.",
+      "I'm called the 'unicorn of the sea' because of my long spiral tusk!"
+    ],
+    "61": [
+      "I'm a big wild cat that lives in Africa.",
+      "I live in a group called a pride.",
+      "I have a big, fluffy mane and I'm called the 'King of the Jungle'!"
+    ],
+    "62": [
+      "I'm a large wild cat from Asia.",
+      "I love swimming, unlike most cats.",
+      "I have beautiful orange fur with black stripes!"
+    ],
+    "63": [
+      "I'm the largest animal that walks on land.",
+      "I use my long nose to grab food and spray water.",
+      "I have huge floppy ears, ivory tusks, and I never forget!"
+    ],
+    "64": [
+      "I'm the tallest animal on Earth.",
+      "I live in the African savanna and I eat leaves from treetops.",
+      "I have a super long neck and spotted brown patches on my body!"
+    ],
+    "65": [
+      "I'm a playful animal that lives in trees in warm places.",
+      "I love swinging from branch to branch using my hands and tail.",
+      "I eat bananas and I'm known for being very clever and silly!"
+    ],
+    "66": [
+      "I'm one of the strongest animals in the jungle.",
+      "I'm a great ape and I'm closely related to humans.",
+      "I have huge muscles, dark fur, and I beat my chest to show strength!"
+    ],
+    "67": [
+      "I'm a colorful tropical bird.",
+      "I have a curved beak and I'm very good at talking.",
+      "I can copy human words and I love crackers! Polly wants one!"
+    ],
+    "68": [
+      "I'm a tropical bird from Central and South America.",
+      "I have very bright, colorful feathers.",
+      "I have a huge, colorful beak that's almost as big as my body!"
+    ],
+    "69": [
+      "I'm a powerful wild cat from the Americas.",
+      "I love water and I'm an excellent swimmer.",
+      "I have a golden coat covered with dark rosette-shaped spots!"
+    ],
+    "70": [
+      "I'm a long, legless reptile.",
+      "I slither along the ground and flick my forked tongue.",
+      "I hiss and some of my relatives can be venomous!"
+    ],
+    "71": [
+      "I'm a large reptile that lives in rivers and swamps.",
+      "I have a long snout and powerful jaws full of teeth.",
+      "I hide in the water with just my eyes showing, and I snap! See you later!"
+    ],
+    "72": [
+      "I'm one of the heaviest animals in Africa.",
+      "I spend most of my day in rivers and lakes to stay cool.",
+      "I have a huge mouth that opens super wide and stubby little legs!"
+    ],
+    "73": [
+      "I'm a massive animal with very tough, thick skin.",
+      "I live in Africa and Asia and I'm a herbivore.",
+      "I have one or two horns on my nose!"
+    ],
+    "74": [
+      "I'm a horse-like animal from the African savanna.",
+      "No two of us look exactly the same.",
+      "I'm white with black stripes -- or am I black with white stripes?"
+    ],
+    "75": [
+      "I'm a tropical reptile known for a very special ability.",
+      "I have eyes that can look in two different directions at once.",
+      "I can change the color of my skin to blend in with my surroundings!"
+    ],
+    "76": [
+      "I'm one of the slowest animals in the world.",
+      "I spend most of my life hanging upside down in trees.",
+      "I move so slowly that algae grows on my fur!"
+    ],
+    "77": [
+      "I'm a great ape that lives in the rainforests of Asia.",
+      "I have very long arms for swinging through the trees.",
+      "I have shaggy reddish-orange hair and my name means 'person of the forest'!"
+    ],
+    "78": [
+      "I'm a powerful big cat that roams tropical forests.",
+      "I hunt at night and I'm very hard to spot in the dark.",
+      "I'm actually a leopard or jaguar with all-black fur!"
+    ],
+    "79": [
+      "I'm a tall bird that lives near lakes and lagoons.",
+      "I stand on one leg a lot and I live in big flocks.",
+      "I'm bright pink because of the shrimp I eat!"
+    ],
+    "80": [
+      "I'm a large, fancy bird from Asia.",
+      "The males of my species put on quite a show.",
+      "I spread my enormous tail feathers into a fan of shimmering blue and green eyespots!"
+    ],
+    "81": [
+      "I'm a massive animal that lives in the coldest places on Earth.",
+      "I'm an excellent swimmer in freezing Arctic waters.",
+      "I have thick white fur and huge paws, and I'm the largest land carnivore!"
+    ],
+    "82": [
+      "I'm a small wild animal from the Arctic.",
+      "My fur changes color with the seasons.",
+      "I'm white in winter and brown in summer, and I have a fluffy tail and small rounded ears!"
+    ],
+    "83": [
+      "I'm a bird of prey from the Arctic.",
+      "Unlike most of my relatives, I often hunt during the day.",
+      "I have bright white feathers with dark markings, and I starred in a famous wizard movie!"
+    ],
+    "84": [
+      "I'm a large animal that lives in hot, dry deserts.",
+      "I can go a very long time without drinking water.",
+      "I have one or two humps on my back that store fat for energy!"
+    ],
+    "85": [
+      "I'm a small creature that lives in deserts and warm places.",
+      "I have eight legs and two large pincers.",
+      "I have a curved, stinging tail that I hold over my back!"
+    ],
+    "86": [
+      "I'm a reptile that lives in dry, rocky deserts.",
+      "I have a pattern of diamond shapes along my body.",
+      "I shake the tip of my tail to make a buzzing warning sound!"
+    ],
+    "87": [
+      "I'm a small animal from the deserts of Africa.",
+      "I live in large groups and we take turns being lookouts.",
+      "I stand up tall on my back legs to watch for danger, like a little sentinel!"
+    ],
+    "88": [
+      "I'm a small wild animal from the Sahara Desert.",
+      "I'm nocturnal and I have an amazing sense of hearing.",
+      "I have the biggest ears of any fox -- they help me stay cool in the heat!"
+    ],
+    "89": [
+      "I'm a large animal from the cold, snowy north.",
+      "I travel in huge herds across the tundra.",
+      "I have big antlers and I'm famous for pulling a certain jolly man's sleigh!"
+    ],
+    "90": [
+      "I'm a strong, energetic dog breed from cold places.",
+      "I have thick fur and I love to run.",
+      "I pull sleds across the snow and I have striking blue eyes!"
+    ],
+    "91": [
+      "I'm a tiny rodent from the Arctic tundra.",
+      "I live under the snow and dig tunnels to find food.",
+      "People tell a myth that I run off cliffs, but that's not actually true!"
+    ],
+    "92": [
+      "I'm a small mammal from the Americas.",
+      "I have a very special kind of body armor.",
+      "I'm covered in hard, bony plates and I curl into a ball for protection!"
+    ],
+    "93": [
+      "I'm a fast bird that prefers running to flying.",
+      "I live in the deserts of the southwestern United States.",
+      "I can run up to 20 miles per hour and I say 'beep beep' in cartoons!"
+    ],
+    "94": [
+      "I'm a large bird of prey that soars high in the sky.",
+      "I have a bald head and a very keen sense of smell.",
+      "I circle in the sky looking for dead animals to eat -- I'm nature's cleanup crew!"
+    ],
+    "95": [
+      "I'm a wild animal related to wolves and dogs.",
+      "I live in North America and I'm very adaptable.",
+      "I howl at the moon at night and I'm known for being crafty and clever!"
+    ],
+    "96": [
+      "I'm a large reptile that loves warm, tropical climates.",
+      "I can often be seen basking in the sun on rocks or tree branches.",
+      "I'm green, I have a row of spines along my back, and a long, whip-like tail!"
+    ],
+    "97": [
+      "I'm a wild animal from Africa that hunts in packs.",
+      "I have one of the strongest bites of any mammal.",
+      "I look like a dog but I'm not one, and my laugh-like call is famous!"
+    ],
+    "98": [
+      "I'm a slow-moving reptile with a heavy shell.",
+      "I live on land and I can live for a very, very long time.",
+      "Some of my relatives have lived for over 150 years -- I'm one of the oldest animals on Earth!"
+    ],
+    "99": [
+      "I'm a hoofed animal from the grasslands of North America.",
+      "I'm the fastest land animal on my continent.",
+      "I can run nearly 60 miles per hour and I have two branching horns!"
+    ],
+    "100": [
+      "I'm a tiny rodent from the deserts of Asia and Africa.",
+      "I have very long back legs compared to my small body.",
+      "I hop like a tiny kangaroo and I have a super long tufted tail!"
+    ],
+    "101": [
+      "I'm a very unusual amphibian from Mexico.",
+      "I live in water my whole life and I never fully grow up.",
+      "I have feathery gills on my head and I can regrow lost body parts!"
+    ],
+    "102": [
+      "I'm one of the most hunted animals in the world.",
+      "I'm covered from head to tail in protective armor.",
+      "I have overlapping scales made of keratin and I curl into a tight ball when scared!"
+    ],
+    "103": [
+      "I'm a small, adorable mammal from the mountains of Asia.",
+      "I'm not actually closely related to giant pandas.",
+      "I have reddish-brown fur, a striped fluffy tail, and I look like a mix of a cat and a raccoon!"
+    ],
+    "104": [
+      "I'm a tree-dwelling marsupial from Australia.",
+      "I sleep up to 22 hours a day because my food gives me very little energy.",
+      "I eat eucalyptus leaves and I have a big round nose and fluffy ears!"
+    ],
+    "105": [
+      "I'm one of the strangest mammals on the planet.",
+      "I lay eggs even though I'm a mammal, and I have a bill like a duck.",
+      "I have a beaver-like tail, webbed feet, and the males have venomous spurs on their ankles!"
+    ],
+    "106": [
+      "I'm a big cat that lives high up in the mountains of Central Asia.",
+      "I have a very long, thick tail that I wrap around myself like a scarf.",
+      "I have beautiful spotted grey fur and I'm called the 'ghost of the mountains'!"
+    ],
+    "107": [
+      "I'm an unusual mammal from the rainforests of Central Africa.",
+      "I look like a mix of different animals and I was unknown to scientists until 1901.",
+      "I have a brown body with striped legs like a zebra, but I'm actually related to the giraffe!"
+    ],
+    "108": [
+      "I'm a small marsupial from a tiny island near Australia.",
+      "I'm known for my friendly, cheerful expression.",
+      "I always look like I'm smiling and I've been called 'the happiest animal on Earth'!"
+    ],
+    "109": [
+      "I'm a large, flightless bird from Australia and New Guinea.",
+      "I have a tall, bony crest on top of my head.",
+      "I have bright blue skin on my neck, I can be dangerous, and I'm considered one of the most dangerous birds alive!"
+    ],
+    "110": [
+      "I'm a strange nocturnal primate from Madagascar.",
+      "I have huge eyes, big ears, and bushy tail.",
+      "I tap on trees with my extra-long, bony middle finger to find insects hiding inside!"
+    ],
+    "111": [
+      "I'm a very rare, flightless bird from New Zealand.",
+      "I'm nocturnal and I'm the heaviest parrot in the world.",
+      "I'm a big, green, chubby parrot that can't fly, and there are fewer than 250 of me left!"
+    ],
+    "112": [
+      "I'm one of the rarest animals in the entire world.",
+      "I'm a small marine mammal that lives in one tiny part of one ocean.",
+      "I'm the world's smallest porpoise, found only in the Gulf of California, and I'm critically endangered!"
+    ],
+    "113": [
+      "I'm the largest rodent in the world.",
+      "I'm a very social and calm animal from South America.",
+      "I look like a giant guinea pig, I love water, and I'm friends with almost every other animal!"
+    ],
+    "114": [
+      "I'm a small marsupial from Australia.",
+      "I have a long, pointy snout and a striped back.",
+      "I use my long, sticky tongue to eat up to 20,000 termites every day!"
+    ],
+    "115": [
+      "I'm the top predator on the island of Madagascar.",
+      "I'm related to the mongoose but I look a bit like a small cougar.",
+      "I have a long tail, retractable claws, and I'm the only animal that hunts lemurs!"
+    ],
+    "116": [
+      "I'm a large reptile that lives in rivers in Asia.",
+      "I'm a type of crocodilian with a very unusual snout.",
+      "I have an extremely long, thin snout that's perfect for catching fish!"
+    ],
+    "117": [
+      "I'm one of the rarest mammals on the planet.",
+      "I was only discovered by scientists in 1992 in Southeast Asia.",
+      "I'm called the 'Asian unicorn' because I'm so rarely seen in the forests of Vietnam and Laos!"
+    ],
+    "118": [
+      "I'm a gentle marine mammal that lives in warm coastal waters.",
+      "I'm related to manatees and, strangely, to elephants.",
+      "I graze on seagrass and I'm sometimes called a 'sea cow'!"
+    ],
+    "119": [
+      "I'm a medium-sized wild cat from the forests of Southeast Asia.",
+      "I spend a lot of time in trees and I'm an excellent climber.",
+      "I have large, cloud-shaped blotches on my fur and the longest canine teeth relative to body size of any cat!"
+    ],
+    "120": [
+      "I'm one of the rarest primates in the world.",
+      "I live only on one island in China.",
+      "I'm a small ape from Hainan Island with fewer than 40 of us left, making me the rarest ape on Earth!"
+    ]
+  },
+  "funFacts": {
+    "1": [
+      "Dogs can understand up to 250 words and gestures, and they can count up to five!",
+      "A dog's nose print is unique, just like a human fingerprint -- no two are alike!"
+    ],
+    "2": [
+      "Cats spend about 70% of their lives sleeping -- that's around 16 hours a day!",
+      "A group of cats is called a 'clowder,' and cats can rotate their ears 180 degrees!"
+    ],
+    "3": [
+      "Chickens can remember over 100 different faces of people and other chickens!",
+      "Mother hens talk to their chicks while they are still inside the egg, and the chicks chirp back!"
+    ],
+    "4": [
+      "Cows have best friends and get stressed when they are separated from them!",
+      "A cow can walk upstairs but not downstairs because their knees can't bend the right way!"
+    ],
+    "5": [
+      "Sheep can recognize up to 50 other sheep faces and even 10 human faces for years!",
+      "Sheep have excellent memories and can remember events and faces for up to two years!"
+    ],
+    "6": [
+      "Pigs are smarter than dogs and can even learn to play video games with joysticks!",
+      "Pigs can't look up at the sky while standing -- their necks just won't let them!"
+    ],
+    "7": [
+      "Horses can sleep both lying down and standing up!",
+      "A horse can run within hours of being born, and they can see nearly 360 degrees around them!"
+    ],
+    "8": [
+      "Goats have rectangular pupils that give them a nearly 340-degree field of vision!",
+      "Goats were one of the first animals to be tamed by humans over 10,000 years ago!"
+    ],
+    "9": [
+      "Donkeys have an incredible memory and can remember places and other donkeys they've met 25 years ago!",
+      "A donkey's ears can be over 12 inches long, and they can hear another donkey calling from 60 miles away in the desert!"
+    ],
+    "10": [
+      "Wild turkeys can fly at speeds up to 55 miles per hour, even though they look clumsy on the ground!",
+      "Benjamin Franklin wanted the turkey, not the bald eagle, to be the national bird of the United States!"
+    ],
+    "11": [
+      "Rabbits can't vomit, so they have to be very careful about what they eat!",
+      "A happy rabbit will jump and twist in the air -- this joyful move is called a 'binky'!"
+    ],
+    "12": [
+      "Ducks have waterproof feathers thanks to a special oil they spread with their beaks!",
+      "A duck's quack doesn't echo, and no one has been able to figure out exactly why!"
+    ],
+    "13": [
+      "Geese fly in a V-formation because it saves energy -- the birds in back ride the air current created by the ones in front!",
+      "Geese mate for life and will mourn when their partner dies, sometimes refusing to eat!"
+    ],
+    "14": [
+      "Llamas are used as guard animals to protect sheep and goats from coyotes and other predators!",
+      "Llamas hum to communicate with each other, and mothers hum to their babies!"
+    ],
+    "15": [
+      "Alpaca fiber is warmer than sheep's wool and is naturally water-resistant!",
+      "Alpacas use a communal dung pile -- the whole herd goes to the same spot to keep their space clean!"
+    ],
+    "16": [
+      "Guinea pigs 'popcorn' -- they jump straight up in the air when they are really happy!",
+      "Guinea pigs are born with their eyes open, a full coat of fur, and they can even run right away!"
+    ],
+    "17": [
+      "Hamsters can run up to 8 miles on their exercise wheel in a single night!",
+      "A hamster's cheek pouches extend all the way back to their shoulders and can hold a lot of food!"
+    ],
+    "18": [
+      "Goldfish have a memory span of at least three months, not just a few seconds like the myth says!",
+      "Goldfish can see more colors than humans can -- they can see ultraviolet and infrared light!"
+    ],
+    "19": [
+      "Parakeets can learn to say hundreds of words and even learn to count!",
+      "In the wild, parakeets live in huge flocks of thousands, chattering to each other constantly!"
+    ],
+    "20": [
+      "Some turtles can breathe through their rear end -- it helps them stay underwater longer!",
+      "Turtles have been on Earth for over 200 million years -- they were around when dinosaurs roamed!"
+    ],
+    "21": [
+      "Squirrels plant thousands of trees every year because they forget where they buried their acorns!",
+      "A squirrel's front teeth never stop growing, so they have to keep gnawing to keep them short!"
+    ],
+    "22": [
+      "Robins can see earthworms underground by detecting tiny movements in the soil!",
+      "Baby robins eat about 14 feet of earthworms every single day while growing up!"
+    ],
+    "23": [
+      "Deer can jump up to 10 feet high and 30 feet far in a single leap!",
+      "A baby deer (called a fawn) has no scent for the first week of its life, which helps it hide from predators!"
+    ],
+    "24": [
+      "Foxes use the Earth's magnetic field to help them hunt -- they can sense which direction is north!",
+      "A fox's tail is called a 'brush,' and they use it as a warm blanket in cold weather!"
+    ],
+    "25": [
+      "Raccoons have incredibly sensitive hands that become even more sensitive when wet, which is why they 'wash' their food!",
+      "Raccoons can remember solutions to tasks for up to three years!"
+    ],
+    "26": [
+      "Hedgehogs are immune to many snake venoms and can eat venomous snakes without being harmed!",
+      "Baby hedgehogs are called 'hoglets,' and they are born with soft spines under their skin that harden after a few hours!"
+    ],
+    "27": [
+      "Some frogs can freeze solid in winter and then thaw and hop away in spring, completely fine!",
+      "A group of frogs is called an 'army,' and the golden poison frog has enough toxin to be dangerous to 10 grown men!"
+    ],
+    "28": [
+      "Butterflies taste with their feet! They have taste sensors on their legs to find the right plants!",
+      "Monarch butterflies migrate up to 3,000 miles from Canada to Mexico every year -- and they've never made the trip before!"
+    ],
+    "29": [
+      "A ladybug can eat up to 5,000 aphids in its lifetime, making it a gardener's best friend!",
+      "Ladybugs bleed from their knees when threatened -- the smelly yellow liquid scares predators away!"
+    ],
+    "30": [
+      "A honeybee visits between 50 and 1,000 flowers in one trip and can fly up to 6 miles!",
+      "Bees communicate by dancing! A 'waggle dance' tells other bees where to find the best flowers!"
+    ],
+    "31": [
+      "A garden snail can sleep for up to three years if the weather is too dry!",
+      "Snails have thousands of tiny teeth on a ribbon-like tongue called a radula -- some species have over 20,000 teeth!"
+    ],
+    "32": [
+      "Pigeons can find their way home from over 1,000 miles away -- that's why people used them to carry messages!",
+      "Pigeons can recognize all 26 letters of the English alphabet and can even tell the difference between two different human beings in a photograph!"
+    ],
+    "33": [
+      "Sparrows have been living alongside humans for about 10,000 years -- as long as we've been farming!",
+      "A sparrow's heart beats over 800 times per minute, compared to a human's average of 72!"
+    ],
+    "34": [
+      "Bats are the only mammals that can truly fly -- other 'flying' mammals just glide!",
+      "A single brown bat can eat up to 1,000 mosquitoes in just one hour!"
+    ],
+    "35": [
+      "A mouse's heart beats about 632 times per minute -- almost 10 times faster than a human heart!",
+      "Mice sing ultrasonic love songs to each other that are too high-pitched for humans to hear!"
+    ],
+    "36": [
+      "A mole can dig a tunnel 300 feet long in just one night!",
+      "Moles have a special protein in their blood that lets them breathe recycled air in their underground tunnels!"
+    ],
+    "37": [
+      "Dragonflies have been on Earth for over 300 million years -- they existed before dinosaurs!",
+      "A dragonfly can fly in any direction, including backwards and sideways, and can hover in one spot like a helicopter!"
+    ],
+    "38": [
+      "Chipmunks have cheek pouches that can stretch to three times the size of their head!",
+      "A chipmunk can gather up to 165 acorns in a single day!"
+    ],
+    "39": [
+      "An owl can rotate its head up to 270 degrees -- that's three-quarters of the way around!",
+      "Owls can't move their eyeballs at all, which is why they need to turn their whole head to look around!"
+    ],
+    "40": [
+      "Woodpeckers peck at trees up to 20 times per second, and their brains are specially cushioned to prevent damage!",
+      "A woodpecker's tongue can be up to 4 inches long and wraps around the inside of its skull when not in use!"
+    ],
+    "41": [
+      "Dolphins sleep with one eye open! Only half their brain sleeps at a time so they can keep breathing!",
+      "Every dolphin has a unique whistle that acts like a name -- other dolphins use it to call them!"
+    ],
+    "42": [
+      "A blue whale's heart is so big that a small child could crawl through its arteries!",
+      "Blue whale babies gain about 200 pounds every single day during their first year of life!"
+    ],
+    "43": [
+      "Sharks have been around for over 400 million years -- they're older than trees!",
+      "Sharks can sense a single drop of blood in an Olympic-sized swimming pool!"
+    ],
+    "44": [
+      "An octopus has three hearts and blue blood!",
+      "Octopuses have been seen using coconut shells as portable shelters -- they carry them around and hide inside!"
+    ],
+    "45": [
+      "Male seahorses are the ones who get pregnant and give birth to the babies -- the only males in the animal kingdom that do!",
+      "Seahorses don't have stomachs, so food passes through them very quickly and they need to eat almost constantly!"
+    ],
+    "46": [
+      "Some jellyfish are immortal! The Turritopsis jellyfish can revert back to its baby form and start its life cycle over!",
+      "Jellyfish are about 95% water and have no brain, no blood, and no heart!"
+    ],
+    "47": [
+      "Sea turtles have been around since the time of the dinosaurs, over 110 million years ago!",
+      "Sea turtles can hold their breath for up to 5 hours by slowing their heart rate to conserve oxygen!"
+    ],
+    "48": [
+      "All clownfish are born male, and the dominant one in a group can change into a female!",
+      "Clownfish have a special slimy mucus coating that protects them from the anemone's stinging tentacles!"
+    ],
+    "49": [
+      "Starfish don't have blood -- instead, they pump seawater through their bodies!",
+      "A starfish can regrow an entire new arm, and sometimes a single arm can grow a whole new starfish!"
+    ],
+    "50": [
+      "Crabs walk sideways because of the way their leg joints bend -- it's actually faster for them!",
+      "The Japanese spider crab has legs that can span up to 12 feet from tip to tip -- that's bigger than a car!"
+    ],
+    "51": [
+      "Lobsters taste with their feet and chew with their stomachs!",
+      "Lobsters can live for over 100 years, and they keep growing their entire lives -- they never stop!"
+    ],
+    "52": [
+      "Seals can sleep underwater and come up to breathe automatically without waking up!",
+      "A seal's whiskers are so sensitive they can detect fish swimming nearby, even in complete darkness!"
+    ],
+    "53": [
+      "A walrus can eat up to 4,000 clams in one feeding session!",
+      "Walruses use their tusks like ice picks to pull their heavy bodies out of the water onto ice!"
+    ],
+    "54": [
+      "Emperor penguins can dive to depths of over 1,800 feet and hold their breath for more than 20 minutes!",
+      "Penguin dads keep their eggs warm by balancing them on their feet under a flap of skin for two months without eating!"
+    ],
+    "55": [
+      "Pufferfish contain a toxin called tetrodotoxin that is up to 1,200 times more poisonous than cyanide!",
+      "Despite being so toxic, pufferfish is considered a delicacy in Japan, but chefs must train for years to prepare it safely!"
+    ],
+    "56": [
+      "Manta rays have the largest brains of any fish and can recognize themselves in mirrors!",
+      "Manta rays can have a wingspan of up to 23 feet -- that's wider than many cars are long!"
+    ],
+    "57": [
+      "Electric eels can generate up to 860 volts of electricity -- enough to stun a horse!",
+      "Eels can swim both forwards and backwards, and some species travel thousands of miles to lay their eggs!"
+    ],
+    "58": [
+      "Giant squid have the largest eyes in the animal kingdom -- each one can be as big as a dinner plate!",
+      "Squid have three hearts: two pump blood to the gills, and one pumps it to the rest of the body!"
+    ],
+    "59": [
+      "Orcas are actually the largest member of the dolphin family, not whales!",
+      "Different orca groups speak different 'dialects' -- each pod has its own unique set of calls!"
+    ],
+    "60": [
+      "A narwhal's tusk is actually a giant tooth that grows in a spiral and can be up to 10 feet long!",
+      "Narwhal tusks have millions of nerve endings, and scientists think they use them to sense changes in the water!"
+    ],
+    "61": [
+      "A lion's roar can be heard from up to 5 miles away -- it's the loudest of any big cat!",
+      "Lions sleep up to 20 hours a day, and it's actually the female lions that do most of the hunting!"
+    ],
+    "62": [
+      "Every tiger has a unique pattern of stripes, just like human fingerprints -- no two tigers are alike!",
+      "Tigers are one of the few big cats that actually enjoy swimming and playing in water!"
+    ],
+    "63": [
+      "Elephants are the only animals that can't jump, but they can communicate using vibrations felt through their feet!",
+      "An elephant's trunk has over 40,000 muscles and can pick up something as small as a single grain of rice!"
+    ],
+    "64": [
+      "A giraffe's tongue can be up to 20 inches long and is dark purple to protect it from sunburn!",
+      "Giraffes only need about 30 minutes of sleep per day -- one of the shortest sleep requirements of any animal!"
+    ],
+    "65": [
+      "Capuchin monkeys have been observed using rocks as tools to crack open nuts for at least 3,000 years!",
+      "Spider monkeys can swing through trees at speeds of up to 35 miles per hour using just their arms and tail!"
+    ],
+    "66": [
+      "Gorillas share about 98% of their DNA with humans, making them one of our closest relatives!",
+      "Gorillas can learn sign language -- a gorilla named Koko learned over 1,000 signs and understood about 2,000 words of English!"
+    ],
+    "67": [
+      "African grey parrots are considered one of the smartest birds -- they can learn over 1,000 words and use them in context!",
+      "Parrots are one of the few animals that can truly learn to say new sounds by imitating them, just like humans!"
+    ],
+    "68": [
+      "A toucan's beak is made of keratin (the same stuff as your fingernails) and has air pockets inside that make it surprisingly lightweight!",
+      "Toucans regulate their body temperature through their beaks -- blood flow to the beak releases heat like a radiator!"
+    ],
+    "69": [
+      "Jaguars have the strongest bite of any big cat -- they can bite right through a turtle's shell!",
+      "Unlike most cats, jaguars love water and are excellent swimmers who hunt caimans and fish in rivers!"
+    ],
+    "70": [
+      "Snakes smell with their tongues! They flick their forked tongue to collect scent particles from the air!",
+      "Some snakes can go up to two years without eating a single meal!"
+    ],
+    "71": [
+      "Crocodiles have been around for about 200 million years and lived alongside dinosaurs!",
+      "Crocodiles can't stick their tongues out! Their tongues are attached to the roof of their mouths!"
+    ],
+    "72": [
+      "Hippos produce a natural red-pink 'sunscreen' from their skin that protects them from the sun!",
+      "Despite their round shape, hippos can run up to 19 miles per hour on land -- faster than most humans!"
+    ],
+    "73": [
+      "A rhinoceros horn is made entirely of keratin -- the same protein found in your hair and fingernails!",
+      "Despite their poor eyesight, rhinos have amazing hearing and can rotate their ears in all directions to pick up sounds!"
+    ],
+    "74": [
+      "Every zebra has a unique stripe pattern, like a fingerprint -- no two zebras are exactly alike!",
+      "Scientists believe zebra stripes may help confuse biting flies and keep the zebras cooler in hot weather!"
+    ],
+    "75": [
+      "A chameleon's tongue can shoot out faster than a jet fighter plane takes off -- in just 1/100th of a second!",
+      "Chameleons don't actually change color to match their background -- they change color based on their mood, temperature, and light!"
+    ],
+    "76": [
+      "Sloths are such slow movers that algae grows on their fur, giving them a greenish tint that helps them hide in trees!",
+      "Sloths only come down from their trees about once a week to go to the bathroom!"
+    ],
+    "77": [
+      "Orangutans are the largest tree-dwelling animals on Earth and spend about 90% of their time up in trees!",
+      "Orangutans make umbrellas out of large leaves when it rains -- they're one of the few animals to use tools from nature!"
+    ],
+    "78": [
+      "Black panthers aren't a separate species -- they're leopards or jaguars with extra melanin that makes their fur look black!",
+      "If you look closely at a black panther in sunlight, you can still see their spots hidden in the dark fur!"
+    ],
+    "79": [
+      "Flamingos are born white or grey -- they turn pink because of pigments in the shrimp and algae they eat!",
+      "Flamingos can only eat with their heads upside down, and they stomp their feet to stir up food from the mud!"
+    ],
+    "80": [
+      "A peacock's tail feathers can be over 5 feet long -- more than 60% of the bird's total body length!",
+      "The colorful 'eyes' on a peacock's feathers aren't paint or pigment -- they're created by tiny crystal structures that reflect light!"
+    ],
+    "81": [
+      "Polar bears have black skin under their white fur to absorb heat from the sun!",
+      "A polar bear can smell a seal from over 20 miles away and through 3 feet of ice!"
+    ],
+    "82": [
+      "Arctic foxes can survive temperatures as low as minus 58 degrees Fahrenheit thanks to their thick fur!",
+      "An Arctic fox's fluffy tail is so warm that they wrap it around themselves like a blanket when sleeping!"
+    ],
+    "83": [
+      "Snowy owls can eat up to 1,600 lemmings in a single year -- that's about 3 to 5 per day!",
+      "Unlike most owls that are nocturnal, snowy owls are active during the day because in the Arctic, summer days have 24 hours of sunlight!"
+    ],
+    "84": [
+      "Camels can drink up to 40 gallons of water in one go -- that's enough to fill a bathtub!",
+      "A camel's hump stores fat, not water! The fat provides energy when food is scarce in the desert!"
+    ],
+    "85": [
+      "Scorpions glow bright blue-green under ultraviolet light, and scientists still aren't completely sure why!",
+      "Some scorpion species can survive for an entire year without eating any food at all!"
+    ],
+    "86": [
+      "A rattlesnake adds a new segment to its rattle every time it sheds its skin!",
+      "Rattlesnakes can sense body heat using special pits on their face, allowing them to 'see' warm-blooded animals in complete darkness!"
+    ],
+    "87": [
+      "Meerkats take turns standing guard while the rest of the group looks for food -- they even have different alarm calls for different predators!",
+      "Baby meerkats are taught how to handle scorpions by adult meerkats who remove the stinger first!"
+    ],
+    "88": [
+      "Fennec foxes have ears that can be 6 inches long -- the largest ears relative to body size of any carnivore!",
+      "The soles of a fennec fox's feet are covered in thick fur that acts like snowshoes on the hot desert sand!"
+    ],
+    "89": [
+      "Reindeer are the only deer species where both males and females grow antlers!",
+      "Reindeer eyes change color from gold in summer to blue in winter to help them see better in low Arctic light!"
+    ],
+    "90": [
+      "Huskies have a special double coat that keeps them warm at minus 60 degrees and cool in summer!",
+      "Huskies have been helping people in the Arctic for over 3,000 years, and they can run over 100 miles in a day!"
+    ],
+    "91": [
+      "Lemmings don't actually run off cliffs on purpose -- that's a myth made famous by a 1958 documentary that staged the scene!",
+      "Lemmings are excellent swimmers and can cross rivers and small lakes during their mass migrations!"
+    ],
+    "92": [
+      "The nine-banded armadillo always gives birth to identical quadruplets -- four babies that are all exactly the same!",
+      "Armadillos can hold their breath for up to six minutes, and they can walk along the bottom of streams underwater!"
+    ],
+    "93": [
+      "Roadrunners can run up to 20 miles per hour, making them one of the fastest running birds!",
+      "Roadrunners eat rattlesnakes! They grab the snake by the tail and smack its head on the ground!"
+    ],
+    "94": [
+      "Vultures have extremely strong stomach acid that can destroy dangerous bacteria, allowing them to eat rotten meat safely!",
+      "Some vultures pee on their own legs to cool down -- the evaporation helps lower their body temperature!"
+    ],
+    "95": [
+      "Coyotes can run at speeds of up to 43 miles per hour and can jump over 13-foot fences!",
+      "Coyotes have adapted to live in every habitat in North America, from deserts to forests and even big cities!"
+    ],
+    "96": [
+      "Green iguanas have a special 'third eye' on top of their head that can sense light and shadows above them!",
+      "Iguanas can fall from 50 feet up in a tree, hit the ground, and walk away without getting hurt!"
+    ],
+    "97": [
+      "Hyenas have one of the most powerful bites in the animal kingdom -- strong enough to crush bones!",
+      "Hyenas are actually more closely related to cats than dogs, even though they look like dogs!"
+    ],
+    "98": [
+      "The oldest known tortoise ever recorded lived to be 190 years old!",
+      "A tortoise's shell is actually part of its skeleton -- it's made up of about 60 bones fused together!"
+    ],
+    "99": [
+      "Pronghorns are the fastest land animals in North America and can sustain speeds of 55 mph for miles!",
+      "Pronghorns evolved their speed to outrun the now-extinct American cheetah!"
+    ],
+    "100": [
+      "Jerboas can jump up to 10 feet in a single leap -- that's over 10 times their body length!",
+      "Jerboas get all the water they need from the seeds they eat -- they never need to drink water!"
+    ],
+    "101": [
+      "Axolotls can regrow entire limbs, parts of their brain, heart, and other organs!",
+      "Axolotls are called 'Peter Pan salamanders' because they never go through metamorphosis -- they keep their baby features their whole lives!"
+    ],
+    "102": [
+      "Pangolins are the only mammals in the world covered in scales!",
+      "When curled into a ball, a pangolin's scales are so tough that even lions can't bite through them!"
+    ],
+    "103": [
+      "Red pandas were discovered about 50 years before giant pandas, so they were actually the original 'panda'!",
+      "Red pandas use their bushy, ringed tails as blankets to keep warm while they sleep in cold mountain forests!"
+    ],
+    "104": [
+      "Koalas sleep up to 22 hours a day because eucalyptus leaves are so low in nutrition and hard to digest!",
+      "Baby koalas (called joeys) are born the size of a jellybean and crawl into their mother's pouch to continue growing!"
+    ],
+    "105": [
+      "When the platypus was first sent to scientists in England, they thought it was a prank -- someone had sewn a duck's bill onto a beaver!",
+      "Platypuses can detect the electric fields generated by other animals' muscles, helping them find prey underwater with their eyes closed!"
+    ],
+    "106": [
+      "Snow leopards can leap up to 50 feet in a single bound -- that's the length of a school bus!",
+      "Snow leopards can't roar like other big cats! Instead, they make a friendly puffing sound called a 'chuff'!"
+    ],
+    "107": [
+      "Okapis were unknown to Western science until 1901, making them one of the last large mammals to be discovered!",
+      "Okapis have tongues so long (about 18 inches) that they can lick their own ears and eyelids clean!"
+    ],
+    "108": [
+      "Quokkas are known as 'the happiest animal on Earth' because of the natural smile on their face!",
+      "Quokkas can survive for long periods without food or water by living off the fat stored in their tails!"
+    ],
+    "109": [
+      "Cassowaries are considered one of the most dangerous birds in the world -- they have a dagger-like claw on each foot!",
+      "Cassowary dads are single fathers -- the male incubates the eggs and raises the chicks entirely on his own!"
+    ],
+    "110": [
+      "The aye-aye has an extra-long, skeletal middle finger that it uses to tap on trees and fish out insect larvae!",
+      "Aye-ayes are the world's largest nocturnal primate, and they are the only primates that use echolocation-like tapping to find food!"
+    ],
+    "111": [
+      "The kakapo is the only flightless parrot in the world and can live for over 90 years!",
+      "Male kakapos attract mates by making a deep booming sound that can be heard up to 3 miles away!"
+    ],
+    "112": [
+      "The vaquita is the most endangered marine mammal in the world, with fewer than 10 individuals believed to remain!",
+      "Vaquitas were not even discovered by scientists until 1958, and they have been in danger ever since!"
+    ],
+    "113": [
+      "Capybaras are so friendly and calm that other animals like birds, monkeys, and even crocodiles hang out on or near them!",
+      "Capybaras are excellent swimmers and can hold their breath underwater for up to five minutes!"
+    ],
+    "114": [
+      "Numbats are one of the few marsupials that are active during the day instead of at night!",
+      "A numbat's tongue can be up to 4 inches long and can flick in and out of a termite mound up to 100 times per minute!"
+    ],
+    "115": [
+      "The fossa is the largest predator on Madagascar and is the only animal that regularly hunts lemurs!",
+      "Fossas can climb down trees headfirst thanks to their flexible ankles that can rotate nearly 180 degrees!"
+    ],
+    "116": [
+      "Gharials have over 100 razor-sharp teeth, all perfectly designed for catching slippery fish!",
+      "Male gharials develop a bulbous growth on their snout called a 'ghara' that they use to make buzzing sounds and blow bubbles to attract mates!"
+    ],
+    "117": [
+      "The saola is so rare that it has been spotted in the wild only a handful of times since its discovery in 1992!",
+      "The saola is sometimes called the 'Asian unicorn' -- not because it has one horn, but because it is so incredibly hard to find!"
+    ],
+    "118": [
+      "Dugongs are the only marine mammals that are strictly herbivorous -- they eat nothing but seagrass!",
+      "Dugongs are closely related to elephants, and they can live for up to 70 years!"
+    ],
+    "119": [
+      "Clouded leopards have the longest canine teeth relative to body size of any living cat -- they're sometimes called 'modern-day saber-tooths'!",
+      "Clouded leopards can hang upside down from branches using just their hind feet and climb down trees headfirst!"
+    ],
+    "120": [
+      "The Hainan gibbon is the rarest ape on Earth, with only about 35 to 40 individuals left in the wild!",
+      "Hainan gibbons can swing through the treetops at speeds of up to 35 miles per hour, covering gaps of over 30 feet in a single leap!"
+    ]
+  }
+}

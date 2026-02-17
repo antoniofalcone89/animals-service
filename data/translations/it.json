@@ -128,5 +128,1089 @@
     "118": "Dugongo",
     "119": "Leopardo Nebuloso",
     "120": "Gibbone di Hainan"
+  },
+  "hints": {
+    "1": [
+      "Sono un animale domestico molto comune",
+      "Scodinzolo quando sono felice",
+      "Faccio 'bau bau' e sono il miglior amico dell'uomo"
+    ],
+    "2": [
+      "Sono un animale domestico che ama stare in casa",
+      "Faccio le fusa quando sono contento",
+      "Faccio 'miao' e adoro cacciare i topi"
+    ],
+    "3": [
+      "Sono un animale della fattoria",
+      "Ho le piume e faccio le uova",
+      "Faccio 'coccodè' e mi sveglio all'alba"
+    ],
+    "4": [
+      "Sono un grande animale della fattoria",
+      "Produco il latte che bevi a colazione",
+      "Faccio 'muuu' e mangio l'erba nei prati"
+    ],
+    "5": [
+      "Sono un animale della fattoria con un manto morbido",
+      "La mia lana viene usata per fare i maglioni",
+      "Faccio 'bee' e vivo in gregge"
+    ],
+    "6": [
+      "Sono un animale della fattoria rosa",
+      "Ho la coda arricciata e amo rotolarmi nel fango",
+      "Faccio 'oink oink' e ho il muso a forma di presa elettrica"
+    ],
+    "7": [
+      "Sono un grande animale domestico che vive nella stalla",
+      "Le persone mi cavalcano e ho una lunga criniera",
+      "Faccio 'ihihih' e galoppo nei prati"
+    ],
+    "8": [
+      "Sono un animale della fattoria con le corna",
+      "Mi arrampico facilmente sulle rocce",
+      "Ho la barbetta e faccio 'bee', ma non sono una pecora"
+    ],
+    "9": [
+      "Sono un animale della fattoria usato per trasportare carichi",
+      "Ho le orecchie molto lunghe",
+      "Faccio 'ih-oh ih-oh' e assomiglio a un piccolo cavallo"
+    ],
+    "10": [
+      "Sono un grande uccello della fattoria",
+      "Sono tradizionalmente servito durante le feste",
+      "Ho il bargiglio rosso e faccio 'glu glu glu'"
+    ],
+    "11": [
+      "Sono un piccolo animale domestico molto morbido",
+      "Ho le orecchie lunghe e salto tanto",
+      "Adoro le carote e muovo il nasino velocemente"
+    ],
+    "12": [
+      "Sono un uccello che vive vicino all'acqua",
+      "Ho le zampe palmate per nuotare",
+      "Faccio 'qua qua' e cammino dondolando"
+    ],
+    "13": [
+      "Sono un uccello grande della fattoria",
+      "Sono nota per essere un'ottima guardiana",
+      "Faccio un forte starnazzo e ho il collo lungo"
+    ],
+    "14": [
+      "Vengo dal Sud America e vivo in montagna",
+      "Ho il collo lungo e il pelo morbido",
+      "Sputo quando mi arrabbio e assomiglio a un cammello senza gobba"
+    ],
+    "15": [
+      "Vengo dal Sud America e vivo sulle montagne",
+      "Il mio pelo è ancora più morbido di quello del mio cugino",
+      "Assomiglio a un lama ma sono più piccolo e soffice"
+    ],
+    "16": [
+      "Sono un piccolo animale domestico molto socievole",
+      "Emetto dei fischietti acuti quando sono eccitato",
+      "Non vengo davvero dall'India, ma mi chiamano 'porcellino d'India'"
+    ],
+    "17": [
+      "Sono un piccolo roditore domestico",
+      "Ho le guance molto grandi dove conservo il cibo",
+      "Adoro correre nella mia ruota girevole tutta la notte"
+    ],
+    "18": [
+      "Sono un animale domestico che vive nell'acqua",
+      "Nuoto in una boccia o un acquario",
+      "Sono un pesciolino di colore arancione brillante"
+    ],
+    "19": [
+      "Sono un piccolo uccello domestico molto colorato",
+      "Posso imparare a parlare e ripetere le parole",
+      "Sono un piccolo pappagallo ondulato, spesso verde o blu"
+    ],
+    "20": [
+      "Sono un rettile che si muove molto lentamente",
+      "Porto la mia casa sempre con me sulla schiena",
+      "Ho un guscio duro e ritiro la testa quando ho paura"
+    ],
+    "21": [
+      "Sono un piccolo animale che vive sugli alberi",
+      "Ho una grande coda pelosa",
+      "Raccolgo e nascondo le ghiande per l'inverno"
+    ],
+    "22": [
+      "Sono un piccolo uccello che si vede spesso nei giardini",
+      "Ho il petto di un colore molto vivace",
+      "Ho il petto rosso-arancione e annuncio la primavera"
+    ],
+    "23": [
+      "Sono un grande animale che vive nel bosco",
+      "I maschi della mia specie hanno qualcosa di speciale sulla testa",
+      "Ho grandi corna ramificate che si rinnovano ogni anno"
+    ],
+    "24": [
+      "Sono un animale selvatico molto furbo",
+      "Ho una coda grande e folta",
+      "Ho il pelo rosso, il muso appuntito e sono nota per la mia astuzia"
+    ],
+    "25": [
+      "Sono un animale selvatico notturno molto curioso",
+      "Ho una mascherina nera intorno agli occhi",
+      "Lavo il cibo con le zampette prima di mangiarlo"
+    ],
+    "26": [
+      "Sono un piccolo animale notturno",
+      "Ho il corpo ricoperto di qualcosa di appuntito",
+      "Mi arrotolo a palla e ho gli aculei sulla schiena"
+    ],
+    "27": [
+      "Sono un piccolo animale anfibio",
+      "Vivo sia in acqua che sulla terra",
+      "Faccio 'cra cra' e salto tra le foglie di ninfea"
+    ],
+    "28": [
+      "Sono un insetto che vola nei prati",
+      "Inizio la vita come bruco",
+      "Ho ali grandi e colorate e volo di fiore in fiore"
+    ],
+    "29": [
+      "Sono un piccolo insetto portafortuna",
+      "Ho le ali con dei puntini",
+      "Sono rossa con puntini neri e mangio gli afidi"
+    ],
+    "30": [
+      "Sono un insetto che vola e vive in gruppo",
+      "Produco qualcosa di molto dolce",
+      "Faccio il miele e vivo nell'alveare con la regina"
+    ],
+    "31": [
+      "Sono un piccolo animale che si muove molto lentamente",
+      "Lascio una scia lucida dove passo",
+      "Porto la mia casetta a spirale sulla schiena"
+    ],
+    "32": [
+      "Sono un uccello molto comune in città",
+      "Mi vedi spesso nelle piazze a cercare briciole",
+      "Faccio 'tru tru' e muovo la testa avanti e indietro quando cammino"
+    ],
+    "33": [
+      "Sono un piccolo uccello che si vede ovunque",
+      "Faccio un cinguettio allegro",
+      "Sono marrone e grigio, e saltello sui marciapiedi cercando briciole"
+    ],
+    "34": [
+      "Sono un animale notturno che vola",
+      "Non sono un uccello, ma ho le ali",
+      "Dormo a testa in giù e mi oriento con gli ultrasuoni"
+    ],
+    "35": [
+      "Sono un piccolo roditore molto comune",
+      "I gatti amano rincorrermi",
+      "Faccio 'squitt' e adoro il formaggio"
+    ],
+    "36": [
+      "Sono un piccolo mammifero che vive sottoterra",
+      "Ho zampe molto forti per scavare",
+      "Sono quasi cieco e creo gallerie sotto i prati"
+    ],
+    "37": [
+      "Sono un insetto volante che vive vicino all'acqua",
+      "Ho quattro ali trasparenti",
+      "Volo velocissima sopra gli stagni e ho un corpo lungo e sottile"
+    ],
+    "38": [
+      "Sono un piccolo animale che vive nei boschi del Nord America",
+      "Ho le guance grandi per trasportare il cibo",
+      "Assomiglio a uno scoiattolo ma ho delle strisce sulla schiena"
+    ],
+    "39": [
+      "Sono un uccello rapace notturno",
+      "Posso girare la testa quasi completamente",
+      "Faccio 'uh-uh' e ho due grandi occhi rotondi"
+    ],
+    "40": [
+      "Sono un uccello che vive nei boschi",
+      "Uso il mio becco come un martello",
+      "Batto ritmicamente il becco contro i tronchi degli alberi"
+    ],
+    "41": [
+      "Sono un mammifero marino molto intelligente",
+      "Salto fuori dall'acqua e faccio acrobazie",
+      "Ho il muso a forma di bottiglia e comunico con fischi e clic"
+    ],
+    "42": [
+      "Sono il più grande animale che vive nel mare",
+      "Spruzzo acqua dal foro sulla testa",
+      "Sono il più grande animale mai esistito sulla Terra"
+    ],
+    "43": [
+      "Sono un grande predatore marino",
+      "Ho molte file di denti aguzzi",
+      "Ho una pinna dorsale triangolare che spunta dall'acqua"
+    ],
+    "44": [
+      "Sono un animale marino molto intelligente",
+      "Ho un corpo molle e nessun osso",
+      "Ho otto tentacoli con ventose e posso cambiare colore"
+    ],
+    "45": [
+      "Sono un piccolo animale marino dalla forma insolita",
+      "Nuoto in posizione verticale",
+      "Assomiglio a un pezzo degli scacchi e il papà porta i piccoli nella pancia"
+    ],
+    "46": [
+      "Sono un animale marino trasparente",
+      "Galleggio nelle correnti oceaniche",
+      "Ho tentacoli urticanti e un corpo a forma di ombrello"
+    ],
+    "47": [
+      "Sono un grande rettile marino",
+      "Nuoto negli oceani tropicali",
+      "Ho le pinne invece delle zampe e torno sulla spiaggia per deporre le uova"
+    ],
+    "48": [
+      "Sono un piccolo pesce tropicale molto colorato",
+      "Vivo tra i tentacoli urticanti senza farmi male",
+      "Sono arancione con strisce bianche, reso famoso da un film d'animazione"
+    ],
+    "49": [
+      "Sono un animale marino che vive sul fondale",
+      "Ho una forma geometrica molto riconoscibile",
+      "Ho cinque braccia e posso rigenerarle se ne perdo una"
+    ],
+    "50": [
+      "Sono un animale marino con un guscio duro",
+      "Cammino di lato sulla spiaggia",
+      "Ho due grandi chele e otto zampe"
+    ],
+    "51": [
+      "Sono un crostaceo marino che vive sul fondale",
+      "Divento rossa quando vengo cucinata",
+      "Ho due grandi chele e lunghe antenne"
+    ],
+    "52": [
+      "Sono un mammifero marino che vive in acqua fredda",
+      "Ho un corpo affusolato e le pinne",
+      "Mi sdraio sugli scogli e batto le pinne, ho i baffoni"
+    ],
+    "53": [
+      "Sono un grande mammifero marino dell'Artico",
+      "Ho i baffi folti e la pelle rugosa",
+      "Ho due lunghe zanne d'avorio che uso per arrampicarmi sul ghiaccio"
+    ],
+    "54": [
+      "Sono un uccello che non sa volare",
+      "Vivo dove fa molto freddo e nuoto benissimo",
+      "Sono bianco e nero, cammino dondolando e vivo al Polo Sud"
+    ],
+    "55": [
+      "Sono un pesce marino con una difesa speciale",
+      "Quando mi sento minacciato, cambio forma",
+      "Mi gonfio come un pallone e ho le spine su tutto il corpo"
+    ],
+    "56": [
+      "Sono un grande animale marino piatto",
+      "Nuoto muovendo le mie 'ali' nell'acqua",
+      "Sono una razza gigante e plano elegantemente nell'oceano"
+    ],
+    "57": [
+      "Sono un pesce dal corpo molto allungato",
+      "Vivo sia in acqua dolce che salata",
+      "Ho un corpo lungo come un serpente e sono scivolosa"
+    ],
+    "58": [
+      "Sono un mollusco marino con molte braccia",
+      "Ho dieci tentacoli e nuoto velocemente",
+      "Spruzzo inchiostro nero per scappare dai predatori"
+    ],
+    "59": [
+      "Sono un grande mammifero marino predatore",
+      "Sono bianca e nera e vivo in gruppo",
+      "Mi chiamano 'balena assassina' ma in realtà sono il più grande delfino"
+    ],
+    "60": [
+      "Sono un mammifero marino dell'Artico",
+      "Sono conosciuto per qualcosa di unico sulla mia testa",
+      "Ho un lungo corno a spirale e mi chiamano 'l'unicorno del mare'"
+    ],
+    "61": [
+      "Sono un grande felino che vive nella savana",
+      "Il maschio ha qualcosa di maestoso intorno al viso",
+      "Ho una grande criniera e mi chiamano 'il re della giungla'"
+    ],
+    "62": [
+      "Sono un grande felino dell'Asia",
+      "Ho un mantello con un disegno molto riconoscibile",
+      "Ho strisce arancioni e nere e sono il felino più grande del mondo"
+    ],
+    "63": [
+      "Sono il più grande animale terrestre",
+      "Ho un naso molto lungo e speciale",
+      "Ho una proboscide, grandi orecchie e zanne d'avorio"
+    ],
+    "64": [
+      "Sono un grande animale africano erbivoro",
+      "Sono il più alto animale del mondo",
+      "Ho un collo lunghissimo e le macchie marroni sulla pelle"
+    ],
+    "65": [
+      "Sono un animale che vive sugli alberi nella giungla",
+      "Sono molto agile e ho la coda prensile",
+      "Mi arrampico tra i rami, mangio le banane e faccio le smorfie"
+    ],
+    "66": [
+      "Sono un grande primate della giungla africana",
+      "Sono molto forte e mi batto il petto con i pugni",
+      "Sono la scimmia più grande del mondo e ho le mani simili alle vostre"
+    ],
+    "67": [
+      "Sono un uccello tropicale molto colorato",
+      "Posso imparare a ripetere le parole umane",
+      "Ho piume vivaci, un becco ricurvo e parlo come le persone"
+    ],
+    "68": [
+      "Sono un uccello tropicale del Sud America",
+      "Ho un becco enorme e colorato",
+      "Il mio becco è quasi grande quanto il mio corpo ed è arancione"
+    ],
+    "69": [
+      "Sono un grande felino del Sud America",
+      "Ho un mantello maculato giallo e nero",
+      "Sono il felino più grande delle Americhe e amo nuotare"
+    ],
+    "70": [
+      "Sono un rettile senza zampe",
+      "Mi muovo strisciando a terra",
+      "Faccio 'sss' e alcune specie hanno il veleno"
+    ],
+    "71": [
+      "Sono un grande rettile che vive nei fiumi tropicali",
+      "Ho tantissimi denti e una pelle corazzata",
+      "Ho un muso lungo e piatto e posso restare immobile come un tronco"
+    ],
+    "72": [
+      "Sono un grande mammifero che vive in Africa",
+      "Passo gran parte del tempo immerso nell'acqua",
+      "Ho una bocca enorme e sono uno degli animali più pericolosi"
+    ],
+    "73": [
+      "Sono un grande mammifero erbivoro con la pelle spessa",
+      "Ho qualcosa di speciale sul naso",
+      "Ho uno o due corni sul muso e la pelle grigia e corazzata"
+    ],
+    "74": [
+      "Sono un animale africano che vive nella savana",
+      "Ho un disegno unico sul mio corpo",
+      "Sono bianca e nera a strisce, ogni esemplare ha un disegno diverso"
+    ],
+    "75": [
+      "Sono un rettile che vive sugli alberi tropicali",
+      "Ho gli occhi che si muovono indipendentemente l'uno dall'altro",
+      "Cambio colore per mimetizzarmi e catturo gli insetti con la lingua lunghissima"
+    ],
+    "76": [
+      "Sono un mammifero che vive appeso agli alberi",
+      "Sono l'animale più lento del mondo",
+      "Dormo fino a 20 ore al giorno e mi muovo al rallentatore"
+    ],
+    "77": [
+      "Sono un grande primate rosso che vive in Asia",
+      "Passo la vita sugli alberi della foresta pluviale",
+      "Ho il pelo lungo e rosso e le braccia lunghissime"
+    ],
+    "78": [
+      "Sono un grande felino misterioso",
+      "Sono completamente nera grazie al mio mantello scuro",
+      "Sono un leopardo o un giaguaro con il pelo tutto nero"
+    ],
+    "79": [
+      "Sono un grande uccello che vive in gruppi vicino all'acqua",
+      "Il mio colore è molto particolare e appariscente",
+      "Sono rosa, ho le zampe lunghe e sto spesso in equilibrio su una gamba sola"
+    ],
+    "80": [
+      "Sono un grande uccello noto per la mia bellezza",
+      "Il maschio ha qualcosa di spettacolare da mostrare",
+      "Apro la mia grande coda a ventaglio con piume blu e verdi con ocelli"
+    ],
+    "81": [
+      "Sono un grande mammifero che vive dove fa molto freddo",
+      "Ho il pelo bianco per mimetizzarmi nella neve",
+      "Sono il più grande predatore terrestre e vivo tra i ghiacci dell'Artico"
+    ],
+    "82": [
+      "Sono un piccolo animale che vive nell'Artico",
+      "D'inverno il mio pelo diventa completamente bianco",
+      "Assomiglio a una volpe ma con il pelo bianco e le orecchie piccole"
+    ],
+    "83": [
+      "Sono un uccello rapace che vive al freddo",
+      "Ho un piumaggio quasi completamente bianco",
+      "Sono un gufo bianco con occhi gialli, famoso anche nei film di magia"
+    ],
+    "84": [
+      "Sono un grande animale che vive nel deserto",
+      "Ho qualcosa di caratteristico sulla schiena",
+      "Ho una o due gobbe dove accumulo grasso per sopravvivere senza acqua"
+    ],
+    "85": [
+      "Sono un piccolo animale del deserto con otto zampe",
+      "Ho la coda ricurva sopra il corpo",
+      "Ho un pungiglione velenoso sulla punta della coda"
+    ],
+    "86": [
+      "Sono un rettile velenoso del deserto americano",
+      "Ho qualcosa di speciale sulla punta della coda",
+      "Faccio un rumore di sonagli con la coda per avvertire del pericolo"
+    ],
+    "87": [
+      "Sono un piccolo mammifero che vive in gruppo nel deserto africano",
+      "Mi metto in piedi sulle zampe posteriori per fare la sentinella",
+      "Vivo in colonie con vedette che sorvegliano l'arrivo dei predatori"
+    ],
+    "88": [
+      "Sono una piccola volpe del deserto del Sahara",
+      "Ho qualcosa di sproporzionatamente grande rispetto al corpo",
+      "Ho orecchie enormi che mi aiutano a disperdere il calore"
+    ],
+    "89": [
+      "Sono un grande animale che vive al freddo estremo",
+      "Tiro la slitta durante le feste natalizie",
+      "Ho grandi corna ramificate e la guida Babbo Natale"
+    ],
+    "90": [
+      "Sono un cane da lavoro che vive al freddo",
+      "Tiro le slitte sulla neve",
+      "Ho gli occhi azzurri, il pelo spesso e assomiglio a un lupo"
+    ],
+    "91": [
+      "Sono un piccolo roditore che vive nella tundra artica",
+      "Vivo in grandi gruppi e migro in massa",
+      "Sono famoso per le mie migrazioni in massa nelle regioni artiche"
+    ],
+    "92": [
+      "Sono un mammifero delle Americhe con una protezione speciale",
+      "Mi arrotolo a palla quando ho paura",
+      "Ho una corazza di placche ossee che copre tutto il mio corpo"
+    ],
+    "93": [
+      "Sono un uccello del deserto americano che preferisce correre",
+      "Sono velocissimo e raramente volo",
+      "Corro per le strade del deserto e sono famoso per un cartone animato"
+    ],
+    "94": [
+      "Sono un grande uccello rapace",
+      "Plano in cerchio nel cielo alla ricerca di cibo",
+      "Ho la testa calva e mi nutro di animali morti"
+    ],
+    "95": [
+      "Sono un canide selvatico del Nord America",
+      "Ululo alla luna durante la notte",
+      "Assomiglio a un lupo ma sono più piccolo e più furbo"
+    ],
+    "96": [
+      "Sono un rettile che vive nelle zone calde",
+      "Ho la pelle squamosa e una cresta sulla schiena",
+      "Sono una grande lucertola verde che ama prendere il sole"
+    ],
+    "97": [
+      "Sono un mammifero predatore della savana africana",
+      "Vivo in clan e ho una risata caratteristica",
+      "Rido in modo inquietante e ho mascelle fortissime"
+    ],
+    "98": [
+      "Sono un rettile che si muove molto lentamente",
+      "Porto un guscio pesante sulla schiena e vivo a lungo",
+      "Posso vivere oltre 100 anni e sono una tartaruga terrestre gigante"
+    ],
+    "99": [
+      "Sono un mammifero veloce del Nord America",
+      "Sono il secondo animale terrestre più veloce del mondo",
+      "Assomiglio a un'antilope e corro fino a 90 km/h nelle praterie"
+    ],
+    "100": [
+      "Sono un piccolo roditore del deserto",
+      "Ho le zampe posteriori molto lunghe per saltare",
+      "Salto come un canguro in miniatura nel deserto asiatico"
+    ],
+    "101": [
+      "Sono un anfibio molto speciale del Messico",
+      "Posso rigenerare parti del mio corpo",
+      "Ho branchie esterne piumose e un sorriso simpatico, e non mi trasformo mai"
+    ],
+    "102": [
+      "Sono un mammifero ricoperto di scaglie",
+      "Mi arrotolo a palla per difendermi",
+      "Sono l'unico mammifero con le scaglie e mangio formiche con la lingua lunga"
+    ],
+    "103": [
+      "Sono un piccolo mammifero dell'Asia con il pelo rosso",
+      "Vivo sugli alberi e mangio bambù",
+      "Ho la coda ad anelli, la faccia bianca e rossa, e non sono un vero panda"
+    ],
+    "104": [
+      "Sono un marsupiale australiano che vive sugli alberi",
+      "Dormo quasi tutto il giorno",
+      "Mangio solo foglie di eucalipto e ho un grande naso nero"
+    ],
+    "105": [
+      "Sono un mammifero australiano davvero unico",
+      "Depongo le uova pur essendo un mammifero",
+      "Ho il becco d'anatra, la coda di castoro e i piedi palmati"
+    ],
+    "106": [
+      "Sono un grande felino che vive sulle montagne dell'Asia centrale",
+      "Ho una coda lunghissima e folta",
+      "Ho il pelo grigio con macchie nere e vivo ad altissima quota tra le nevi"
+    ],
+    "107": [
+      "Sono un mammifero africano molto raro",
+      "Ho le zampe a strisce come una zebra ma non sono una zebra",
+      "Ho la lingua blu lunghissima e assomiglio a un incrocio tra giraffa e zebra"
+    ],
+    "108": [
+      "Sono un piccolo marsupiale australiano",
+      "Sono noto per sembrare sempre felice",
+      "Sorrido sempre e sono considerato l'animale più felice del mondo"
+    ],
+    "109": [
+      "Sono un grande uccello che non vola, dell'Australia",
+      "Sono considerato molto pericoloso",
+      "Ho un elmo osseo sulla testa e artigli potenti come lame"
+    ],
+    "110": [
+      "Sono un primate notturno del Madagascar",
+      "Ho occhi enormi e un dito medio molto lungo",
+      "Uso il mio lungo dito medio per estrarre insetti dal legno"
+    ],
+    "111": [
+      "Sono un pappagallo che non sa volare",
+      "Vivo in Nuova Zelanda e sono attivo di notte",
+      "Sono il pappagallo più pesante del mondo e sono quasi estinto"
+    ],
+    "112": [
+      "Sono un mammifero marino molto raro",
+      "Vivo nel Golfo della California",
+      "Sono la focena più piccola e più rara del mondo, quasi estinta"
+    ],
+    "113": [
+      "Sono il roditore più grande del mondo",
+      "Vivo in Sud America vicino all'acqua",
+      "Assomiglio a una cavia gigante e sono molto socievole"
+    ],
+    "114": [
+      "Sono un piccolo marsupiale australiano",
+      "Ho strisce bianche e nere sulla schiena",
+      "Ho un muso lungo e appuntito e mangio le termiti con la lingua"
+    ],
+    "115": [
+      "Sono un predatore del Madagascar",
+      "Assomiglio a un incrocio tra un gatto e una mangusta",
+      "Sono il più grande carnivoro del Madagascar e caccio i lemuri"
+    ],
+    "116": [
+      "Sono un grande rettile che vive nei fiumi dell'Asia",
+      "Ho un muso molto lungo e stretto",
+      "Ho un muso sottilissimo pieno di denti e mangio soprattutto pesci"
+    ],
+    "117": [
+      "Sono un mammifero estremamente raro del Vietnam",
+      "Sono stato scoperto solo nel 1992",
+      "Mi chiamano 'l'unicorno asiatico' perché sono quasi impossibile da avvistare"
+    ],
+    "118": [
+      "Sono un grande mammifero marino erbivoro",
+      "Vivo nelle acque tropicali poco profonde",
+      "Assomiglio a un lamantino e mi chiamano 'mucca di mare'"
+    ],
+    "119": [
+      "Sono un felino misterioso del Sud-est asiatico",
+      "Ho un mantello con macchie a forma di nuvola",
+      "Ho le macchie sfumate come nuvole e i canini più lunghi rispetto al corpo di tutti i felini"
+    ],
+    "120": [
+      "Sono un primate molto raro che vive in Asia",
+      "Sono a grave rischio di estinzione e ne restano pochissimi",
+      "Sono il primate più raro del mondo, vivo solo sull'isola di Hainan in Cina"
+    ]
+  },
+  "funFacts": {
+    "1": [
+      "I cani hanno un olfatto fino a 100.000 volte più potente di quello umano e possono fiutare malattie come il diabete.",
+      "I cani sognano proprio come noi! Durante il sonno muovono le zampe come se stessero correndo."
+    ],
+    "2": [
+      "I gatti passano circa il 70% della loro vita a dormire, cioè circa 13-16 ore al giorno.",
+      "Ogni gatto ha un disegno unico sul naso, come le impronte digitali per gli umani."
+    ],
+    "3": [
+      "Le galline possono riconoscere oltre 100 facce diverse, comprese quelle umane.",
+      "Le galline comunicano tra loro con più di 30 suoni diversi, ognuno con un significato specifico."
+    ],
+    "4": [
+      "Le mucche hanno migliori amiche e si stressano quando vengono separate da loro.",
+      "Una mucca produce in media circa 200.000 bicchieri di latte nella sua vita."
+    ],
+    "5": [
+      "Le pecore hanno una memoria eccellente e possono ricordare fino a 50 volti di altre pecore per anni.",
+      "Le pecore hanno una visione quasi a 360 gradi senza bisogno di girare la testa."
+    ],
+    "6": [
+      "I maiali sono più intelligenti dei cani e possono imparare a giocare ai videogiochi con il muso.",
+      "I maiali non sudano! Per questo si rotolano nel fango per rinfrescarsi."
+    ],
+    "7": [
+      "I cavalli possono dormire sia in piedi che sdraiati grazie a un meccanismo speciale nelle zampe.",
+      "I cavalli possono vedere quasi a 360 gradi e hanno il campo visivo più ampio di qualsiasi mammifero terrestre."
+    ],
+    "8": [
+      "Le capre hanno le pupille rettangolari che permettono loro di vedere quasi a 340 gradi.",
+      "Le capre sono ottime arrampicatrici e possono scalare pendii quasi verticali."
+    ],
+    "9": [
+      "Gli asini hanno una memoria incredibile e possono ricordare luoghi e altri asini incontrati 25 anni prima.",
+      "Gli asini sono originari dell'Africa e i loro antenati selvatici vivevano nei deserti."
+    ],
+    "10": [
+      "I tacchini possono arrossire! La pelle della testa e del collo cambia colore in base alle emozioni.",
+      "I tacchini selvatici possono volare a brevi distanze a velocità fino a 90 km/h."
+    ],
+    "11": [
+      "I conigli possono girare le orecchie di 180 gradi per captare i suoni da ogni direzione.",
+      "I denti dei conigli non smettono mai di crescere per tutta la vita."
+    ],
+    "12": [
+      "Le anatre hanno le zampe senza nervi né vasi sanguigni, quindi non sentono mai il freddo ai piedi.",
+      "Le anatre dormono con un occhio aperto per stare allerta dai predatori."
+    ],
+    "13": [
+      "Le oche volano in formazione a V per risparmiare energia: ogni oca sfrutta la corrente d'aria di quella davanti.",
+      "Le oche sono state usate come guardiane fin dai tempi degli antichi Romani."
+    ],
+    "14": [
+      "I lama vengono usati come guardiani di greggi di pecore perché proteggono gli altri animali dai predatori.",
+      "I lama comunicano tra loro principalmente attraverso il linguaggio del corpo e emettendo un suono di ronzio."
+    ],
+    "15": [
+      "Il pelo dell'alpaca è più caldo, più morbido e più resistente della lana di pecora.",
+      "Gli alpaca fanno i bisogni tutti nello stesso punto, mantenendo pulito il resto del pascolo."
+    ],
+    "16": [
+      "Le cavie emettono un suono chiamato 'popcorning' saltando di gioia quando sono felici.",
+      "Le cavie hanno bisogno di vitamina C nella dieta, proprio come gli esseri umani."
+    ],
+    "17": [
+      "I criceti possono trasportare nelle guance una quantità di cibo pari al 20% del loro peso corporeo.",
+      "I criceti corrono fino a 9 km per notte sulla loro ruota!"
+    ],
+    "18": [
+      "I pesci rossi hanno una memoria di almeno 3 mesi, non di 3 secondi come si crede.",
+      "I pesci rossi possono vedere più colori degli umani, inclusa la luce ultravioletta."
+    ],
+    "19": [
+      "I pappagallini ondulati possono imparare un vocabolario di centinaia di parole.",
+      "I pappagallini possono girare la testa di 180 gradi."
+    ],
+    "20": [
+      "Alcune tartarughe possono respirare dal sedere! Assorbono ossigeno attraverso la cloaca.",
+      "Le tartarughe esistono da più di 200 milioni di anni, prima ancora dei dinosauri."
+    ],
+    "21": [
+      "Gli scoiattoli piantano accidentalmente milioni di alberi ogni anno dimenticando dove hanno nascosto le ghiande.",
+      "Gli scoiattoli hanno le caviglie che ruotano di 180 gradi, permettendogli di scendere dagli alberi a testa in giù."
+    ],
+    "22": [
+      "I pettirossi possono vedere il campo magnetico terrestre e lo usano per orientarsi durante le migrazioni.",
+      "I pettirossi riconoscono gli esseri umani individualmente e possono diventare molto confidenti."
+    ],
+    "23": [
+      "I cervi perdono e fanno ricrescere le corna ogni anno. Le corna possono crescere fino a 2,5 cm al giorno.",
+      "I cervi sono ottimi nuotatori e possono attraversare laghi e fiumi larghi."
+    ],
+    "24": [
+      "Le volpi usano il campo magnetico terrestre per calcolare la distanza delle prede sotto la neve.",
+      "Le volpi artiche possono sopportare temperature fino a -70 gradi Celsius."
+    ],
+    "25": [
+      "I procioni possono aprire lucchetti, barattoli e maniglie delle porte grazie alle loro zampe incredibilmente agili.",
+      "I procioni lavano il cibo nell'acqua non per pulirlo, ma per sentirne meglio la consistenza con le zampe bagnate."
+    ],
+    "26": [
+      "I ricci sono immuni al veleno di molti serpenti e possono mangiare scorpioni senza problemi.",
+      "Un riccio ha circa 5.000-7.000 aculei sul corpo che si rinnovano continuamente."
+    ],
+    "27": [
+      "Alcune rane possono congelare completamente d'inverno e tornare in vita in primavera.",
+      "Le rane bevono e respirano attraverso la pelle, non hanno bisogno di bere con la bocca."
+    ],
+    "28": [
+      "Le farfalle sentono i sapori con i piedi! Hanno dei sensori sulle zampe per riconoscere le piante.",
+      "Le farfalle monarca migrano per oltre 4.000 km dal Canada al Messico ogni anno."
+    ],
+    "29": [
+      "Una coccinella può mangiare fino a 5.000 afidi durante la sua vita, proteggendo le piante.",
+      "Le coccinelle hanno diverse specie con numeri diversi di puntini, da 0 a 24."
+    ],
+    "30": [
+      "Un'ape visita da 50 a 1.000 fiori al giorno e deve visitarne circa 2 milioni per produrre mezzo chilo di miele.",
+      "Le api comunicano tra loro danzando: la 'danza dell'addome' indica la direzione e la distanza del cibo."
+    ],
+    "31": [
+      "Le lumache possono dormire fino a 3 anni di fila se le condizioni non sono favorevoli.",
+      "La bava della lumaca è così protettiva che può strisciare sul filo di un rasoio senza tagliarsi."
+    ],
+    "32": [
+      "I piccioni possono trovare la strada di casa da oltre 1.800 km di distanza grazie al loro senso magnetico.",
+      "I piccioni sono stati usati durante le guerre mondiali per portare messaggi e hanno salvato migliaia di vite."
+    ],
+    "33": [
+      "I passeri fanno il bagno nella polvere per liberarsi dei parassiti tra le piume.",
+      "I passeri vivono in quasi ogni parte del mondo e si sono adattati a convivere con gli esseri umani da migliaia di anni."
+    ],
+    "34": [
+      "I pipistrelli sono gli unici mammiferi capaci di volare veramente, non solo planare.",
+      "Un singolo pipistrello può mangiare fino a 1.000 zanzare in una sola ora."
+    ],
+    "35": [
+      "Il cuore di un topo batte circa 600 volte al minuto, dieci volte più veloce del cuore umano.",
+      "I topi possono ridere! Emettono suoni ultrasonici di gioia quando giocano."
+    ],
+    "36": [
+      "Le talpe possono scavare tunnel lunghi fino a 20 metri in un solo giorno.",
+      "Le talpe hanno una proteina speciale nel sangue che permette loro di respirare l'aria con poco ossigeno sottoterra."
+    ],
+    "37": [
+      "Le libellule esistono da oltre 300 milioni di anni e un tempo avevano un'apertura alare di 75 cm.",
+      "Le libellule possono volare in tutte le direzioni, anche all'indietro, e raggiungono i 50 km/h."
+    ],
+    "38": [
+      "Le tamie possono trasportare fino a 9 noci alla volta nelle guance.",
+      "Le tamie costruiscono tane sotterranee elaborate con stanze separate per dormire, conservare il cibo e i rifiuti."
+    ],
+    "39": [
+      "I gufi possono ruotare la testa di 270 gradi senza muovere il corpo.",
+      "I gufi hanno le piume progettate per volare in modo silenzioso, così le prede non li sentono arrivare."
+    ],
+    "40": [
+      "I picchi battono il becco contro gli alberi fino a 20 volte al secondo, senza mai avere mal di testa, grazie a un cranio speciale.",
+      "La lingua del picchio è così lunga che si avvolge intorno al cranio e può raggiungere gli insetti nelle profondità del legno."
+    ],
+    "41": [
+      "I delfini dormono con metà cervello alla volta: un occhio resta aperto per sorvegliare i predatori.",
+      "Ogni delfino ha un fischio unico che funziona come un nome proprio con cui gli altri lo chiamano."
+    ],
+    "42": [
+      "Il cuore della balenottera azzurra è grande quanto un'automobile e batte solo 2 volte al minuto in immersione.",
+      "Il canto delle balene può essere sentito a migliaia di chilometri di distanza nell'oceano."
+    ],
+    "43": [
+      "Gli squali perdono e sostituiscono circa 30.000 denti nel corso della loro vita.",
+      "Gli squali esistono da oltre 400 milioni di anni, molto prima dei dinosauri."
+    ],
+    "44": [
+      "I polpi hanno tre cuori e il sangue blu perché contiene rame invece di ferro.",
+      "I polpi possono cambiare colore, forma e consistenza della pelle in meno di un secondo."
+    ],
+    "45": [
+      "Nei cavallucci marini è il papà a rimanere incinto e a partorire i piccoli.",
+      "I cavallucci marini non hanno lo stomaco: il cibo passa attraverso il corpo così velocemente che devono mangiare quasi continuamente."
+    ],
+    "46": [
+      "Le meduse esistono da oltre 650 milioni di anni, molto prima dei dinosauri e dei pesci.",
+      "Le meduse non hanno cervello, cuore né sangue, eppure possono sentire la luce e le correnti."
+    ],
+    "47": [
+      "Le tartarughe marine possono trattenere il respiro per ore e navigare per migliaia di chilometri.",
+      "Le tartarughe marine tornano a deporre le uova sulla stessa spiaggia dove sono nate, anche dopo 30 anni."
+    ],
+    "48": [
+      "I pesci pagliaccio sono immuni al veleno degli anemoni grazie a uno strato speciale di muco sulla pelle.",
+      "Tutti i pesci pagliaccio nascono maschi e il più grande del gruppo può diventare femmina."
+    ],
+    "49": [
+      "Le stelle marine non hanno cervello né sangue. Al posto del sangue, usano acqua di mare filtrata.",
+      "Le stelle marine possono rigenerare un intero braccio perso e, in alcune specie, un braccio può rigenerare un'intera stella."
+    ],
+    "50": [
+      "I granchi camminano di lato perché le loro articolazioni si piegano solo in quella direzione.",
+      "I granchi crescono cambiando il guscio: durante la muta, escono dal vecchio guscio e ne formano uno nuovo."
+    ],
+    "51": [
+      "Le aragoste possono vivere oltre 100 anni e continuano a crescere per tutta la vita senza invecchiare.",
+      "Le aragoste hanno il sangue blu e sentono i sapori con le zampe."
+    ],
+    "52": [
+      "Le foche possono dormire sott'acqua, tornando in superficie automaticamente per respirare.",
+      "Le foche hanno i baffi così sensibili che possono seguire la scia di un pesce passato 30 secondi prima."
+    ],
+    "53": [
+      "I trichechi usano le loro zanne lunghe fino a un metro per arrampicarsi sul ghiaccio e per difendersi.",
+      "I trichechi possono rallentare il battito cardiaco per resistere alle acque gelide dell'Artico."
+    ],
+    "54": [
+      "I pinguini imperatore possono resistere a temperature di -60 gradi e si scaldano facendo un grande abbraccio di gruppo.",
+      "I pinguini fanno la proposta di matrimonio! Il maschio cerca il ciottolo perfetto e lo regala alla femmina."
+    ],
+    "55": [
+      "Il pesce palla contiene una tossina 1.200 volte più velenosa del cianuro, sufficiente per uccidere 30 persone.",
+      "Il pesce palla si gonfia ingerendo rapidamente acqua fino a raddoppiare o triplicare le sue dimensioni."
+    ],
+    "56": [
+      "Le mante hanno il cervello più grande di tutti i pesci e sono tra i pochi animali a riconoscersi allo specchio.",
+      "Le mante possono avere un'apertura alare fino a 7 metri e pesare oltre 2 tonnellate."
+    ],
+    "57": [
+      "Le anguille europee nascono tutte nel Mar dei Sargassi, nell'Oceano Atlantico, e poi migrano verso l'Europa.",
+      "Le anguille elettriche possono generare scariche fino a 860 volt, sufficienti ad accendere una lampadina."
+    ],
+    "58": [
+      "I calamari giganti hanno gli occhi più grandi del regno animale, grandi come palloni da basket.",
+      "I calamari hanno tre cuori e il sangue blu, proprio come i polpi."
+    ],
+    "59": [
+      "Le orche vivono in famiglie guidate dalla nonna: sono una delle poche specie con una struttura matriarcale.",
+      "Ogni gruppo di orche ha un proprio dialetto vocale che le distingue dagli altri gruppi."
+    ],
+    "60": [
+      "Il corno del narvalo è in realtà un dente canino che cresce a spirale e può raggiungere i 3 metri.",
+      "I narvali possono immergersi fino a 1.500 metri di profondità, tra i mammiferi più profondi."
+    ],
+    "61": [
+      "I leoni sono gli unici felini che vivono in gruppo, chiamato branco, e le femmine fanno quasi tutta la caccia.",
+      "Il ruggito del leone può essere sentito a 8 chilometri di distanza."
+    ],
+    "62": [
+      "Le strisce della tigre sono uniche come le impronte digitali: non esistono due tigri con lo stesso disegno.",
+      "Le tigri sono ottime nuotatrici e adorano fare il bagno, a differenza della maggior parte dei felini."
+    ],
+    "63": [
+      "Gli elefanti sono gli unici animali che non possono saltare, ma possono sentire i terremoti con i piedi.",
+      "Gli elefanti piangono, giocano e ridono. Fanno anche dei rituali quando un membro del branco muore."
+    ],
+    "64": [
+      "La lingua della giraffa è lunga circa 50 centimetri ed è di colore blu-viola per proteggersi dal sole.",
+      "Le giraffe dormono solo circa 30 minuti al giorno, in brevi pisolini di pochi minuti."
+    ],
+    "65": [
+      "Le scimmie cappuccine usano pietre come strumenti per aprire noci e frutti duri da oltre 3.000 anni.",
+      "Alcune scimmie sanno contare e comprendere concetti matematici di base."
+    ],
+    "66": [
+      "I gorilla condividono circa il 98% del DNA con gli esseri umani.",
+      "I gorilla costruiscono un nuovo nido per dormire ogni sera, usando foglie e rami."
+    ],
+    "67": [
+      "Il pappagallo cenerino africano è il parlatore più dotato e può imparare oltre 1.000 parole.",
+      "I pappagalli sono tra i pochi animali che possono ballare seguendo il ritmo della musica."
+    ],
+    "68": [
+      "Il becco del tucano è leggero perché è cavo all'interno, come una spugna ossea.",
+      "Il tucano usa il suo grande becco per regolare la temperatura corporea disperdendo il calore."
+    ],
+    "69": [
+      "Il giaguaro ha il morso più potente tra tutti i felini e può perforare il guscio di una tartaruga.",
+      "A differenza della maggior parte dei felini, il giaguaro ama l'acqua e caccia anche coccodrilli e caimani."
+    ],
+    "70": [
+      "I serpenti sentono le vibrazioni del terreno con la mandibola e 'annusano' con la lingua.",
+      "Alcuni serpenti possono sopravvivere fino a 2 anni senza mangiare dopo un pasto abbondante."
+    ],
+    "71": [
+      "I coccodrilli sono rimasti quasi invariati per 200 milioni di anni, sopravvivendo ai dinosauri.",
+      "Le mamme coccodrillo sono tenerissime: trasportano i piccoli in bocca delicatamente fino all'acqua."
+    ],
+    "72": [
+      "Gli ippopotami producono un 'sudore' rosso naturale che funziona come crema solare e antibiotico.",
+      "Nonostante il loro peso, gli ippopotami possono correre fino a 30 km/h sulla terra."
+    ],
+    "73": [
+      "Il corno del rinoceronte è fatto di cheratina, la stessa proteina dei nostri capelli e unghie.",
+      "I rinoceronti hanno una vista molto scarsa ma un olfatto e un udito eccezionali."
+    ],
+    "74": [
+      "Le strisce delle zebre sono uniche per ogni individuo, come le nostre impronte digitali.",
+      "Le strisce delle zebre confondono le mosche tse-tse e altri insetti mordaci, proteggendole dalle punture."
+    ],
+    "75": [
+      "I camaleonti cambiano colore non per mimetizzarsi ma per comunicare le emozioni e regolare la temperatura.",
+      "Gli occhi del camaleonte possono muoversi indipendentemente, guardando in due direzioni diverse contemporaneamente."
+    ],
+    "76": [
+      "I bradipi sono così lenti che sulle loro pellicce crescono alghe verdi che li aiutano a mimetizzarsi.",
+      "I bradipi scendono dall'albero una volta alla settimana solo per fare i bisogni, sempre nello stesso punto."
+    ],
+    "77": [
+      "Gli oranghi costruiscono 'ombrelli' di foglie per ripararsi dalla pioggia, dimostrando grande intelligenza.",
+      "Gli oranghi condividono il 97% del DNA con gli esseri umani e possono imparare il linguaggio dei segni."
+    ],
+    "78": [
+      "Le pantere nere non sono una specie separata: sono leopardi o giaguari con una mutazione del colore del pelo.",
+      "Anche se sembrano completamente nere, sotto la luce giusta si possono vedere le macchie sulla pelliccia."
+    ],
+    "79": [
+      "I fenicotteri nascono bianchi o grigi e diventano rosa grazie ai carotenoidi presenti nei gamberetti che mangiano.",
+      "I fenicotteri possono bere acqua quasi bollente dalle sorgenti vulcaniche senza farsi male."
+    ],
+    "80": [
+      "Le piume della coda del pavone possono raggiungere 1,5 metri di lunghezza e hanno 'occhi' iridescenti.",
+      "I pavoni fanno vibrare le piume a una frequenza così bassa che è impercettibile all'orecchio umano ma attira le femmine."
+    ],
+    "81": [
+      "Gli orsi polari hanno la pelle nera sotto il pelo bianco, che in realtà è trasparente e non bianco.",
+      "Le zampe dell'orso polare funzionano come racchette da neve e i peli sotto le zampe impediscono di scivolare sul ghiaccio."
+    ],
+    "82": [
+      "La volpe artica può sopravvivere a temperature di -50 gradi grazie alla pelliccia più calda di tutti i mammiferi.",
+      "La volpe artica cambia colore con le stagioni: bianca d'inverno e marrone d'estate per mimetizzarsi."
+    ],
+    "83": [
+      "Il gufo delle nevi ha un udito così fine che può localizzare e catturare una preda sotto 30 cm di neve.",
+      "A differenza della maggior parte dei gufi, il gufo delle nevi caccia di giorno perché nell'Artico d'estate il sole non tramonta mai."
+    ],
+    "84": [
+      "I cammelli possono bere fino a 200 litri d'acqua in soli 15 minuti dopo un lungo periodo senza bere.",
+      "Le gobbe del cammello non contengono acqua ma grasso, che viene usato come riserva di energia."
+    ],
+    "85": [
+      "Gli scorpioni brillano di un colore verde-blu sotto la luce ultravioletta grazie a una sostanza nella loro corazza.",
+      "Gli scorpioni possono sopravvivere fino a un anno senza mangiare rallentando il metabolismo."
+    ],
+    "86": [
+      "Il serpente a sonagli aggiunge un nuovo anello al sonaglio ogni volta che cambia pelle.",
+      "Il serpente a sonagli può percepire la differenza di temperatura di un millesimo di grado con le fossette termosensibili."
+    ],
+    "87": [
+      "I suricati si alternano come sentinelle: mentre il gruppo mangia, uno sta in piedi e sorveglia l'orizzonte.",
+      "I suricati sono immuni a molti veleni, inclusi quelli degli scorpioni che cacciano regolarmente."
+    ],
+    "88": [
+      "Le orecchie del fennec sono lunghe fino a 15 cm e servono sia per sentire le prede sottoterra sia per disperdere il calore.",
+      "Il fennec è la volpe più piccola del mondo e pesa circa 1,5 kg, meno di un gatto."
+    ],
+    "89": [
+      "Le renne sono gli unici cervi in cui sia i maschi che le femmine hanno le corna.",
+      "Gli occhi delle renne cambiano colore da dorato d'estate a blu d'inverno per vedere meglio al buio."
+    ],
+    "90": [
+      "Gli husky possono correre per ore a -40 gradi senza stancarsi grazie a un metabolismo unico.",
+      "Gli husky hanno un doppio strato di pelo che li protegge sia dal freddo estremo che dal caldo."
+    ],
+    "91": [
+      "I lemming non si gettano davvero dalle scogliere: è un mito creato da un documentario degli anni '50.",
+      "I lemming sono tra i pochi piccoli roditori che rimangono attivi durante il lungo inverno artico, vivendo sotto la neve."
+    ],
+    "92": [
+      "L'armadillo a nove fasce partorisce sempre quattro gemelli identici dallo stesso uovo fecondato.",
+      "L'armadillo può trattenere il respiro per 6 minuti e camminare sul fondo dei fiumi."
+    ],
+    "93": [
+      "Il roadrunner può correre a oltre 30 km/h ed è più veloce di un essere umano medio.",
+      "Il roadrunner mangia serpenti a sonagli sbattendoli ripetutamente a terra prima di ingoiarli."
+    ],
+    "94": [
+      "Gli avvoltoi hanno lo stomaco così acido da distruggere batteri pericolosissimi come l'antrace e il colera.",
+      "Gli avvoltoi svolgono un ruolo ecologico fondamentale: senza di loro, le malattie si diffonderebbero molto di più."
+    ],
+    "95": [
+      "I coyote si sono adattati alle città e oggi vivono persino nel centro di grandi metropoli americane.",
+      "I coyote possono correre a oltre 65 km/h e fare salti di 4 metri in lunghezza."
+    ],
+    "96": [
+      "Le iguane hanno un 'terzo occhio' sulla sommità della testa che rileva i cambiamenti di luce e le ombre dei predatori.",
+      "Le iguane marine delle Galapagos sono le uniche lucertole al mondo che nuotano e si nutrono in mare."
+    ],
+    "97": [
+      "Le iene hanno una delle mascelle più potenti del mondo animale, capaci di frantumare le ossa di grandi animali.",
+      "Nonostante assomiglino ai cani, le iene sono più imparentate con i gatti e le manguste."
+    ],
+    "98": [
+      "Le testuggini giganti delle Galapagos possono vivere oltre 170 anni, tra gli animali più longevi al mondo.",
+      "Le testuggini delle Galapagos hanno contribuito a ispirare la teoria dell'evoluzione di Charles Darwin."
+    ],
+    "99": [
+      "L'antilocapra è il mammifero più veloce del Nord America e può correre a 90 km/h per lunghe distanze.",
+      "L'antilocapra ha una vista eccezionale, equivalente a un binocolo 8x, per avvistare i predatori da lontano."
+    ],
+    "100": [
+      "Il gerboa può saltare fino a 3 metri di altezza, quasi 15 volte la propria lunghezza.",
+      "I gerboa non bevono quasi mai acqua: ottengono tutta l'idratazione dal cibo che mangiano."
+    ],
+    "101": [
+      "L'axolotl può rigenerare arti, organi, il midollo spinale e persino parti del cervello senza cicatrici.",
+      "L'axolotl vive allo stato selvatico solo nel lago Xochimilco a Città del Messico ed è quasi estinto in natura."
+    ],
+    "102": [
+      "I pangolini sono i mammiferi più trafficati illegalmente al mondo a causa delle loro scaglie.",
+      "La lingua del pangolino può essere lunga fino a 40 cm, più lunga del suo corpo, e parte dal bacino."
+    ],
+    "103": [
+      "Il panda rosso è stato chiamato 'panda' 50 anni prima del panda gigante bianco e nero.",
+      "Il panda rosso ha un falso pollice, un'estensione dell'osso del polso, che lo aiuta ad afferrare il bambù."
+    ],
+    "104": [
+      "I koala dormono fino a 22 ore al giorno perché le foglie di eucalipto danno pochissima energia.",
+      "I piccoli di koala mangiano una pappa speciale prodotta dalla mamma per sviluppare i batteri necessari a digerire l'eucalipto."
+    ],
+    "105": [
+      "L'ornitorinco è uno dei pochissimi mammiferi velenosi: i maschi hanno speroni velenosi sulle zampe posteriori.",
+      "L'ornitorinco caccia sott'acqua usando l'elettroricezione: percepisce i campi elettrici generati dai muscoli delle prede."
+    ],
+    "106": [
+      "Il leopardo delle nevi può saltare fino a 15 metri di distanza grazie alle zampe posteriori potentissime.",
+      "La coda del leopardo delle nevi è lunga quasi quanto il corpo e la usa come sciarpa per coprirsi il naso dal freddo."
+    ],
+    "107": [
+      "L'okapi è stato scoperto dalla scienza occidentale solo nel 1901, nonostante sia grande come un cavallo.",
+      "L'okapi ha una lingua blu-viola lunga fino a 35 cm con cui si pulisce anche le orecchie."
+    ],
+    "108": [
+      "Il quokka è chiamato 'l'animale più felice del mondo' perché la forma del muso lo fa sembrare sempre sorridente.",
+      "I quokka vivono solo in una piccola area dell'Australia sud-occidentale e sull'isola di Rottnest."
+    ],
+    "109": [
+      "Il casuario è considerato l'uccello più pericoloso del mondo: ha artigli affilati che possono essere letali.",
+      "Il casuario è fondamentale per la foresta pluviale perché disperde i semi di oltre 200 specie di piante."
+    ],
+    "110": [
+      "L'aye-aye usa il suo lungo dito medio per bussare sugli alberi e trovare le larve di insetti con l'ecolocalizzazione.",
+      "L'aye-aye è l'unico primate al mondo che usa l'ecolocalizzazione per trovare il cibo."
+    ],
+    "111": [
+      "Il kakapo è l'unico pappagallo al mondo che non sa volare e può vivere fino a 90 anni.",
+      "Il kakapo ha un odore dolce e muschiato che, purtroppo, rende facile ai predatori trovarlo."
+    ],
+    "112": [
+      "La vaquita è il mammifero marino più raro al mondo: ne restano meno di 10 esemplari.",
+      "La vaquita è stata scoperta dalla scienza solo nel 1958 ed è già sull'orlo dell'estinzione."
+    ],
+    "113": [
+      "I capibara sono animali estremamente socievoli e vanno d'accordo con quasi tutte le specie animali.",
+      "I capibara sono semiacquatici e possono restare sott'acqua fino a 5 minuti nascondendosi dai predatori."
+    ],
+    "114": [
+      "Il numbat è uno dei pochi marsupiali attivi di giorno e mangia fino a 20.000 termiti al giorno.",
+      "Il numbat ha una lingua lunga e sottile che può estendersi per 10 cm fuori dalla bocca per catturare le termiti."
+    ],
+    "115": [
+      "La fossa è il più grande predatore del Madagascar e può cacciare lemuri saltando da un albero all'altro.",
+      "La fossa ha caviglie che ruotano a 180 gradi, permettendole di scendere dagli alberi a testa in giù come uno scoiattolo."
+    ],
+    "116": [
+      "Il gaviale ha il muso più stretto di tutti i coccodrilliani, perfetto per catturare pesci con un rapido movimento laterale.",
+      "I maschi di gaviale sviluppano una protuberanza bulbosa sulla punta del muso che amplifica i loro richiami."
+    ],
+    "117": [
+      "La saola è così rara che è stata vista in natura solo 4 volte da quando è stata scoperta nel 1992.",
+      "La saola vive solo nelle foreste delle montagne Annamite tra Vietnam e Laos e viene chiamata 'l'unicorno asiatico'."
+    ],
+    "118": [
+      "Il dugongo è il parente marino più stretto dell'elefante, non del lamantino come si potrebbe pensare.",
+      "I dugonghi possono vivere fino a 70 anni e le femmine hanno un solo piccolo ogni 3-7 anni."
+    ],
+    "119": [
+      "Il leopardo nebuloso ha i canini più lunghi in proporzione al corpo di tutti i felini viventi.",
+      "Il leopardo nebuloso può arrampicarsi sugli alberi a testa in giù e appendersi ai rami con le zampe posteriori."
+    ],
+    "120": [
+      "Il gibbone di Hainan è il primate più raro del mondo: ne restano solo circa 35 esemplari.",
+      "I gibboni di Hainan cantano in duetto al mattino per rafforzare il legame di coppia e marcare il territorio."
+    ]
   }
 }

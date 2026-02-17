@@ -14,6 +14,8 @@ class QuizAnimal(BaseModel):
     id: int = Field(..., description="Animal ID")
     name: str = Field(..., description="Animal name")
     image_url: Optional[str] = Field(None, description="URL to animal image")
+    hints: list[str] = Field(default_factory=list, description="3 progressive hints")
+    fun_facts: list[str] = Field(default_factory=list, description="2 fun facts")
 
 
 class AnimalWithStatus(QuizAnimal):
