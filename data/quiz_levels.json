@@ -62,7 +62,7 @@
         "id": 35,
         "name": "Mouse",
         "emoji": "🐭",
-        "imageUrl": null
+        "imageUrl": "/static/images/Mouse.png"
       },
       {
         "id": 27,
@@ -74,49 +74,49 @@
         "id": 28,
         "name": "Butterfly",
         "emoji": "🦋",
-        "imageUrl": null
+        "imageUrl": "/static/images/Butterfly.png"
       },
       {
         "id": 30,
         "name": "Bee",
         "emoji": "🐝",
-        "imageUrl": null
+        "imageUrl": "/static/images/Bee.png"
       },
       {
         "id": 18,
         "name": "Goldfish",
         "emoji": "🐠",
-        "imageUrl": null
+        "imageUrl": "/static/images/Goldfish.png"
       },
       {
         "id": 20,
         "name": "Turtle",
         "emoji": "🐢",
-        "imageUrl": null
+        "imageUrl": "/static/images/Turtle.png"
       },
       {
         "id": 61,
         "name": "Lion",
         "emoji": "🦁",
-        "imageUrl": null
+        "imageUrl": "/static/images/Lion.png"
       },
       {
         "id": 63,
         "name": "Elephant",
         "emoji": "🐘",
-        "imageUrl": null
+        "imageUrl": "/static/images/Elephant.png"
       },
       {
         "id": 65,
         "name": "Monkey",
         "emoji": "🐒",
-        "imageUrl": null
+        "imageUrl": "/static/images/Monkey.png"
       },
       {
         "id": 41,
         "name": "Dolphin",
         "emoji": "🐬",
-        "imageUrl": null
+        "imageUrl": "/static/images/Dolphin.png"
       },
       {
         "id": 54,
@@ -147,19 +147,19 @@
         "id": 10,
         "name": "Turkey",
         "emoji": "🦃",
-        "imageUrl": null
+        "imageUrl": "/static/images/Turkey.png"
       },
       {
         "id": 13,
         "name": "Goose",
         "emoji": "🦆",
-        "imageUrl": null
+        "imageUrl": "/static/images/Goose.png"
       },
       {
         "id": 17,
         "name": "Hamster",
         "emoji": "🐹",
-        "imageUrl": null
+        "imageUrl": "/static/images/Hamster.png"
       },
       {
         "id": 21,
@@ -183,13 +183,13 @@
         "id": 29,
         "name": "Ladybug",
         "emoji": "🐞",
-        "imageUrl": null
+        "imageUrl": "/static/images/Ladybug.png"
       },
       {
         "id": 31,
         "name": "Snail",
         "emoji": "🐌",
-        "imageUrl": null
+        "imageUrl": "/static/images/Snail.png"
       },
       {
         "id": 32,
@@ -207,49 +207,49 @@
         "id": 42,
         "name": "Whale",
         "emoji": "🐋",
-        "imageUrl": null
+        "imageUrl": "/static/images/Whale.png"
       },
       {
         "id": 43,
         "name": "Shark",
         "emoji": "🦈",
-        "imageUrl": null
+        "imageUrl": "/static/images/Shark.png"
       },
       {
         "id": 50,
         "name": "Crab",
         "emoji": "🦀",
-        "imageUrl": null
+        "imageUrl": "/static/images/Crab.png"
       },
       {
         "id": 62,
         "name": "Tiger",
         "emoji": "🐅",
-        "imageUrl": null
+        "imageUrl": "/static/images/Tiger.png"
       },
       {
         "id": 64,
         "name": "Giraffe",
         "emoji": "🦒",
-        "imageUrl": null
+        "imageUrl": "/static/images/Giraffe.png"
       },
       {
         "id": 70,
         "name": "Snake",
         "emoji": "🐍",
-        "imageUrl": null
+        "imageUrl": "/static/images/Snake.png"
       },
       {
         "id": 74,
         "name": "Zebra",
         "emoji": "🦓",
-        "imageUrl": null
+        "imageUrl": "/static/images/Zebra.png"
       },
       {
         "id": 84,
         "name": "Camel",
         "emoji": "🐫",
-        "imageUrl": null
+        "imageUrl": "/static/images/Camel.png"
       }
     ]
   },
@@ -262,7 +262,7 @@
         "id": 22,
         "name": "Robin",
         "emoji": "🐦",
-        "imageUrl": null
+        "imageUrl": "/static/images/Robin.png"
       },
       {
         "id": 25,
@@ -286,73 +286,73 @@
         "id": 34,
         "name": "Bat",
         "emoji": "🦇",
-        "imageUrl": null
+        "imageUrl": "/static/images/Bat.png"
       },
       {
         "id": 37,
         "name": "Dragonfly",
         "emoji": "🐾",
-        "imageUrl": null
+        "imageUrl": "/static/images/Dragonfly.png"
       },
       {
         "id": 40,
         "name": "Woodpecker",
         "emoji": "🐦",
-        "imageUrl": null
+        "imageUrl": "/static/images/Woodpecker.png"
       },
       {
         "id": 44,
         "name": "Octopus",
         "emoji": "🐙",
-        "imageUrl": null
+        "imageUrl": "/static/images/Octopus.png"
       },
       {
         "id": 46,
         "name": "Jellyfish",
         "emoji": "🐾",
-        "imageUrl": null
+        "imageUrl": "/static/images/Jellyfish.png"
       },
       {
         "id": 49,
         "name": "Starfish",
         "emoji": "⭐",
-        "imageUrl": null
+        "imageUrl": "/static/images/Starfish.png"
       },
       {
         "id": 52,
         "name": "Seal",
         "emoji": "🦭",
-        "imageUrl": null
+        "imageUrl": "/static/images/Seal.png"
       },
       {
         "id": 66,
         "name": "Gorilla",
         "emoji": "🦍",
-        "imageUrl": null
+        "imageUrl": "/static/images/Gorilla.png"
       },
       {
         "id": 67,
         "name": "Parrot",
         "emoji": "🦜",
-        "imageUrl": null
+        "imageUrl": "/static/images/Parrot.png"
       },
       {
         "id": 71,
         "name": "Crocodile",
         "emoji": "🐊",
-        "imageUrl": null
+        "imageUrl": "/static/images/Crocodile.png"
       },
       {
         "id": 72,
         "name": "Hippo",
         "emoji": "🦛",
-        "imageUrl": null
+        "imageUrl": "/static/images/Hippo.png"
       },
       {
         "id": 73,
         "name": "Rhino",
         "emoji": "🦏",
-        "imageUrl": null
+        "imageUrl": "/static/images/Rhino.png"
       },
       {
         "id": 79,
@@ -364,19 +364,19 @@
         "id": 80,
         "name": "Peacock",
         "emoji": "🦚",
-        "imageUrl": null
+        "imageUrl": "/static/images/Peacock.png"
       },
       {
         "id": 81,
         "name": "Polar Bear",
         "emoji": "🐻",
-        "imageUrl": null
+        "imageUrl": "/static/images/Polar_Bear.png"
       },
       {
         "id": 89,
         "name": "Reindeer",
         "emoji": "🦌",
-        "imageUrl": null
+        "imageUrl": "/static/images/Reindeer.png"
       }
     ]
   },
@@ -389,37 +389,37 @@
         "id": 14,
         "name": "Llama",
         "emoji": "🦙",
-        "imageUrl": null
+        "imageUrl": "/static/images/Llama.png"
       },
       {
         "id": 15,
         "name": "Alpaca",
         "emoji": "🦙",
-        "imageUrl": null
+        "imageUrl": "/static/images/Alpaca.png"
       },
       {
         "id": 16,
         "name": "Guinea Pig",
         "emoji": "🐹",
-        "imageUrl": null
+        "imageUrl": "/static/images/Guinea_Pig.png"
       },
       {
         "id": 19,
         "name": "Parakeet",
         "emoji": "🦜",
-        "imageUrl": null
+        "imageUrl": "/static/images/Parakeet.png"
       },
       {
         "id": 36,
         "name": "Mole",
         "emoji": "🐾",
-        "imageUrl": null
+        "imageUrl": "/static/images/Mole.png"
       },
       {
         "id": 38,
         "name": "Chipmunk",
         "emoji": "🐿️",
-        "imageUrl": null
+        "imageUrl": "/static/images/Chipmunk.png"
       },
       {
         "id": 45,
@@ -431,31 +431,31 @@
         "id": 47,
         "name": "Sea Turtle",
         "emoji": "🐢",
-        "imageUrl": null
+        "imageUrl": "/static/images/Sea_Turtle.png"
       },
       {
         "id": 48,
         "name": "Clownfish",
         "emoji": "🐠",
-        "imageUrl": null
+        "imageUrl": "/static/images/Clownfish.png"
       },
       {
         "id": 51,
         "name": "Lobster",
         "emoji": "🦞",
-        "imageUrl": null
+        "imageUrl": "/static/images/Lobster.png"
       },
       {
         "id": 57,
         "name": "Eel",
         "emoji": "🐍",
-        "imageUrl": null
+        "imageUrl": "/static/images/Eel.png"
       },
       {
         "id": 58,
         "name": "Squid",
         "emoji": "🦑",
-        "imageUrl": null
+        "imageUrl": "/static/images/Squid.png"
       },
       {
         "id": 68,
@@ -467,7 +467,7 @@
         "id": 69,
         "name": "Jaguar",
         "emoji": "🐆",
-        "imageUrl": null
+        "imageUrl": "/static/images/Jaguar.png"
       },
       {
         "id": 75,
@@ -485,19 +485,19 @@
         "id": 78,
         "name": "Panther",
         "emoji": "🐈‍⬛",
-        "imageUrl": null
+        "imageUrl": "/static/images/Panther.png"
       },
       {
         "id": 85,
         "name": "Scorpion",
         "emoji": "🦂",
-        "imageUrl": null
+        "imageUrl": "/static/images/Scorpion.png"
       },
       {
         "id": 90,
         "name": "Husky",
         "emoji": "🐕",
-        "imageUrl": null
+        "imageUrl": "/static/images/Husky.png"
       },
       {
         "id": 104,
@@ -516,13 +516,13 @@
         "id": 53,
         "name": "Walrus",
         "emoji": "🐾",
-        "imageUrl": null
+        "imageUrl": "/static/images/Walrus.png"
       },
       {
         "id": 55,
         "name": "Pufferfish",
         "emoji": "🐡",
-        "imageUrl": null
+        "imageUrl": "/static/images/Pufferfish.png"
       },
       {
         "id": 56,
@@ -534,7 +534,7 @@
         "id": 59,
         "name": "Orca",
         "emoji": "🐋",
-        "imageUrl": null
+        "imageUrl": "/static/images/Orca.png"
       },
       {
         "id": 60,
@@ -546,37 +546,37 @@
         "id": 77,
         "name": "Orangutan",
         "emoji": "🦧",
-        "imageUrl": null
+        "imageUrl": "/static/images/Orangutan.png"
       },
       {
         "id": 82,
         "name": "Arctic Fox",
         "emoji": "🦊",
-        "imageUrl": null
+        "imageUrl": "/static/images/Arctic_Fox.png"
       },
       {
         "id": 83,
         "name": "Snowy Owl",
         "emoji": "🦉",
-        "imageUrl": null
+        "imageUrl": "/static/images/Snowy_Owl.png"
       },
       {
         "id": 86,
         "name": "Rattlesnake",
         "emoji": "🐍",
-        "imageUrl": null
+        "imageUrl": "/static/images/Rattlesnake.png"
       },
       {
         "id": 87,
         "name": "Meerkat",
         "emoji": "🐾",
-        "imageUrl": null
+        "imageUrl": "/static/images/Meerkat.png"
       },
       {
         "id": 88,
         "name": "Fennec Fox",
         "emoji": "🦊",
-        "imageUrl": null
+        "imageUrl": "/static/images/Fennec_Fox.png"
       },
       {
         "id": 92,
@@ -588,7 +588,7 @@
         "id": 94,
         "name": "Vulture",
         "emoji": "🐦",
-        "imageUrl": null
+        "imageUrl": "/static/images/Vulture.png"
       },
       {
         "id": 95,
@@ -600,19 +600,19 @@
         "id": 96,
         "name": "Iguana",
         "emoji": "🦎",
-        "imageUrl": null
+        "imageUrl": "/static/images/Iguana.png"
       },
       {
         "id": 97,
         "name": "Hyena",
         "emoji": "🐾",
-        "imageUrl": null
+        "imageUrl": "/static/images/Hyena.png"
       },
       {
         "id": 98,
         "name": "Tortoise",
         "emoji": "🐢",
-        "imageUrl": null
+        "imageUrl": "/static/images/Tortoise.png"
       },
       {
         "id": 101,
@@ -643,25 +643,25 @@
         "id": 91,
         "name": "Lemming",
         "emoji": "🐾",
-        "imageUrl": null
+        "imageUrl": "/static/images/Lemming.png"
       },
       {
         "id": 93,
         "name": "Roadrunner",
         "emoji": "🐦",
-        "imageUrl": null
+        "imageUrl": "/static/images/Roadrunner.png"
       },
       {
         "id": 99,
         "name": "Pronghorn",
         "emoji": "🐾",
-        "imageUrl": null
+        "imageUrl": "/static/images/Pronghorn.png"
       },
       {
         "id": 100,
         "name": "Jerboa",
         "emoji": "🐾",
-        "imageUrl": null
+        "imageUrl": "/static/images/Jerboa.png"
       },
       {
         "id": 102,
