@@ -70,8 +70,18 @@ class UserStore(abc.ABC):
         """Return total coins for a user."""
 
     @abc.abstractmethod
-    def spend_coins(self, uid: str, amount: int) -> int:
-        """Atomically deduct coins. Returns new total. Raises ValueError if insufficient."""
+    def buy_hint(
+        self, uid: str, level_id: int, animal_index: int, hint_costs: list[int],
+    ) -> tuple[int, int]:
+        """Atomically deduct coins and reveal a hint.
+
+        Returns ``(hints_revealed, total_coins)``.
+        Raises ``ValueError("insufficient_coins")`` or ``ValueError("max_hints_reached")``.
+        """
+
+    @abc.abstractmethod
+    def get_hints(self, uid: str) -> dict[int, list[int]]:
+        """Return hints revealed per level ``{level_id: [count, ...]}``."""
 
     @abc.abstractmethod
     def count_completed(self, uid: str) -> int:
@@ -89,6 +99,7 @@ class InMemoryUserStore(UserStore):
         self._users: dict[str, dict] = {}
         self._progress: dict[str, dict[int, list[bool]]] = {}
         self._coins: dict[str, int] = {}
+        self._hints: dict[str, dict[int, list[int]]] = {}
 
     def create_user(self, uid: str, email: str, username: str) -> dict:
         if uid in self._users:
@@ -154,13 +165,36 @@ class InMemoryUserStore(UserStore):
         self._ensure_progress(uid)
         return self._coins.get(uid, 0)
 
-    def spend_coins(self, uid: str, amount: int) -> int:
+    def _ensure_hints(self, uid: str) -> dict[int, list[int]]:
+        """Lazy-init hints tracking (mirrors _ensure_progress)."""
+        if uid not in self._hints:
+            self._hints[uid] = {
+                lid: [0] * get_level_animal_count(lid)
+                for lid in get_level_ids()
+            }
+        return self._hints[uid]
+
+    def buy_hint(
+        self, uid: str, level_id: int, animal_index: int, hint_costs: list[int],
+    ) -> tuple[int, int]:
         self._ensure_progress(uid)
-        current = self._coins.get(uid, 0)
-        if current < amount:
+        hints = self._ensure_hints(uid)
+        level_hints = hints.get(level_id)
+        if level_hints is None or animal_index >= len(level_hints):
+            raise ValueError("invalid level/index")
+        current_count = level_hints[animal_index]
+        if current_count >= len(hint_costs):
+            raise ValueError("max_hints_reached")
+        cost = hint_costs[current_count]
+        current_coins = self._coins.get(uid, 0)
+        if current_coins < cost:
             raise ValueError("insufficient_coins")
-        self._coins[uid] = current - amount
-        return self._coins[uid]
+        self._coins[uid] = current_coins - cost
+        level_hints[animal_index] = current_count + 1
+        return level_hints[animal_index], self._coins[uid]
+
+    def get_hints(self, uid: str) -> dict[int, list[int]]:
+        return self._ensure_hints(uid)
 
     def count_completed(self, uid: str) -> int:
         progress = self._ensure_progress(uid)
@@ -276,22 +310,44 @@ class FirestoreUserStore(UserStore):
             return 0
         return snap.to_dict().get("total_coins", 0)
 
-    def spend_coins(self, uid: str, amount: int) -> int:
+    def buy_hint(
+        self, uid: str, level_id: int, animal_index: int, hint_costs: list[int],
+    ) -> tuple[int, int]:
         ref = self._ref(uid)
         db = get_firestore_client()
 
         @firestore_transaction
-        def _spend(transaction: Transaction) -> int:
+        def _buy(transaction: Transaction) -> tuple[int, int]:
             snap = ref.get(transaction=transaction)
             data = snap.to_dict() if snap.exists else {}
+            hints = data.get("hints", {})
+            level_key = str(level_id)
+            level_hints = hints.get(level_key, [0] * get_level_animal_count(level_id))
+            if animal_index >= len(level_hints):
+                raise ValueError("invalid animal_index")
+            current_count = level_hints[animal_index]
+            if current_count >= len(hint_costs):
+                raise ValueError("max_hints_reached")
+            cost = hint_costs[current_count]
             total_coins = data.get("total_coins", 0)
-            if total_coins < amount:
+            if total_coins < cost:
                 raise ValueError("insufficient_coins")
-            new_total = total_coins - amount
-            transaction.update(ref, {"total_coins": new_total})
-            return new_total
+            level_hints[animal_index] = current_count + 1
+            new_total = total_coins - cost
+            transaction.update(ref, {
+                f"hints.{level_key}": level_hints,
+                "total_coins": new_total,
+            })
+            return level_hints[animal_index], new_total
 
-        return _spend(db.transaction())
+        return _buy(db.transaction())
+
+    def get_hints(self, uid: str) -> dict[int, list[int]]:
+        snap = self._ref(uid).get()
+        if not snap.exists:
+            return {}
+        raw = snap.to_dict().get("hints", {})
+        return {int(k): v for k, v in raw.items()}
 
     def count_completed(self, uid: str) -> int:
         snap = self._ref(uid).get()

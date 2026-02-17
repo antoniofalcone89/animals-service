@@ -100,8 +100,9 @@ def get_level_detail(
     level_id: int,
     guessed: list[bool] | None = None,
     locale: str = DEFAULT_LOCALE,
+    hints: list[int] | None = None,
 ) -> LevelDetail | None:
-    """Return level detail with per-animal guessed status."""
+    """Return level detail with per-animal guessed status and hints revealed."""
     raw_levels = _load_quiz_levels()
     lvl = next((l for l in raw_levels if l["id"] == level_id), None)
     if lvl is None:
@@ -117,6 +118,7 @@ def get_level_detail(
             hints=_translate_hints(a["id"], locale),
             fun_facts=_translate_fun_facts(a["id"], locale),
             guessed=guessed[i] if i < len(guessed) else False,
+            hints_revealed=hints[i] if hints and i < len(hints) else 0,
         )
         for i, a in enumerate(animals)
     ]

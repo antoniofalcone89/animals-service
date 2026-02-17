@@ -274,48 +274,120 @@ class TestUserCoins:
         assert resp.json()["totalCoins"] == 0
 
 
-class TestSpendCoins:
-    """POST /api/v1/users/me/spend-coins tests."""
+class TestBuyHint:
+    """POST /api/v1/quiz/buy-hint tests."""
 
-    def test_spend_coins_success(self):
+    def test_buy_hint_success(self):
         headers = _register_and_header()
         # Earn 10 coins via a correct answer
         client.post("/api/v1/quiz/answer", headers=headers, json={
             "levelId": 1, "animalIndex": 0, "answer": "Cane",
         })
-        # Spend 5 coins
-        resp = client.post("/api/v1/users/me/spend-coins", headers=headers, json={
-            "amount": 5,
+        # Buy first hint for animal at index 1 (cost=5)
+        resp = client.post("/api/v1/quiz/buy-hint", headers=headers, json={
+            "levelId": 1, "animalIndex": 1,
         })
         assert resp.status_code == 200
-        assert resp.json()["totalCoins"] == 5
-        # Verify via GET /users/me/coins
+        data = resp.json()
+        assert data["hintsRevealed"] == 1
+        assert data["totalCoins"] == 5
+        # Verify coins via GET /users/me/coins
         resp2 = client.get("/api/v1/users/me/coins", headers=headers)
         assert resp2.json()["totalCoins"] == 5
 
-    def test_spend_coins_insufficient(self):
+    def test_buy_hint_escalating_cost(self):
         headers = _register_and_header()
-        resp = client.post("/api/v1/users/me/spend-coins", headers=headers, json={
-            "amount": 100,
+        # Earn 35 coins (answer 4 animals correctly: 4 * 10 = 40 coins)
+        for idx in range(4):
+            # Get the correct Italian name for each animal
+            resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+                "levelId": 1, "animalIndex": idx, "answer": "wrong",
+            })
+            correct_name = resp.json()["correctAnswer"]
+            client.post("/api/v1/quiz/answer", headers=headers, json={
+                "levelId": 1, "animalIndex": idx, "answer": correct_name,
+            })
+        # Now have 40 coins. Buy 3 hints for animal 5: costs 5, 10, 20
+        resp1 = client.post("/api/v1/quiz/buy-hint", headers=headers, json={
+            "levelId": 1, "animalIndex": 5,
+        })
+        assert resp1.json()["hintsRevealed"] == 1
+        assert resp1.json()["totalCoins"] == 35  # 40 - 5
+
+        resp2 = client.post("/api/v1/quiz/buy-hint", headers=headers, json={
+            "levelId": 1, "animalIndex": 5,
+        })
+        assert resp2.json()["hintsRevealed"] == 2
+        assert resp2.json()["totalCoins"] == 25  # 35 - 10
+
+        resp3 = client.post("/api/v1/quiz/buy-hint", headers=headers, json={
+            "levelId": 1, "animalIndex": 5,
+        })
+        assert resp3.json()["hintsRevealed"] == 3
+        assert resp3.json()["totalCoins"] == 5  # 25 - 20
+
+    def test_buy_hint_insufficient_coins(self):
+        headers = _register_and_header()
+        # No coins earned — buying a hint should fail
+        resp = client.post("/api/v1/quiz/buy-hint", headers=headers, json={
+            "levelId": 1, "animalIndex": 0,
         })
         assert resp.status_code == 400
         detail = resp.json()["detail"]
         assert detail["error"]["code"] == "insufficient_coins"
 
-    def test_spend_coins_invalid_amount(self):
+    def test_buy_hint_max_hints_reached(self):
         headers = _register_and_header()
-        resp = client.post("/api/v1/users/me/spend-coins", headers=headers, json={
-            "amount": 0,
+        # Earn enough coins: 4 correct answers = 40 coins (need 5+10+20=35)
+        for idx in range(4):
+            resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+                "levelId": 1, "animalIndex": idx, "answer": "wrong",
+            })
+            correct_name = resp.json()["correctAnswer"]
+            client.post("/api/v1/quiz/answer", headers=headers, json={
+                "levelId": 1, "animalIndex": idx, "answer": correct_name,
+            })
+        # Buy all 3 hints
+        for _ in range(3):
+            client.post("/api/v1/quiz/buy-hint", headers=headers, json={
+                "levelId": 1, "animalIndex": 5,
+            })
+        # 4th attempt should fail
+        resp = client.post("/api/v1/quiz/buy-hint", headers=headers, json={
+            "levelId": 1, "animalIndex": 5,
         })
-        assert resp.status_code == 422
-        resp2 = client.post("/api/v1/users/me/spend-coins", headers=headers, json={
-            "amount": -5,
-        })
-        assert resp2.status_code == 422
+        assert resp.status_code == 400
+        detail = resp.json()["detail"]
+        assert detail["error"]["code"] == "max_hints_reached"
 
-    def test_spend_coins_no_auth(self):
-        resp = client.post("/api/v1/users/me/spend-coins", json={"amount": 5})
+    def test_buy_hint_invalid_level(self):
+        headers = _register_and_header()
+        resp = client.post("/api/v1/quiz/buy-hint", headers=headers, json={
+            "levelId": 999, "animalIndex": 0,
+        })
+        assert resp.status_code == 400
+
+    def test_buy_hint_no_auth(self):
+        resp = client.post("/api/v1/quiz/buy-hint", json={
+            "levelId": 1, "animalIndex": 0,
+        })
         assert resp.status_code in (401, 403)
+
+    def test_progress_includes_hints_revealed(self):
+        headers = _register_and_header()
+        # Earn coins and buy a hint
+        client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Cane",
+        })
+        client.post("/api/v1/quiz/buy-hint", headers=headers, json={
+            "levelId": 1, "animalIndex": 1,
+        })
+        # Check progress includes hintsRevealed
+        resp = client.get("/api/v1/users/me/progress", headers=headers)
+        assert resp.status_code == 200
+        animals = resp.json()["levels"]["1"]
+        assert animals[1]["hintsRevealed"] == 1
+        assert animals[0]["hintsRevealed"] == 0
 
 
 class TestUpdateProfile:

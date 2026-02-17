@@ -2,8 +2,9 @@
 
 import logging
 
+from app.config import settings
 from app.db.user_store import get_store
-from app.models.quiz import AnswerResponse
+from app.models.quiz import AnswerResponse, BuyHintResponse
 from app.services.level_service import get_animal_name_at, get_level_detail
 
 logger = logging.getLogger(__name__)
@@ -48,10 +49,12 @@ def submit_answer(
 
 def get_user_progress(user_id: str, locale: str = "it") -> dict[str, list[dict]]:
     """Return progress per level enriched with full animal objects."""
-    progress = get_store().ensure_progress(user_id)
+    store = get_store()
+    progress = store.ensure_progress(user_id)
+    hints = store.get_hints(user_id)
     result: dict[str, list[dict]] = {}
     for lid, bools in progress.items():
-        detail = get_level_detail(lid, bools, locale=locale)
+        detail = get_level_detail(lid, bools, locale=locale, hints=hints.get(lid))
         if detail is not None:
             result[str(lid)] = [
                 a.model_dump(by_alias=True) for a in detail.animals
@@ -70,9 +73,12 @@ def get_user_level_guessed(user_id: str, level_id: int) -> list[bool]:
     return progress.get(level_id, [])
 
 
-def spend_coins(user_id: str, amount: int) -> int:
-    """Deduct coins from user balance. Returns new total. Raises ValueError."""
-    return get_store().spend_coins(user_id, amount)
+def buy_hint(user_id: str, level_id: int, animal_index: int) -> BuyHintResponse:
+    """Buy a hint for an animal. Raises ValueError on failure."""
+    hints_revealed, total_coins = get_store().buy_hint(
+        user_id, level_id, animal_index, settings.hint_costs_list,
+    )
+    return BuyHintResponse(total_coins=total_coins, hints_revealed=hints_revealed)
 
 
 def count_completed_levels(user_id: str) -> int:

@@ -22,6 +22,7 @@ class AnimalWithStatus(QuizAnimal):
     """Animal with guessed status for level detail view."""
 
     guessed: bool = Field(False, description="Whether the current user has guessed this animal")
+    hints_revealed: int = Field(0, description="Number of hints revealed for this animal")
 
 
 class Level(BaseModel):
@@ -61,20 +62,22 @@ class AnswerResponse(BaseModel):
     correct_answer: Optional[str] = Field(None, description="The correct answer (only returned when wrong)")
 
 
-class SpendCoinsRequest(BaseModel):
-    """Request schema for spending coins."""
+class BuyHintRequest(BaseModel):
+    """Request schema for buying a hint."""
 
     model_config = ConfigDict(populate_by_name=True, alias_generator=to_camel)
 
-    amount: int = Field(..., gt=0, description="Number of coins to deduct")
+    level_id: int = Field(..., description="Level ID")
+    animal_index: int = Field(..., ge=0, description="Zero-based index of the animal within the level")
 
 
-class SpendCoinsResponse(BaseModel):
-    """Response schema for a coin spending operation."""
+class BuyHintResponse(BaseModel):
+    """Response schema for a hint purchase."""
 
     model_config = ConfigDict(populate_by_name=True, alias_generator=to_camel)
 
-    total_coins: int = Field(..., description="Updated coin balance after deduction")
+    total_coins: int = Field(..., description="Updated coin balance after purchase")
+    hints_revealed: int = Field(..., description="Number of hints now revealed for this animal")
 
 
 class LeaderboardEntry(BaseModel):

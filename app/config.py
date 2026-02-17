@@ -12,11 +12,17 @@ class Settings(BaseSettings):
     RATE_LIMIT: str = "100/minute"
     CACHE_TTL: int = 3600
     DEBUG: bool = False
+    HINT_COSTS: str = "5,10,20"
 
     @property
     def allowed_origins_list(self) -> list[str]:
         """Parse comma-separated origins into a list."""
         return [origin.strip() for origin in self.ALLOWED_ORIGINS.split(",")]
+
+    @property
+    def hint_costs_list(self) -> list[int]:
+        """Parse comma-separated hint costs into a list of ints."""
+        return [int(c.strip()) for c in self.HINT_COSTS.split(",")]
 
     model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
 
