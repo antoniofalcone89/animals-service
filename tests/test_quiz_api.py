@@ -180,7 +180,7 @@ class TestQuizAnswer:
         assert data["correct"] is True
         assert data["coinsAwarded"] == 10
         assert data["totalCoins"] == 10
-        assert "correctAnswer" not in data
+        assert data["correctAnswer"] == "Cane"
 
     def test_correct_answer_english(self):
         headers = {**_register_and_header(), "Accept-Language": "en"}
@@ -229,6 +229,54 @@ class TestQuizAnswer:
             "levelId": 999, "animalIndex": 0, "answer": "Cane",
         })
         assert resp.status_code == 400
+
+    def test_fuzzy_match_one_edit_short_word(self):
+        """Short word (<=7 chars): 1 edit allowed — 'Cne' matches 'Cane'."""
+        headers = _register_and_header()
+        resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Cne",
+        })
+        data = resp.json()
+        assert data["correct"] is True
+        assert data["correctAnswer"] == "Cane"
+
+    def test_fuzzy_match_two_edits_short_word_rejected(self):
+        """Short word (<=7 chars): 2 edits NOT allowed — 'Ce' does not match 'Cane'."""
+        headers = _register_and_header()
+        resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Ce",
+        })
+        assert resp.json()["correct"] is False
+
+    def test_fuzzy_match_two_edits_long_word(self):
+        """Long word (8+ chars): 2 edits allowed — 'Elphant' matches 'Elephant'."""
+        headers = {**_register_and_header(), "Accept-Language": "en"}
+        resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 16, "answer": "Elphant",
+        })
+        data = resp.json()
+        assert data["correct"] is True
+        assert data["correctAnswer"] == "Elephant"
+
+    def test_fuzzy_match_returns_correct_answer(self):
+        """Fuzzy match always returns correctAnswer with proper spelling."""
+        headers = _register_and_header()
+        resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Cone",
+        })
+        data = resp.json()
+        assert data["correct"] is True
+        assert data["correctAnswer"] == "Cane"
+
+    def test_wrong_answer_returns_correct_answer(self):
+        """Wrong answer also returns correctAnswer."""
+        headers = _register_and_header()
+        resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Tigre",
+        })
+        data = resp.json()
+        assert data["correct"] is False
+        assert data["correctAnswer"] == "Cane"
 
 
 # ---------------------------------------------------------------------------

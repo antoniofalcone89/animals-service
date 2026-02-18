@@ -13,6 +13,32 @@ logger = logging.getLogger(__name__)
 COINS_PER_CORRECT = 10
 
 
+def _levenshtein(a: str, b: str) -> int:
+    """Compute Levenshtein edit distance between two strings."""
+    if len(a) < len(b):
+        return _levenshtein(b, a)
+    if not b:
+        return len(a)
+    prev = list(range(len(b) + 1))
+    for i, ca in enumerate(a):
+        curr = [i + 1]
+        for j, cb in enumerate(b):
+            cost = 0 if ca == cb else 1
+            curr.append(min(prev[j + 1] + 1, curr[j] + 1, prev[j] + cost))
+        prev = curr
+    return prev[-1]
+
+
+def _is_fuzzy_match(guess: str, correct: str) -> bool:
+    """Check if guess matches correct answer within Levenshtein threshold."""
+    g = guess.strip().lower()
+    c = correct.lower()
+    if g == c:
+        return True
+    threshold = 1 if len(c) <= 7 else 2
+    return _levenshtein(g, c) <= threshold
+
+
 def submit_answer(
     user_id: str, level_id: int, animal_index: int, answer: str, locale: str = "it",
 ) -> AnswerResponse | None:
@@ -30,7 +56,7 @@ def submit_answer(
     if level_progress is None or animal_index >= len(level_progress):
         return None
 
-    is_correct = answer.strip().lower() == correct_name.lower()
+    is_correct = _is_fuzzy_match(answer, correct_name)
     coins_awarded = 0
     total_coins = store.get_coins(user_id)
 
@@ -43,7 +69,7 @@ def submit_answer(
         correct=is_correct,
         coins_awarded=coins_awarded,
         total_coins=total_coins,
-        correct_answer=None if is_correct else correct_name,
+        correct_answer=correct_name,
     )
 
 

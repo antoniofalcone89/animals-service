@@ -59,7 +59,7 @@ class AnswerResponse(BaseModel):
     correct: bool = Field(..., description="Whether the answer was correct")
     coins_awarded: int = Field(..., description="Coins earned for this answer")
     total_coins: int = Field(..., description="User's updated total coin count")
-    correct_answer: Optional[str] = Field(None, description="The correct answer (only returned when wrong)")
+    correct_answer: str = Field(..., description="The correct answer (always returned so the client can display proper spelling)")
 
 
 class BuyHintRequest(BaseModel):
