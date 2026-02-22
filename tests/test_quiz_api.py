@@ -438,6 +438,90 @@ class TestBuyHint:
         assert animals[0]["hintsRevealed"] == 0
 
 
+class TestRevealLetter:
+    """POST /api/v1/quiz/reveal-letter tests."""
+
+    def _earn_coins(self, headers: dict, count: int) -> None:
+        """Earn coins by answering animals correctly (10 coins each)."""
+        for idx in range(count):
+            resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+                "levelId": 1, "animalIndex": idx, "answer": "wrong",
+            })
+            correct_name = resp.json()["correctAnswer"]
+            client.post("/api/v1/quiz/answer", headers=headers, json={
+                "levelId": 1, "animalIndex": idx, "answer": correct_name,
+            })
+
+    def test_reveal_letter_success(self):
+        headers = _register_and_header()
+        # Earn 30 coins (3 correct answers)
+        self._earn_coins(headers, 3)
+        # Reveal a letter for animal at index 5
+        resp = client.post("/api/v1/quiz/reveal-letter", headers=headers, json={
+            "levelId": 1, "animalIndex": 5,
+        })
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["lettersRevealed"] == 1
+        assert data["totalCoins"] == 0  # 30 - 30
+
+    def test_reveal_letter_insufficient_coins(self):
+        headers = _register_and_header()
+        # No coins earned
+        resp = client.post("/api/v1/quiz/reveal-letter", headers=headers, json={
+            "levelId": 1, "animalIndex": 0,
+        })
+        assert resp.status_code == 402
+        detail = resp.json()["detail"]
+        assert detail["error"]["code"] == "insufficient_coins"
+
+    def test_reveal_letter_max_reveals(self):
+        headers = _register_and_header()
+        # Earn 90 coins (9 correct answers) to cover 3 reveals at 30 each
+        self._earn_coins(headers, 9)
+        # Reveal 3 letters
+        for i in range(3):
+            resp = client.post("/api/v1/quiz/reveal-letter", headers=headers, json={
+                "levelId": 1, "animalIndex": 10,
+            })
+            assert resp.status_code == 200
+            assert resp.json()["lettersRevealed"] == i + 1
+        # 4th attempt should fail
+        resp = client.post("/api/v1/quiz/reveal-letter", headers=headers, json={
+            "levelId": 1, "animalIndex": 10,
+        })
+        assert resp.status_code == 400
+        detail = resp.json()["detail"]
+        assert detail["error"]["code"] == "max_reveals_reached"
+
+    def test_reveal_letter_invalid_level(self):
+        headers = _register_and_header()
+        resp = client.post("/api/v1/quiz/reveal-letter", headers=headers, json={
+            "levelId": 999, "animalIndex": 0,
+        })
+        assert resp.status_code == 400
+
+    def test_reveal_letter_no_auth(self):
+        resp = client.post("/api/v1/quiz/reveal-letter", json={
+            "levelId": 1, "animalIndex": 0,
+        })
+        assert resp.status_code in (401, 403)
+
+    def test_progress_includes_letters_revealed(self):
+        headers = _register_and_header()
+        # Earn 30 coins and reveal a letter
+        self._earn_coins(headers, 3)
+        client.post("/api/v1/quiz/reveal-letter", headers=headers, json={
+            "levelId": 1, "animalIndex": 4,
+        })
+        # Check progress includes lettersRevealed
+        resp = client.get("/api/v1/users/me/progress", headers=headers)
+        assert resp.status_code == 200
+        animals = resp.json()["levels"]["1"]
+        assert animals[4]["lettersRevealed"] == 1
+        assert animals[0]["lettersRevealed"] == 0
+
+
 class TestUpdateProfile:
     """PATCH /api/v1/users/me/profile tests."""
 

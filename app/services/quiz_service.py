@@ -4,7 +4,7 @@ import logging
 
 from app.config import settings
 from app.db.user_store import get_store
-from app.models.quiz import AnswerResponse, BuyHintResponse
+from app.models.quiz import AnswerResponse, BuyHintResponse, RevealLetterResponse
 from app.services.level_service import get_animal_name_at, get_level_detail
 
 logger = logging.getLogger(__name__)
@@ -78,9 +78,10 @@ def get_user_progress(user_id: str, locale: str = "it") -> dict[str, list[dict]]
     store = get_store()
     progress = store.ensure_progress(user_id)
     hints = store.get_hints(user_id)
+    letters = store.get_letters(user_id)
     result: dict[str, list[dict]] = {}
     for lid, bools in progress.items():
-        detail = get_level_detail(lid, bools, locale=locale, hints=hints.get(lid))
+        detail = get_level_detail(lid, bools, locale=locale, hints=hints.get(lid), letters=letters.get(lid))
         if detail is not None:
             result[str(lid)] = [
                 a.model_dump(by_alias=True) for a in detail.animals
@@ -105,6 +106,15 @@ def buy_hint(user_id: str, level_id: int, animal_index: int) -> BuyHintResponse:
         user_id, level_id, animal_index, settings.hint_costs_list,
     )
     return BuyHintResponse(total_coins=total_coins, hints_revealed=hints_revealed)
+
+
+def reveal_letter(user_id: str, level_id: int, animal_index: int) -> RevealLetterResponse:
+    """Reveal a letter for an animal. Raises ValueError on failure."""
+    letters_revealed, total_coins = get_store().reveal_letter(
+        user_id, level_id, animal_index,
+        settings.REVEAL_LETTER_COST, settings.MAX_LETTER_REVEALS,
+    )
+    return RevealLetterResponse(total_coins=total_coins, letters_revealed=letters_revealed)
 
 
 def count_completed_levels(user_id: str) -> int:

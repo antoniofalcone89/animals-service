@@ -9,8 +9,11 @@ from slowapi.util import get_remote_address
 from app.config import settings
 from app.dependencies import get_current_user_id, get_locale
 from app.models.auth import ApiErrorResponse
-from app.models.quiz import AnswerRequest, AnswerResponse, BuyHintRequest, BuyHintResponse
-from app.services.quiz_service import buy_hint, submit_answer
+from app.models.quiz import (
+    AnswerRequest, AnswerResponse, BuyHintRequest, BuyHintResponse,
+    RevealLetterRequest, RevealLetterResponse,
+)
+from app.services.quiz_service import buy_hint, reveal_letter, submit_answer
 
 logger = logging.getLogger(__name__)
 
@@ -65,5 +68,37 @@ async def post_buy_hint(
         }
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
+            detail={"error": {"code": code, "message": messages.get(code, code)}},
+        )
+
+
+@router.post(
+    "/reveal-letter",
+    response_model=RevealLetterResponse,
+    responses={400: {"model": ApiErrorResponse}},
+    summary="Reveal a letter for an animal in a level",
+)
+@limiter.limit(settings.RATE_LIMIT)
+async def post_reveal_letter(
+    request: Request,
+    body: RevealLetterRequest,
+    user_id: str = Depends(get_current_user_id),
+) -> RevealLetterResponse:
+    """Spend coins to reveal one letter for an animal."""
+    try:
+        return reveal_letter(user_id, body.level_id, body.animal_index)
+    except ValueError as exc:
+        code = str(exc)
+        status_code = (
+            status.HTTP_402_PAYMENT_REQUIRED if code == "insufficient_coins"
+            else status.HTTP_400_BAD_REQUEST
+        )
+        messages = {
+            "insufficient_coins": "Not enough coins",
+            "max_reveals_reached": "Maximum letters already revealed",
+            "invalid level/index": "Invalid levelId or animalIndex",
+        }
+        raise HTTPException(
+            status_code=status_code,
             detail={"error": {"code": code, "message": messages.get(code, code)}},
         )

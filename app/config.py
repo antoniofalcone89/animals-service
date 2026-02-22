@@ -13,6 +13,8 @@ class Settings(BaseSettings):
     CACHE_TTL: int = 3600
     DEBUG: bool = False
     HINT_COSTS: str = "5,10,20"
+    REVEAL_LETTER_COST: int = 30
+    MAX_LETTER_REVEALS: int = 3
 
     @property
     def allowed_origins_list(self) -> list[str]:

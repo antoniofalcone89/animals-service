@@ -23,6 +23,7 @@ class AnimalWithStatus(QuizAnimal):
 
     guessed: bool = Field(False, description="Whether the current user has guessed this animal")
     hints_revealed: int = Field(0, description="Number of hints revealed for this animal")
+    letters_revealed: int = Field(0, description="Number of letters revealed for this animal")
 
 
 class Level(BaseModel):
@@ -78,6 +79,24 @@ class BuyHintResponse(BaseModel):
 
     total_coins: int = Field(..., description="Updated coin balance after purchase")
     hints_revealed: int = Field(..., description="Number of hints now revealed for this animal")
+
+
+class RevealLetterRequest(BaseModel):
+    """Request schema for revealing a letter."""
+
+    model_config = ConfigDict(populate_by_name=True, alias_generator=to_camel)
+
+    level_id: int = Field(..., description="Level ID")
+    animal_index: int = Field(..., ge=0, description="Zero-based index of the animal within the level")
+
+
+class RevealLetterResponse(BaseModel):
+    """Response schema for a letter reveal."""
+
+    model_config = ConfigDict(populate_by_name=True, alias_generator=to_camel)
+
+    total_coins: int = Field(..., description="Updated coin balance after purchase")
+    letters_revealed: int = Field(..., description="Number of letters now revealed for this animal")
 
 
 class LeaderboardEntry(BaseModel):

@@ -84,6 +84,20 @@ class UserStore(abc.ABC):
         """Return hints revealed per level ``{level_id: [count, ...]}``."""
 
     @abc.abstractmethod
+    def reveal_letter(
+        self, uid: str, level_id: int, animal_index: int, cost: int, max_reveals: int,
+    ) -> tuple[int, int]:
+        """Atomically deduct coins and reveal a letter.
+
+        Returns ``(letters_revealed, total_coins)``.
+        Raises ``ValueError("insufficient_coins")`` or ``ValueError("max_reveals_reached")``.
+        """
+
+    @abc.abstractmethod
+    def get_letters(self, uid: str) -> dict[int, list[int]]:
+        """Return letters revealed per level ``{level_id: [count, ...]}``."""
+
+    @abc.abstractmethod
     def count_completed(self, uid: str) -> int:
         """Return the number of fully-completed levels."""
 
@@ -100,6 +114,7 @@ class InMemoryUserStore(UserStore):
         self._progress: dict[str, dict[int, list[bool]]] = {}
         self._coins: dict[str, int] = {}
         self._hints: dict[str, dict[int, list[int]]] = {}
+        self._letters: dict[str, dict[int, list[int]]] = {}
 
     def create_user(self, uid: str, email: str, username: str) -> dict:
         if uid in self._users:
@@ -195,6 +210,36 @@ class InMemoryUserStore(UserStore):
 
     def get_hints(self, uid: str) -> dict[int, list[int]]:
         return self._ensure_hints(uid)
+
+    def _ensure_letters(self, uid: str) -> dict[int, list[int]]:
+        """Lazy-init letters tracking (mirrors _ensure_hints)."""
+        if uid not in self._letters:
+            self._letters[uid] = {
+                lid: [0] * get_level_animal_count(lid)
+                for lid in get_level_ids()
+            }
+        return self._letters[uid]
+
+    def reveal_letter(
+        self, uid: str, level_id: int, animal_index: int, cost: int, max_reveals: int,
+    ) -> tuple[int, int]:
+        self._ensure_progress(uid)
+        letters = self._ensure_letters(uid)
+        level_letters = letters.get(level_id)
+        if level_letters is None or animal_index >= len(level_letters):
+            raise ValueError("invalid level/index")
+        current_count = level_letters[animal_index]
+        if current_count >= max_reveals:
+            raise ValueError("max_reveals_reached")
+        current_coins = self._coins.get(uid, 0)
+        if current_coins < cost:
+            raise ValueError("insufficient_coins")
+        self._coins[uid] = current_coins - cost
+        level_letters[animal_index] = current_count + 1
+        return level_letters[animal_index], self._coins[uid]
+
+    def get_letters(self, uid: str) -> dict[int, list[int]]:
+        return self._ensure_letters(uid)
 
     def count_completed(self, uid: str) -> int:
         progress = self._ensure_progress(uid)
@@ -347,6 +392,44 @@ class FirestoreUserStore(UserStore):
         if not snap.exists:
             return {}
         raw = snap.to_dict().get("hints", {})
+        return {int(k): v for k, v in raw.items()}
+
+    def reveal_letter(
+        self, uid: str, level_id: int, animal_index: int, cost: int, max_reveals: int,
+    ) -> tuple[int, int]:
+        ref = self._ref(uid)
+        db = get_firestore_client()
+
+        @firestore_transaction
+        def _reveal(transaction: Transaction) -> tuple[int, int]:
+            snap = ref.get(transaction=transaction)
+            data = snap.to_dict() if snap.exists else {}
+            letters = data.get("letters", {})
+            level_key = str(level_id)
+            level_letters = letters.get(level_key, [0] * get_level_animal_count(level_id))
+            if animal_index >= len(level_letters):
+                raise ValueError("invalid level/index")
+            current_count = level_letters[animal_index]
+            if current_count >= max_reveals:
+                raise ValueError("max_reveals_reached")
+            total_coins = data.get("total_coins", 0)
+            if total_coins < cost:
+                raise ValueError("insufficient_coins")
+            level_letters[animal_index] = current_count + 1
+            new_total = total_coins - cost
+            transaction.update(ref, {
+                f"letters.{level_key}": level_letters,
+                "total_coins": new_total,
+            })
+            return level_letters[animal_index], new_total
+
+        return _reveal(db.transaction())
+
+    def get_letters(self, uid: str) -> dict[int, list[int]]:
+        snap = self._ref(uid).get()
+        if not snap.exists:
+            return {}
+        raw = snap.to_dict().get("letters", {})
         return {int(k): v for k, v in raw.items()}
 
     def count_completed(self, uid: str) -> int:
