@@ -13,6 +13,20 @@ logger = logging.getLogger(__name__)
 COINS_PER_CORRECT = 10
 
 
+def _calculate_points(ad_revealed: bool, hints_used: int, letters_used: int) -> int:
+    """Calculate points for a correct answer based on assists used."""
+    if ad_revealed:
+        return 3
+    total_assists = hints_used + letters_used
+    if total_assists == 0:
+        return 20
+    if total_assists == 1:
+        return 15
+    if total_assists == 2:
+        return 10
+    return 5
+
+
 def _levenshtein(a: str, b: str) -> int:
     """Compute Levenshtein edit distance between two strings."""
     if len(a) < len(b):
@@ -40,9 +54,10 @@ def _is_fuzzy_match(guess: str, correct: str) -> bool:
 
 
 def submit_answer(
-    user_id: str, level_id: int, animal_index: int, answer: str, locale: str = "it",
+    user_id: str, level_id: int, animal_index: int, answer: str,
+    locale: str = "it", ad_revealed: bool = False,
 ) -> AnswerResponse | None:
-    """Check an answer and update progress / coins.
+    """Check an answer and update progress / coins / points.
 
     Returns None if level_id or animal_index is invalid.
     """
@@ -58,17 +73,24 @@ def submit_answer(
 
     is_correct = _is_fuzzy_match(answer, correct_name)
     coins_awarded = 0
+    points_awarded = 0
     total_coins = store.get_coins(user_id)
 
     if is_correct and not level_progress[animal_index]:
-        coins_awarded, total_coins = store.submit_answer_update(
-            user_id, level_id, animal_index, COINS_PER_CORRECT,
+        hints = store.get_hints(user_id)
+        letters = store.get_letters(user_id)
+        hints_used = hints.get(level_id, [0] * len(level_progress))[animal_index]
+        letters_used = letters.get(level_id, [0] * len(level_progress))[animal_index]
+        points_awarded = _calculate_points(ad_revealed, hints_used, letters_used)
+        coins_awarded, total_coins, _ = store.submit_answer_update(
+            user_id, level_id, animal_index, COINS_PER_CORRECT, points_awarded,
         )
 
     return AnswerResponse(
         correct=is_correct,
         coins_awarded=coins_awarded,
         total_coins=total_coins,
+        points_awarded=points_awarded,
         correct_answer=correct_name,
     )
 
@@ -92,6 +114,11 @@ def get_user_progress(user_id: str, locale: str = "it") -> dict[str, list[dict]]
 def get_user_coins(user_id: str) -> int:
     """Return total coins for a user."""
     return get_store().get_coins(user_id)
+
+
+def get_user_points(user_id: str) -> int:
+    """Return total points for a user."""
+    return get_store().get_points(user_id)
 
 
 def get_user_level_guessed(user_id: str, level_id: int) -> list[bool]:

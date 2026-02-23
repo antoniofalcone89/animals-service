@@ -47,9 +47,9 @@ class UserStore(abc.ABC):
     def get_all_users(self) -> dict[str, dict]:
         """Return all users keyed by UID.
 
-        Each value must include ``username``, ``total_coins``, and
-        ``progress`` (``{level_id: [bool, ...]}``) so that callers can
-        compute leaderboard data without extra reads.
+        Each value must include ``username``, ``total_coins``,
+        ``total_points``, and ``progress`` (``{level_id: [bool, ...]}``)
+        so that callers can compute leaderboard data without extra reads.
         """
 
     @abc.abstractmethod
@@ -58,16 +58,21 @@ class UserStore(abc.ABC):
 
     @abc.abstractmethod
     def submit_answer_update(
-        self, uid: str, level_id: int, animal_index: int, coins_per_correct: int,
-    ) -> tuple[int, int]:
-        """Atomically mark an animal as guessed and award coins.
+        self, uid: str, level_id: int, animal_index: int,
+        coins_per_correct: int, points_awarded: int = 0,
+    ) -> tuple[int, int, int]:
+        """Atomically mark an animal as guessed and award coins + points.
 
-        Returns ``(coins_awarded, total_coins)``.
+        Returns ``(coins_awarded, total_coins, total_points)``.
         """
 
     @abc.abstractmethod
     def get_coins(self, uid: str) -> int:
         """Return total coins for a user."""
+
+    @abc.abstractmethod
+    def get_points(self, uid: str) -> int:
+        """Return total points for a user."""
 
     @abc.abstractmethod
     def buy_hint(
@@ -113,6 +118,7 @@ class InMemoryUserStore(UserStore):
         self._users: dict[str, dict] = {}
         self._progress: dict[str, dict[int, list[bool]]] = {}
         self._coins: dict[str, int] = {}
+        self._points: dict[str, int] = {}
         self._hints: dict[str, dict[int, list[int]]] = {}
         self._letters: dict[str, dict[int, list[int]]] = {}
 
@@ -147,6 +153,7 @@ class InMemoryUserStore(UserStore):
             result[uid] = {
                 **data,
                 "total_coins": self._coins.get(uid, 0),
+                "total_points": self._points.get(uid, 0),
                 "progress": self._ensure_progress(uid),
             }
         return result
@@ -157,14 +164,16 @@ class InMemoryUserStore(UserStore):
         if uid not in self._progress:
             self._progress[uid] = _empty_progress()
             self._coins.setdefault(uid, 0)
+            self._points.setdefault(uid, 0)
         return self._progress[uid]
 
     def ensure_progress(self, uid: str) -> dict[int, list[bool]]:
         return self._ensure_progress(uid)
 
     def submit_answer_update(
-        self, uid: str, level_id: int, animal_index: int, coins_per_correct: int,
-    ) -> tuple[int, int]:
+        self, uid: str, level_id: int, animal_index: int,
+        coins_per_correct: int, points_awarded: int = 0,
+    ) -> tuple[int, int, int]:
         progress = self._ensure_progress(uid)
         level_progress = progress.get(level_id)
         if level_progress is None or animal_index >= len(level_progress):
@@ -174,11 +183,16 @@ class InMemoryUserStore(UserStore):
             level_progress[animal_index] = True
             coins_awarded = coins_per_correct
             self._coins[uid] = self._coins.get(uid, 0) + coins_awarded
-        return coins_awarded, self._coins.get(uid, 0)
+            self._points[uid] = self._points.get(uid, 0) + points_awarded
+        return coins_awarded, self._coins.get(uid, 0), self._points.get(uid, 0)
 
     def get_coins(self, uid: str) -> int:
         self._ensure_progress(uid)
         return self._coins.get(uid, 0)
+
+    def get_points(self, uid: str) -> int:
+        self._ensure_progress(uid)
+        return self._points.get(uid, 0)
 
     def _ensure_hints(self, uid: str) -> dict[int, list[int]]:
         """Lazy-init hints tracking (mirrors _ensure_progress)."""
@@ -269,6 +283,7 @@ class FirestoreUserStore(UserStore):
             "username": username,
             "email": email,
             "total_coins": 0,
+            "total_points": 0,
             "created_at": now,
             "progress": progress,
         }
@@ -310,7 +325,7 @@ class FirestoreUserStore(UserStore):
         snap = ref.get()
         if not snap.exists:
             progress = _empty_progress()
-            ref.set({"progress": {str(k): v for k, v in progress.items()}, "total_coins": 0}, merge=True)
+            ref.set({"progress": {str(k): v for k, v in progress.items()}, "total_coins": 0, "total_points": 0}, merge=True)
             return progress
         raw = snap.to_dict().get("progress", {})
         if not raw:
@@ -320,13 +335,14 @@ class FirestoreUserStore(UserStore):
         return {int(k): v for k, v in raw.items()}
 
     def submit_answer_update(
-        self, uid: str, level_id: int, animal_index: int, coins_per_correct: int,
-    ) -> tuple[int, int]:
+        self, uid: str, level_id: int, animal_index: int,
+        coins_per_correct: int, points_awarded: int = 0,
+    ) -> tuple[int, int, int]:
         ref = self._ref(uid)
         db = get_firestore_client()
 
         @firestore_transaction
-        def _update(transaction: Transaction) -> tuple[int, int]:
+        def _update(transaction: Transaction) -> tuple[int, int, int]:
             snap = ref.get(transaction=transaction)
             data = snap.to_dict() if snap.exists else {}
             progress = data.get("progress", {})
@@ -336,16 +352,20 @@ class FirestoreUserStore(UserStore):
                 raise ValueError("invalid animal_index")
 
             coins_awarded = 0
+            actual_points = 0
             if not level_progress[animal_index]:
                 level_progress[animal_index] = True
                 coins_awarded = coins_per_correct
+                actual_points = points_awarded
 
             total_coins = data.get("total_coins", 0) + coins_awarded
+            total_points = data.get("total_points", 0) + actual_points
             transaction.update(ref, {
                 f"progress.{level_key}": level_progress,
                 "total_coins": total_coins,
+                "total_points": total_points,
             })
-            return coins_awarded, total_coins
+            return coins_awarded, total_coins, total_points
 
         return _update(db.transaction())
 
@@ -354,6 +374,12 @@ class FirestoreUserStore(UserStore):
         if not snap.exists:
             return 0
         return snap.to_dict().get("total_coins", 0)
+
+    def get_points(self, uid: str) -> int:
+        snap = self._ref(uid).get()
+        if not snap.exists:
+            return 0
+        return snap.to_dict().get("total_points", 0)
 
     def buy_hint(
         self, uid: str, level_id: int, animal_index: int, hint_costs: list[int],

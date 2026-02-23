@@ -50,6 +50,7 @@ class AnswerRequest(BaseModel):
     level_id: int = Field(..., description="Level ID")
     animal_index: int = Field(..., ge=0, description="Zero-based index of the animal within the level")
     answer: str = Field(..., description="The user's guess (case-insensitive)")
+    ad_revealed: bool = Field(False, description="True when player watched an ad to reveal the answer")
 
 
 class AnswerResponse(BaseModel):
@@ -60,6 +61,7 @@ class AnswerResponse(BaseModel):
     correct: bool = Field(..., description="Whether the answer was correct")
     coins_awarded: int = Field(..., description="Coins earned for this answer")
     total_coins: int = Field(..., description="User's updated total coin count")
+    points_awarded: int = Field(..., description="Points earned for this answer")
     correct_answer: str = Field(..., description="The correct answer (always returned so the client can display proper spelling)")
 
 
@@ -107,5 +109,5 @@ class LeaderboardEntry(BaseModel):
     rank: int = Field(..., description="Rank position")
     user_id: str = Field(..., description="User ID")
     username: str = Field(..., description="Display name")
-    total_coins: int = Field(..., description="Total coins earned")
+    total_points: int = Field(..., description="Total points earned")
     levels_completed: int = Field(..., description="Number of levels fully completed")

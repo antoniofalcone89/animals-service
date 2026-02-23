@@ -28,20 +28,20 @@ async def leaderboard(
     limit: int = Query(50, le=100, description="Max entries to return"),
     offset: int = Query(0, ge=0, description="Offset for pagination"),
 ) -> dict:
-    """Return paginated global leaderboard ranked by total coins.
+    """Return paginated global leaderboard ranked by total points.
 
     Reads all data from a single ``get_all_users()`` call (which includes
-    ``total_coins`` and ``progress``) so that no extra per-user reads are
+    ``total_points`` and ``progress``) so that no extra per-user reads are
     needed.
     """
     all_users = []
     for uid, user_data in auth_service.get_all_users().items():
-        coins = user_data.get("total_coins", 0)
+        points = user_data.get("total_points", 0)
         progress = user_data.get("progress", {})
         completed = sum(1 for bools in progress.values() if bools and all(bools))
-        all_users.append((uid, user_data.get("username", ""), coins, completed))
+        all_users.append((uid, user_data.get("username", ""), points, completed))
 
-    # Sort by coins descending
+    # Sort by points descending
     all_users.sort(key=lambda u: u[2], reverse=True)
 
     total = len(all_users)
@@ -52,9 +52,9 @@ async def leaderboard(
             rank=offset + i + 1,
             user_id=uid,
             username=username,
-            total_coins=coins,
+            total_points=points,
             levels_completed=completed,
         ).model_dump(by_alias=True)
-        for i, (uid, username, coins, completed) in enumerate(page)
+        for i, (uid, username, points, completed) in enumerate(page)
     ]
     return {"entries": entries, "total": total}

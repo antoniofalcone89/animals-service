@@ -35,7 +35,10 @@ async def post_answer(
     locale: str = Depends(get_locale),
 ) -> AnswerResponse:
     """Submit a quiz answer. Returns whether the answer is correct and coins awarded."""
-    result = submit_answer(user_id, body.level_id, body.animal_index, body.answer, locale=locale)
+    result = submit_answer(
+        user_id, body.level_id, body.animal_index, body.answer,
+        locale=locale, ad_revealed=body.ad_revealed,
+    )
     if result is None:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

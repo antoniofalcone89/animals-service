@@ -180,6 +180,7 @@ class TestQuizAnswer:
         assert data["correct"] is True
         assert data["coinsAwarded"] == 10
         assert data["totalCoins"] == 10
+        assert data["pointsAwarded"] == 20
         assert data["correctAnswer"] == "Cane"
 
     def test_correct_answer_english(self):
@@ -191,6 +192,7 @@ class TestQuizAnswer:
         data = resp.json()
         assert data["correct"] is True
         assert data["coinsAwarded"] == 10
+        assert data["pointsAwarded"] == 20
 
     def test_wrong_answer(self):
         headers = _register_and_header()
@@ -201,6 +203,7 @@ class TestQuizAnswer:
         data = resp.json()
         assert data["correct"] is False
         assert data["coinsAwarded"] == 0
+        assert data["pointsAwarded"] == 0
         assert data["correctAnswer"] == "Cane"
 
     def test_case_insensitive_answer(self):
@@ -222,6 +225,7 @@ class TestQuizAnswer:
         data = resp.json()
         assert data["correct"] is True
         assert data["coinsAwarded"] == 0
+        assert data["pointsAwarded"] == 0
 
     def test_invalid_level(self):
         headers = _register_and_header()
@@ -522,6 +526,135 @@ class TestRevealLetter:
         assert animals[0]["lettersRevealed"] == 0
 
 
+class TestPointsScoring:
+    """Points scoring tests for POST /api/v1/quiz/answer."""
+
+    def _earn_coins(self, headers: dict, count: int) -> None:
+        """Earn coins by answering animals correctly (10 coins each)."""
+        for idx in range(count):
+            resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+                "levelId": 1, "animalIndex": idx, "answer": "wrong",
+            })
+            correct_name = resp.json()["correctAnswer"]
+            client.post("/api/v1/quiz/answer", headers=headers, json={
+                "levelId": 1, "animalIndex": idx, "answer": correct_name,
+            })
+
+    def test_correct_answer_points_no_assists(self):
+        """No hints or letters used: 20 points."""
+        headers = _register_and_header()
+        resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Cane",
+        })
+        assert resp.json()["pointsAwarded"] == 20
+
+    def test_correct_answer_points_one_hint(self):
+        """1 hint used: 15 points."""
+        headers = _register_and_header()
+        # Earn coins first, then buy a hint for animal 5
+        self._earn_coins(headers, 1)
+        client.post("/api/v1/quiz/buy-hint", headers=headers, json={
+            "levelId": 1, "animalIndex": 5,
+        })
+        # Now answer animal 5 correctly
+        resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 5, "answer": "wrong",
+        })
+        correct_name = resp.json()["correctAnswer"]
+        resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 5, "answer": correct_name,
+        })
+        assert resp.json()["pointsAwarded"] == 15
+
+    def test_correct_answer_points_two_assists(self):
+        """1 hint + 1 letter = 2 assists: 10 points."""
+        headers = _register_and_header()
+        # Earn enough coins (4 correct = 40 coins)
+        self._earn_coins(headers, 4)
+        # Buy a hint and reveal a letter for animal 5
+        client.post("/api/v1/quiz/buy-hint", headers=headers, json={
+            "levelId": 1, "animalIndex": 5,
+        })
+        client.post("/api/v1/quiz/reveal-letter", headers=headers, json={
+            "levelId": 1, "animalIndex": 5,
+        })
+        # Answer animal 5
+        resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 5, "answer": "wrong",
+        })
+        correct_name = resp.json()["correctAnswer"]
+        resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 5, "answer": correct_name,
+        })
+        assert resp.json()["pointsAwarded"] == 10
+
+    def test_correct_answer_points_three_plus_assists(self):
+        """3+ assists: 5 points."""
+        headers = _register_and_header()
+        # Earn enough coins (4 correct = 40 coins)
+        self._earn_coins(headers, 4)
+        # Buy 3 hints for animal 5 (costs 5+10+20=35)
+        for _ in range(3):
+            client.post("/api/v1/quiz/buy-hint", headers=headers, json={
+                "levelId": 1, "animalIndex": 5,
+            })
+        # Answer animal 5
+        resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 5, "answer": "wrong",
+        })
+        correct_name = resp.json()["correctAnswer"]
+        resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 5, "answer": correct_name,
+        })
+        assert resp.json()["pointsAwarded"] == 5
+
+    def test_correct_answer_ad_revealed(self):
+        """Ad revealed: 3 points regardless of assists."""
+        headers = _register_and_header()
+        resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Cane", "adRevealed": True,
+        })
+        assert resp.json()["pointsAwarded"] == 3
+
+    def test_wrong_answer_zero_points(self):
+        """Wrong answer: 0 points."""
+        headers = _register_and_header()
+        resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Tigre",
+        })
+        assert resp.json()["pointsAwarded"] == 0
+
+    def test_already_guessed_zero_points(self):
+        """Already guessed: 0 points on re-submission."""
+        headers = _register_and_header()
+        client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Cane",
+        })
+        resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Cane",
+        })
+        assert resp.json()["pointsAwarded"] == 0
+
+
+class TestUserPoints:
+    """GET /api/v1/users/me/points tests."""
+
+    def test_get_points_starts_at_zero(self):
+        headers = _register_and_header()
+        resp = client.get("/api/v1/users/me/points", headers=headers)
+        assert resp.status_code == 200
+        assert resp.json()["totalPoints"] == 0
+
+    def test_get_points_increases_after_correct_answer(self):
+        headers = _register_and_header()
+        client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Cane",
+        })
+        resp = client.get("/api/v1/users/me/points", headers=headers)
+        assert resp.status_code == 200
+        assert resp.json()["totalPoints"] == 20
+
+
 class TestUpdateProfile:
     """PATCH /api/v1/users/me/profile tests."""
 
@@ -549,6 +682,46 @@ class TestLeaderboard:
         assert "entries" in data
         assert "total" in data
         assert isinstance(data["entries"], list)
+
+    def test_leaderboard_entries_have_total_points(self):
+        headers = _register_and_header()
+        # Earn some points
+        client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Cane",
+        })
+        resp = client.get("/api/v1/leaderboard", headers=headers)
+        data = resp.json()
+        assert len(data["entries"]) > 0
+        entry = data["entries"][0]
+        assert "totalPoints" in entry
+        assert "totalCoins" not in entry
+
+    def test_leaderboard_sorted_by_points(self):
+        """Users with more points should rank higher."""
+        headers_a = _register_and_header(username="user_a")
+        headers_b = _register_and_header(username="user_b")
+        # user_a answers 2 animals (40 points)
+        for idx in range(2):
+            resp = client.post("/api/v1/quiz/answer", headers=headers_a, json={
+                "levelId": 1, "animalIndex": idx, "answer": "wrong",
+            })
+            correct = resp.json()["correctAnswer"]
+            client.post("/api/v1/quiz/answer", headers=headers_a, json={
+                "levelId": 1, "animalIndex": idx, "answer": correct,
+            })
+        # user_b answers 1 animal (20 points)
+        resp = client.post("/api/v1/quiz/answer", headers=headers_b, json={
+            "levelId": 1, "animalIndex": 0, "answer": "wrong",
+        })
+        correct = resp.json()["correctAnswer"]
+        client.post("/api/v1/quiz/answer", headers=headers_b, json={
+            "levelId": 1, "animalIndex": 0, "answer": correct,
+        })
+        resp = client.get("/api/v1/leaderboard", headers=headers_a)
+        entries = resp.json()["entries"]
+        # Find our two users
+        points_list = [e["totalPoints"] for e in entries]
+        assert points_list == sorted(points_list, reverse=True)
 
     def test_leaderboard_no_auth(self):
         resp = client.get("/api/v1/leaderboard")
