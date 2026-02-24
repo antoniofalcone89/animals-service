@@ -19,7 +19,7 @@ from app.config import settings
 from app.dependencies import get_current_user_id, get_token_claims
 from app.models.auth import ApiErrorResponse, RegisterRequest, User
 from app.services import auth_service
-from app.services.quiz_service import get_user_coins
+from app.services.quiz_service import get_user_coins, get_user_points
 
 logger = logging.getLogger(__name__)
 
@@ -91,5 +91,6 @@ async def get_current_user(
         username=user_data["username"],
         email=user_data["email"],
         total_coins=get_user_coins(user_id),
+        score=get_user_points(user_id),
         created_at=user_data["created_at"],
     )

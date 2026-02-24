@@ -28,6 +28,7 @@ class User(BaseModel):
     username: str = Field(..., description="Display name")
     email: str = Field(..., description="Email address")
     total_coins: int = Field(0, description="Total coins earned")
+    score: int = Field(0, description="Total score (points) earned")
     created_at: datetime = Field(..., description="Account creation timestamp")
 
 
