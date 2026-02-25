@@ -79,9 +79,10 @@ async def animal_by_name(
     return AnimalDetailResponse(data=animal)
 
 
-@router.get(
+@router.api_route(
     "/health",
     summary="Health check",
+    methods=["GET", "HEAD"],
     description="Check that the API is running.",
 )
 @limiter.limit(settings.RATE_LIMIT)
