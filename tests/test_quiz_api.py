@@ -6,8 +6,15 @@ accepted and the token value is used as the user ID.
 
 from datetime import datetime, timedelta, timezone
 
+import pytest
 from fastapi.testclient import TestClient
 
+from app.api.v1.endpoints.animals import limiter as animals_limiter
+from app.api.v1.endpoints.auth import limiter as auth_limiter
+from app.api.v1.endpoints.leaderboard import limiter as leaderboard_limiter
+from app.api.v1.endpoints.levels import limiter as levels_limiter
+from app.api.v1.endpoints.quiz import limiter as quiz_limiter
+from app.api.v1.endpoints.users import limiter as users_limiter
 from app.main import app
 from app.services import auth_service
 
@@ -15,6 +22,22 @@ client = TestClient(app)
 
 # Counter for unique mock user tokens across test runs
 _uid_counter = 0
+
+
+@pytest.fixture(autouse=True)
+def _reset_rate_limiters() -> None:
+    """Reset SlowAPI in-memory counters to avoid cross-test leakage."""
+    for limiter in (
+        animals_limiter,
+        auth_limiter,
+        levels_limiter,
+        quiz_limiter,
+        users_limiter,
+        leaderboard_limiter,
+    ):
+        storage = getattr(limiter, "_storage", None)
+        if storage is not None and hasattr(storage, "reset"):
+            storage.reset()
 
 
 def _next_token() -> str:
@@ -788,7 +811,7 @@ class TestLeaderboard:
         hint = "https://example.com/leader.png"
         _register(token, username="leader-photo", photo_url=hint)
         headers = _auth_header(token)
-        resp = client.get("/api/v1/leaderboard", headers=headers)
+        resp = client.get("/api/v1/leaderboard?limit=100", headers=headers)
         assert resp.status_code == 200
         entry = next(e for e in resp.json()["entries"] if e["userId"] == token)
         assert entry["photoUrl"] == hint
