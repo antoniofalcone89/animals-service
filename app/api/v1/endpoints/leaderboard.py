@@ -39,7 +39,7 @@ async def leaderboard(
         points = user_data.get("total_points", 0)
         progress = user_data.get("progress", {})
         completed = sum(1 for bools in progress.values() if bools and all(bools))
-        all_users.append((uid, user_data.get("username", ""), points, completed))
+        all_users.append((uid, user_data.get("username", ""), points, completed, user_data.get("photo_url")))
 
     # Sort by points descending
     all_users.sort(key=lambda u: u[2], reverse=True)
@@ -54,7 +54,8 @@ async def leaderboard(
             username=username,
             total_points=points,
             levels_completed=completed,
+            photo_url=photo_url,
         ).model_dump(by_alias=True)
-        for i, (uid, username, points, completed) in enumerate(page)
+        for i, (uid, username, points, completed, photo_url) in enumerate(page)
     ]
     return {"entries": entries, "total": total}

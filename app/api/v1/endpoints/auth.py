@@ -49,8 +49,9 @@ async def register(
     try:
         user_data = auth_service.create_user(
             uid=claims["uid"],
-            email=claims["email"],
+            email=claims.get("email"),
             username=body.username,
+            photo_url=body.photo_url,
         )
     except ValueError:
         raise HTTPException(
@@ -93,4 +94,5 @@ async def get_current_user(
         total_coins=get_user_coins(user_id),
         score=get_user_points(user_id),
         created_at=user_data["created_at"],
+        photo_url=user_data.get("photo_url") or auth_service.get_user_photo_url(user_id),
     )

@@ -111,3 +111,4 @@ class LeaderboardEntry(BaseModel):
     username: str = Field(..., description="Display name")
     total_points: int = Field(..., description="Total points earned")
     levels_completed: int = Field(..., description="Number of levels fully completed")
+    photo_url: Optional[str] = Field(None, description="Profile photo URL")

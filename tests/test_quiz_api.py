@@ -25,12 +25,15 @@ def _auth_header(token: str) -> dict:
     return {"Authorization": f"Bearer {token}"}
 
 
-def _register(token: str, username: str = "testuser") -> dict:
+def _register(token: str, username: str = "testuser", photo_url: str | None = None) -> dict:
     """Register a user profile and return the response body."""
+    payload = {"username": username}
+    if photo_url is not None:
+        payload["photoUrl"] = photo_url
     resp = client.post(
         "/api/v1/auth/register",
         headers=_auth_header(token),
-        json={"username": username},
+        json=payload,
     )
     return resp.json(), resp.status_code
 
@@ -83,6 +86,13 @@ class TestAuthRegister:
         )
         assert resp.status_code == 422
 
+    def test_register_with_photo_url_hint(self):
+        token = _next_token()
+        hint = "https://example.com/avatar.png"
+        body, status = _register(token, username="withphoto", photo_url=hint)
+        assert status == 201
+        assert body["photoUrl"] == hint
+
     def test_register_no_auth(self):
         resp = client.post("/api/v1/auth/register", json={"username": "test"})
         assert resp.status_code in (401, 403)
@@ -97,6 +107,15 @@ class TestAuthMe:
         resp = client.get("/api/v1/auth/me", headers=_auth_header(token))
         assert resp.status_code == 200
         assert resp.json()["username"] == "meuser"
+        assert "photoUrl" in resp.json()
+
+    def test_get_current_user_with_photo_url(self):
+        token = _next_token()
+        hint = "https://example.com/me.png"
+        _register(token, username="mephoto", photo_url=hint)
+        resp = client.get("/api/v1/auth/me", headers=_auth_header(token))
+        assert resp.status_code == 200
+        assert resp.json()["photoUrl"] == hint
 
     def test_get_current_user_not_registered(self):
         token = _next_token()
@@ -695,6 +714,17 @@ class TestLeaderboard:
         entry = data["entries"][0]
         assert "totalPoints" in entry
         assert "totalCoins" not in entry
+        assert "photoUrl" in entry
+
+    def test_leaderboard_entry_includes_photo_url(self):
+        token = _next_token()
+        hint = "https://example.com/leader.png"
+        _register(token, username="leader-photo", photo_url=hint)
+        headers = _auth_header(token)
+        resp = client.get("/api/v1/leaderboard", headers=headers)
+        assert resp.status_code == 200
+        entry = next(e for e in resp.json()["entries"] if e["userId"] == token)
+        assert entry["photoUrl"] == hint
 
     def test_leaderboard_sorted_by_points(self):
         """Users with more points should rank higher."""

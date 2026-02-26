@@ -32,7 +32,13 @@ class UserStore(abc.ABC):
     """Common interface for user persistence."""
 
     @abc.abstractmethod
-    def create_user(self, uid: str, email: str, username: str) -> dict:
+    def create_user(
+        self,
+        uid: str,
+        email: str | None,
+        username: str,
+        photo_url: str | None = None,
+    ) -> dict:
         """Create a new user profile. Raises ``ValueError`` if exists."""
 
     @abc.abstractmethod
@@ -122,7 +128,13 @@ class InMemoryUserStore(UserStore):
         self._hints: dict[str, dict[int, list[int]]] = {}
         self._letters: dict[str, dict[int, list[int]]] = {}
 
-    def create_user(self, uid: str, email: str, username: str) -> dict:
+    def create_user(
+        self,
+        uid: str,
+        email: str | None,
+        username: str,
+        photo_url: str | None = None,
+    ) -> dict:
         if uid in self._users:
             raise ValueError("user_already_exists")
         now = datetime.now(timezone.utc)
@@ -132,6 +144,7 @@ class InMemoryUserStore(UserStore):
             "email": email,
             "total_coins": 0,
             "created_at": now,
+            "photo_url": photo_url,
         }
         self._users[uid] = user_data
         logger.info("Created user profile for %s", uid)
@@ -272,7 +285,13 @@ class FirestoreUserStore(UserStore):
     def _ref(self, uid: str) -> DocumentReference:
         return get_firestore_client().collection(self.COLLECTION).document(uid)
 
-    def create_user(self, uid: str, email: str, username: str) -> dict:
+    def create_user(
+        self,
+        uid: str,
+        email: str | None,
+        username: str,
+        photo_url: str | None = None,
+    ) -> dict:
         ref = self._ref(uid)
         snap = ref.get()
         if snap.exists:
@@ -285,6 +304,7 @@ class FirestoreUserStore(UserStore):
             "total_coins": 0,
             "total_points": 0,
             "created_at": now,
+            "photo_url": photo_url,
             "progress": progress,
         }
         ref.set(doc)
