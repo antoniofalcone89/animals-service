@@ -249,6 +249,21 @@ paths:
                     type: integer
                     example: 120
 
+  /users/me/streak:
+    get:
+      tags: [Users]
+      summary: Get current daily streak
+      operationId: getUserStreak
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Daily streak info
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StreakResponse"
+
   /users/me/profile:
     patch:
       tags: [Users]
@@ -334,10 +349,39 @@ components:
           format: email
         totalCoins:
           type: integer
+        score:
+          type: integer
         createdAt:
           type: string
           format: date-time
-      required: [id, username, email, totalCoins, createdAt]
+        photoUrl:
+          type: string
+          format: uri
+          nullable: true
+        currentStreak:
+          type: integer
+          description: Current daily streak in days
+          example: 5
+        lastActivityDate:
+          type: string
+          format: date
+          nullable: true
+          description: Last streak activity date in YYYY-MM-DD format
+      required: [id, username, totalCoins, score, createdAt, currentStreak]
+
+    StreakResponse:
+      type: object
+      properties:
+        currentStreak:
+          type: integer
+          description: Current daily streak in days
+          example: 5
+        lastActivityDate:
+          type: string
+          format: date
+          nullable: true
+          description: Last streak activity date in YYYY-MM-DD format
+      required: [currentStreak]
 
     Level:
       type: object
@@ -442,11 +486,19 @@ components:
           type: string
         username:
           type: string
-        totalCoins:
+        totalPoints:
           type: integer
         levelsCompleted:
           type: integer
-      required: [rank, userId, username, totalCoins, levelsCompleted]
+        photoUrl:
+          type: string
+          format: uri
+          nullable: true
+        currentStreak:
+          type: integer
+          description: Current daily streak in days
+          example: 3
+      required: [rank, userId, username, totalPoints, levelsCompleted, currentStreak]
 
     ErrorResponse:
       type: object

@@ -6,7 +6,7 @@ the app is running in mock mode.
 
 import abc
 import logging
-from datetime import datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 
 from google.cloud.firestore_v1 import DocumentReference, Transaction
 
@@ -22,6 +22,27 @@ def _empty_progress() -> dict[int, list[bool]]:
         lid: [False] * get_level_animal_count(lid)
         for lid in get_level_ids()
     }
+
+
+def _compute_streak_after_first_correct(
+    last_activity_date: str | None,
+    current_streak: int,
+    today: date,
+) -> tuple[int, str]:
+    """Return updated ``(current_streak, last_activity_date)`` for first daily correct answer."""
+    today_iso = today.isoformat()
+    if last_activity_date == today_iso:
+        return current_streak, today_iso
+
+    try:
+        previous = date.fromisoformat(last_activity_date) if last_activity_date else None
+    except ValueError:
+        previous = None
+
+    if previous == today - timedelta(days=1):
+        return max(0, current_streak) + 1, today_iso
+
+    return 1, today_iso
 
 
 # ---------------------------------------------------------------------------
@@ -66,10 +87,10 @@ class UserStore(abc.ABC):
     def submit_answer_update(
         self, uid: str, level_id: int, animal_index: int,
         coins_per_correct: int, points_awarded: int = 0,
-    ) -> tuple[int, int, int]:
+    ) -> tuple[int, int, int, int, str | None]:
         """Atomically mark an animal as guessed and award coins + points.
 
-        Returns ``(coins_awarded, total_coins, total_points)``.
+        Returns ``(coins_awarded, total_coins, total_points, current_streak, last_activity_date)``.
         """
 
     @abc.abstractmethod
@@ -145,6 +166,8 @@ class InMemoryUserStore(UserStore):
             "total_coins": 0,
             "created_at": now,
             "photo_url": photo_url,
+            "current_streak": 0,
+            "last_activity_date": None,
         }
         self._users[uid] = user_data
         logger.info("Created user profile for %s", uid)
@@ -186,7 +209,7 @@ class InMemoryUserStore(UserStore):
     def submit_answer_update(
         self, uid: str, level_id: int, animal_index: int,
         coins_per_correct: int, points_awarded: int = 0,
-    ) -> tuple[int, int, int]:
+    ) -> tuple[int, int, int, int, str | None]:
         progress = self._ensure_progress(uid)
         level_progress = progress.get(level_id)
         if level_progress is None or animal_index >= len(level_progress):
@@ -197,7 +220,25 @@ class InMemoryUserStore(UserStore):
             coins_awarded = coins_per_correct
             self._coins[uid] = self._coins.get(uid, 0) + coins_awarded
             self._points[uid] = self._points.get(uid, 0) + points_awarded
-        return coins_awarded, self._coins.get(uid, 0), self._points.get(uid, 0)
+
+            user_data = self._users.get(uid)
+            if user_data is not None:
+                next_streak, next_date = _compute_streak_after_first_correct(
+                    user_data.get("last_activity_date"),
+                    int(user_data.get("current_streak", 0) or 0),
+                    datetime.now(timezone.utc).date(),
+                )
+                user_data["current_streak"] = next_streak
+                user_data["last_activity_date"] = next_date
+
+        user_data = self._users.get(uid) or {}
+        return (
+            coins_awarded,
+            self._coins.get(uid, 0),
+            self._points.get(uid, 0),
+            int(user_data.get("current_streak", 0) or 0),
+            user_data.get("last_activity_date"),
+        )
 
     def get_coins(self, uid: str) -> int:
         self._ensure_progress(uid)
@@ -305,6 +346,8 @@ class FirestoreUserStore(UserStore):
             "total_points": 0,
             "created_at": now,
             "photo_url": photo_url,
+            "current_streak": 0,
+            "last_activity_date": None,
             "progress": progress,
         }
         ref.set(doc)
@@ -357,12 +400,12 @@ class FirestoreUserStore(UserStore):
     def submit_answer_update(
         self, uid: str, level_id: int, animal_index: int,
         coins_per_correct: int, points_awarded: int = 0,
-    ) -> tuple[int, int, int]:
+    ) -> tuple[int, int, int, int, str | None]:
         ref = self._ref(uid)
         db = get_firestore_client()
 
         @firestore_transaction
-        def _update(transaction: Transaction) -> tuple[int, int, int]:
+        def _update(transaction: Transaction) -> tuple[int, int, int, int, str | None]:
             snap = ref.get(transaction=transaction)
             data = snap.to_dict() if snap.exists else {}
             progress = data.get("progress", {})
@@ -380,12 +423,24 @@ class FirestoreUserStore(UserStore):
 
             total_coins = data.get("total_coins", 0) + coins_awarded
             total_points = data.get("total_points", 0) + actual_points
+
+            next_streak = int(data.get("current_streak", 0) or 0)
+            next_date = data.get("last_activity_date")
+            if coins_awarded > 0:
+                next_streak, next_date = _compute_streak_after_first_correct(
+                    next_date,
+                    next_streak,
+                    datetime.now(timezone.utc).date(),
+                )
+
             transaction.update(ref, {
                 f"progress.{level_key}": level_progress,
                 "total_coins": total_coins,
                 "total_points": total_points,
+                "current_streak": next_streak,
+                "last_activity_date": next_date,
             })
-            return coins_awarded, total_coins, total_points
+            return coins_awarded, total_coins, total_points, next_streak, next_date
 
         return _update(db.transaction())
 

@@ -34,6 +34,8 @@ class User(BaseModel):
     score: int = Field(0, description="Total score (points) earned")
     created_at: datetime = Field(..., description="Account creation timestamp")
     photo_url: Optional[str] = Field(None, description="Profile photo URL")
+    current_streak: int = Field(0, description="Current daily streak in days")
+    last_activity_date: Optional[str] = Field(None, description="Last streak activity date as ISO date (YYYY-MM-DD)")
 
 
 class ErrorDetail(BaseModel):

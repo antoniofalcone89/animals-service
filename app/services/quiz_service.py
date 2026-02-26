@@ -82,7 +82,7 @@ def submit_answer(
         hints_used = hints.get(level_id, [0] * len(level_progress))[animal_index]
         letters_used = letters.get(level_id, [0] * len(level_progress))[animal_index]
         points_awarded = _calculate_points(ad_revealed, hints_used, letters_used)
-        coins_awarded, total_coins, _ = store.submit_answer_update(
+        coins_awarded, total_coins, _, _, _ = store.submit_answer_update(
             user_id, level_id, animal_index, COINS_PER_CORRECT, points_awarded,
         )
 

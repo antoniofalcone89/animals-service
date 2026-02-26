@@ -95,4 +95,6 @@ async def get_current_user(
         score=get_user_points(user_id),
         created_at=user_data["created_at"],
         photo_url=user_data.get("photo_url") or auth_service.get_user_photo_url(user_id),
+        current_streak=int(user_data.get("current_streak", 0) or 0),
+        last_activity_date=user_data.get("last_activity_date"),
     )

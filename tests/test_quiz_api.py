@@ -4,9 +4,12 @@ In mock auth mode (no FIREBASE_CREDENTIALS set), any non-empty Bearer token is
 accepted and the token value is used as the user ID.
 """
 
+from datetime import datetime, timedelta, timezone
+
 from fastapi.testclient import TestClient
 
 from app.main import app
+from app.services import auth_service
 
 client = TestClient(app)
 
@@ -108,6 +111,8 @@ class TestAuthMe:
         assert resp.status_code == 200
         assert resp.json()["username"] == "meuser"
         assert "photoUrl" in resp.json()
+        assert resp.json()["currentStreak"] == 0
+        assert resp.json()["lastActivityDate"] is None
 
     def test_get_current_user_with_photo_url(self):
         token = _next_token()
@@ -343,6 +348,67 @@ class TestUserCoins:
         resp = client.get("/api/v1/users/me/coins", headers=headers)
         assert resp.status_code == 200
         assert resp.json()["totalCoins"] == 0
+
+
+class TestUserStreak:
+    """GET /api/v1/users/me/streak tests."""
+
+    def test_get_streak_starts_at_zero(self):
+        headers = _register_and_header()
+        resp = client.get("/api/v1/users/me/streak", headers=headers)
+        assert resp.status_code == 200
+        assert resp.json()["currentStreak"] == 0
+        assert resp.json()["lastActivityDate"] is None
+
+    def test_first_correct_sets_streak_to_one(self):
+        headers = _register_and_header()
+        client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Cane",
+        })
+        resp = client.get("/api/v1/users/me/streak", headers=headers)
+        assert resp.status_code == 200
+        assert resp.json()["currentStreak"] == 1
+        assert resp.json()["lastActivityDate"] == datetime.now(timezone.utc).date().isoformat()
+
+    def test_multiple_correct_same_day_does_not_increment_streak(self):
+        headers = _register_and_header()
+        client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Cane",
+        })
+        client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 1, "answer": "Gatto",
+        })
+        resp = client.get("/api/v1/users/me/streak", headers=headers)
+        assert resp.status_code == 200
+        assert resp.json()["currentStreak"] == 1
+
+    def test_yesterday_increments_streak(self):
+        token = _next_token()
+        _register(token, username="streakuser")
+        headers = _auth_header(token)
+        yesterday = (datetime.now(timezone.utc).date() - timedelta(days=1)).isoformat()
+        auth_service.update_user(token, current_streak=4, last_activity_date=yesterday)
+
+        client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Cane",
+        })
+        resp = client.get("/api/v1/users/me/streak", headers=headers)
+        assert resp.status_code == 200
+        assert resp.json()["currentStreak"] == 5
+
+    def test_older_than_yesterday_resets_streak(self):
+        token = _next_token()
+        _register(token, username="streakreset")
+        headers = _auth_header(token)
+        older = (datetime.now(timezone.utc).date() - timedelta(days=2)).isoformat()
+        auth_service.update_user(token, current_streak=7, last_activity_date=older)
+
+        client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Cane",
+        })
+        resp = client.get("/api/v1/users/me/streak", headers=headers)
+        assert resp.status_code == 200
+        assert resp.json()["currentStreak"] == 1
 
 
 class TestBuyHint:
@@ -715,6 +781,7 @@ class TestLeaderboard:
         assert "totalPoints" in entry
         assert "totalCoins" not in entry
         assert "photoUrl" in entry
+        assert "currentStreak" in entry
 
     def test_leaderboard_entry_includes_photo_url(self):
         token = _next_token()

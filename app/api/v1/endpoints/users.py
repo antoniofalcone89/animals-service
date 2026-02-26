@@ -9,6 +9,7 @@ from slowapi.util import get_remote_address
 from app.config import settings
 from app.dependencies import get_current_user_id, get_locale
 from app.models.auth import ApiErrorResponse, UpdateProfileRequest, User
+from app.models.quiz import StreakResponse
 from app.services import auth_service
 from app.services.quiz_service import get_user_coins, get_user_points, get_user_progress
 
@@ -16,6 +17,27 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/users", tags=["Users"])
 limiter = Limiter(key_func=get_remote_address)
+
+
+@router.get(
+    "/me/streak",
+    response_model=StreakResponse,
+    summary="Get current user daily streak",
+)
+@limiter.limit(settings.RATE_LIMIT)
+async def user_streak(
+    request: Request,
+    user_id: str = Depends(get_current_user_id),
+) -> StreakResponse:
+    """Return streak info for the current user."""
+    user_data = auth_service.get_user(user_id)
+    if user_data is None:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found")
+
+    return StreakResponse(
+        current_streak=int(user_data.get("current_streak", 0) or 0),
+        last_activity_date=user_data.get("last_activity_date"),
+    )
 
 
 @router.get(
@@ -84,4 +106,14 @@ async def update_profile(
     user_data = auth_service.update_user(user_id, **updates)
     if user_data is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found")
-    return User(**user_data)
+    return User(
+        id=user_data["id"],
+        username=user_data["username"],
+        email=user_data.get("email"),
+        created_at=user_data["created_at"],
+        photo_url=user_data.get("photo_url") or auth_service.get_user_photo_url(user_id),
+        score=get_user_points(user_id),
+        total_coins=get_user_coins(user_id),
+        current_streak=int(user_data.get("current_streak", 0) or 0),
+        last_activity_date=user_data.get("last_activity_date"),
+    )

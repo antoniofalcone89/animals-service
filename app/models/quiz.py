@@ -112,3 +112,13 @@ class LeaderboardEntry(BaseModel):
     total_points: int = Field(..., description="Total points earned")
     levels_completed: int = Field(..., description="Number of levels fully completed")
     photo_url: Optional[str] = Field(None, description="Profile photo URL")
+    current_streak: int = Field(0, description="Current daily streak in days")
+
+
+class StreakResponse(BaseModel):
+    """Response schema for current user's streak."""
+
+    model_config = ConfigDict(populate_by_name=True, alias_generator=to_camel)
+
+    current_streak: int = Field(0, description="Current daily streak in days")
+    last_activity_date: Optional[str] = Field(None, description="Last streak activity date as ISO date (YYYY-MM-DD)")
