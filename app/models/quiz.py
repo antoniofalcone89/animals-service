@@ -63,6 +63,9 @@ class AnswerResponse(BaseModel):
     total_coins: int = Field(..., description="User's updated total coin count")
     points_awarded: int = Field(..., description="Points earned for this answer")
     correct_answer: str = Field(..., description="The correct answer (always returned so the client can display proper spelling)")
+    current_streak: int = Field(0, description="Current daily streak in days")
+    last_activity_date: Optional[str] = Field(None, description="Last streak activity date as ISO date (YYYY-MM-DD)")
+    streak_bonus_coins: int = Field(0, description="Streak bonus coins granted on the first correct answer of the day")
 
 
 class BuyHintRequest(BaseModel):

@@ -211,24 +211,8 @@ paths:
                         type: boolean
                 example:
                   levels:
-                    "1":
-                      [
-                        true,
-                        false,
-                        true,
-                        false,
-                        false,
-                        false,
-                        false,
-                        false,
-                      ]
-                    "2":
-                      [
-                        false,
-                        false,
-                        false,
-                        false,
-                      ]
+                    "1": [true, false, true, false, false, false, false, false]
+                    "2": [false, false, false, false]
 
   /users/me/coins:
     get:
@@ -456,14 +440,37 @@ components:
           type: boolean
         coinsAwarded:
           type: integer
-          description: "Flat 10 coins for a correct first-time answer, 0 if wrong or already guessed"
+          description: "Coins earned for this answer (base 10 + streakBonusCoins on first correct of day)"
         totalCoins:
           type: integer
           description: User's updated total coin count
+        pointsAwarded:
+          type: integer
+          description: Points earned for this answer
         correctAnswer:
           type: string
-          description: The correct answer — only present when the answer is wrong (omitted when correct)
-      required: [correct, coinsAwarded, totalCoins]
+          description: The correct answer (always returned)
+        currentStreak:
+          type: integer
+          description: Current daily streak in days
+        lastActivityDate:
+          type: string
+          format: date
+          nullable: true
+          description: Last streak activity date in YYYY-MM-DD format
+        streakBonusCoins:
+          type: integer
+          description: Bonus coins granted on first correct answer of the day
+      required:
+        [
+          correct,
+          coinsAwarded,
+          totalCoins,
+          pointsAwarded,
+          correctAnswer,
+          currentStreak,
+          streakBonusCoins,
+        ]
 
     LevelProgress:
       type: object
@@ -498,7 +505,8 @@ components:
           type: integer
           description: Current daily streak in days
           example: 3
-      required: [rank, userId, username, totalPoints, levelsCompleted, currentStreak]
+      required:
+        [rank, userId, username, totalPoints, levelsCompleted, currentStreak]
 
     ErrorResponse:
       type: object

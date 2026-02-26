@@ -75,6 +75,10 @@ def submit_answer(
     coins_awarded = 0
     points_awarded = 0
     total_coins = store.get_coins(user_id)
+    streak_bonus_coins = 0
+    user_data = store.get_user(user_id) or {}
+    current_streak = int(user_data.get("current_streak", 0) or 0)
+    last_activity_date = user_data.get("last_activity_date")
 
     if is_correct and not level_progress[animal_index]:
         hints = store.get_hints(user_id)
@@ -82,7 +86,7 @@ def submit_answer(
         hints_used = hints.get(level_id, [0] * len(level_progress))[animal_index]
         letters_used = letters.get(level_id, [0] * len(level_progress))[animal_index]
         points_awarded = _calculate_points(ad_revealed, hints_used, letters_used)
-        coins_awarded, total_coins, _, _, _ = store.submit_answer_update(
+        coins_awarded, total_coins, _, current_streak, last_activity_date, streak_bonus_coins = store.submit_answer_update(
             user_id, level_id, animal_index, COINS_PER_CORRECT, points_awarded,
         )
 
@@ -92,6 +96,9 @@ def submit_answer(
         total_coins=total_coins,
         points_awarded=points_awarded,
         correct_answer=correct_name,
+        current_streak=current_streak,
+        last_activity_date=last_activity_date,
+        streak_bonus_coins=streak_bonus_coins,
     )
 
 

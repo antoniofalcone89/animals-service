@@ -225,10 +225,13 @@ class TestQuizAnswer:
         assert resp.status_code == 200
         data = resp.json()
         assert data["correct"] is True
-        assert data["coinsAwarded"] == 10
-        assert data["totalCoins"] == 10
+        assert data["coinsAwarded"] == 12
+        assert data["totalCoins"] == 12
         assert data["pointsAwarded"] == 20
         assert data["correctAnswer"] == "Cane"
+        assert data["currentStreak"] == 1
+        assert data["lastActivityDate"] == datetime.now(timezone.utc).date().isoformat()
+        assert data["streakBonusCoins"] == 2
 
     def test_correct_answer_english(self):
         headers = {**_register_and_header(), "Accept-Language": "en"}
@@ -238,8 +241,9 @@ class TestQuizAnswer:
         assert resp.status_code == 200
         data = resp.json()
         assert data["correct"] is True
-        assert data["coinsAwarded"] == 10
+        assert data["coinsAwarded"] == 12
         assert data["pointsAwarded"] == 20
+        assert data["streakBonusCoins"] == 2
 
     def test_wrong_answer(self):
         headers = _register_and_header()
@@ -252,6 +256,7 @@ class TestQuizAnswer:
         assert data["coinsAwarded"] == 0
         assert data["pointsAwarded"] == 0
         assert data["correctAnswer"] == "Cane"
+        assert data["streakBonusCoins"] == 0
 
     def test_case_insensitive_answer(self):
         headers = _register_and_header()
@@ -273,6 +278,37 @@ class TestQuizAnswer:
         assert data["correct"] is True
         assert data["coinsAwarded"] == 0
         assert data["pointsAwarded"] == 0
+        assert data["streakBonusCoins"] == 0
+
+    def test_second_correct_same_day_has_no_streak_bonus(self):
+        headers = _register_and_header()
+        client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Cane",
+        })
+        resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 1, "answer": "Gatto",
+        })
+        data = resp.json()
+        assert data["correct"] is True
+        assert data["coinsAwarded"] == 10
+        assert data["streakBonusCoins"] == 0
+
+    def test_first_correct_bonus_uses_streak_and_caps_at_20(self):
+        token = _next_token()
+        _register(token, username="bonus-streak")
+        headers = _auth_header(token)
+
+        yesterday = (datetime.now(timezone.utc).date() - timedelta(days=1)).isoformat()
+        auth_service.update_user(token, current_streak=10, last_activity_date=yesterday)
+
+        resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Cane",
+        })
+        data = resp.json()
+        assert data["correct"] is True
+        assert data["currentStreak"] == 11
+        assert data["streakBonusCoins"] == 20
+        assert data["coinsAwarded"] == 30
 
     def test_invalid_level(self):
         headers = _register_and_header()
@@ -439,7 +475,7 @@ class TestBuyHint:
 
     def test_buy_hint_success(self):
         headers = _register_and_header()
-        # Earn 10 coins via a correct answer
+        # First correct answer awards base + streak bonus
         client.post("/api/v1/quiz/answer", headers=headers, json={
             "levelId": 1, "animalIndex": 0, "answer": "Cane",
         })
@@ -450,14 +486,14 @@ class TestBuyHint:
         assert resp.status_code == 200
         data = resp.json()
         assert data["hintsRevealed"] == 1
-        assert data["totalCoins"] == 5
+        assert data["totalCoins"] == 7
         # Verify coins via GET /users/me/coins
         resp2 = client.get("/api/v1/users/me/coins", headers=headers)
-        assert resp2.json()["totalCoins"] == 5
+        assert resp2.json()["totalCoins"] == 7
 
     def test_buy_hint_escalating_cost(self):
         headers = _register_and_header()
-        # Earn 35 coins (answer 4 animals correctly: 4 * 10 = 40 coins)
+        # Earn coins (first daily correct includes streak bonus)
         for idx in range(4):
             # Get the correct Italian name for each animal
             resp = client.post("/api/v1/quiz/answer", headers=headers, json={
@@ -467,24 +503,24 @@ class TestBuyHint:
             client.post("/api/v1/quiz/answer", headers=headers, json={
                 "levelId": 1, "animalIndex": idx, "answer": correct_name,
             })
-        # Now have 40 coins. Buy 3 hints for animal 5: costs 5, 10, 20
+        # Buy 3 hints for animal 5: costs 5, 10, 20
         resp1 = client.post("/api/v1/quiz/buy-hint", headers=headers, json={
             "levelId": 1, "animalIndex": 5,
         })
         assert resp1.json()["hintsRevealed"] == 1
-        assert resp1.json()["totalCoins"] == 35  # 40 - 5
+        assert resp1.json()["totalCoins"] == 37
 
         resp2 = client.post("/api/v1/quiz/buy-hint", headers=headers, json={
             "levelId": 1, "animalIndex": 5,
         })
         assert resp2.json()["hintsRevealed"] == 2
-        assert resp2.json()["totalCoins"] == 25  # 35 - 10
+        assert resp2.json()["totalCoins"] == 27
 
         resp3 = client.post("/api/v1/quiz/buy-hint", headers=headers, json={
             "levelId": 1, "animalIndex": 5,
         })
         assert resp3.json()["hintsRevealed"] == 3
-        assert resp3.json()["totalCoins"] == 5  # 25 - 20
+        assert resp3.json()["totalCoins"] == 7
 
     def test_buy_hint_insufficient_coins(self):
         headers = _register_and_header()
@@ -566,7 +602,7 @@ class TestRevealLetter:
 
     def test_reveal_letter_success(self):
         headers = _register_and_header()
-        # Earn 30 coins (3 correct answers)
+        # Earn at least 30 coins
         self._earn_coins(headers, 3)
         # Reveal a letter for animal at index 5
         resp = client.post("/api/v1/quiz/reveal-letter", headers=headers, json={
@@ -575,7 +611,7 @@ class TestRevealLetter:
         assert resp.status_code == 200
         data = resp.json()
         assert data["lettersRevealed"] == 1
-        assert data["totalCoins"] == 0  # 30 - 30
+        assert data["totalCoins"] == 2
 
     def test_reveal_letter_insufficient_coins(self):
         headers = _register_and_header()
