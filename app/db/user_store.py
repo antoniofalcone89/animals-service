@@ -133,6 +133,30 @@ class UserStore(abc.ABC):
     def count_completed(self, uid: str) -> int:
         """Return the number of fully-completed levels."""
 
+    @abc.abstractmethod
+    def get_daily_challenge(
+        self, uid: str, challenge_date: str, challenge_size: int,
+    ) -> dict:
+        """Return persisted daily challenge state for user/date."""
+
+    @abc.abstractmethod
+    def submit_daily_challenge_answer(
+        self,
+        uid: str,
+        challenge_date: str,
+        animal_index: int,
+        points_awarded: int,
+        challenge_size: int,
+    ) -> tuple[int, int, bool, datetime | None]:
+        """Persist a daily challenge answer.
+
+        Returns ``(points_awarded_now, total_score, completed, completed_at)``.
+        """
+
+    @abc.abstractmethod
+    def get_daily_challenge_leaderboard(self, challenge_date: str) -> list[dict]:
+        """Return leaderboard rows for a specific challenge date."""
+
 
 # ---------------------------------------------------------------------------
 # In-memory implementation (mock / test mode)
@@ -148,6 +172,7 @@ class InMemoryUserStore(UserStore):
         self._points: dict[str, int] = {}
         self._hints: dict[str, dict[int, list[int]]] = {}
         self._letters: dict[str, dict[int, list[int]]] = {}
+        self._daily_challenges: dict[str, dict[str, dict]] = {}
 
     def create_user(
         self,
@@ -321,6 +346,80 @@ class InMemoryUserStore(UserStore):
         progress = self._ensure_progress(uid)
         return sum(1 for bools in progress.values() if bools and all(bools))
 
+    def _ensure_daily_challenge(
+        self, uid: str, challenge_date: str, challenge_size: int,
+    ) -> dict:
+        by_user = self._daily_challenges.setdefault(uid, {})
+        state = by_user.get(challenge_date)
+        if state is None:
+            state = {
+                "answered": [False] * challenge_size,
+                "score": 0,
+                "completed_at": None,
+            }
+            by_user[challenge_date] = state
+            return state
+
+        answered = state.get("answered", [])
+        if len(answered) != challenge_size:
+            if len(answered) < challenge_size:
+                answered = answered + [False] * (challenge_size - len(answered))
+            else:
+                answered = answered[:challenge_size]
+            state["answered"] = answered
+
+        state.setdefault("score", 0)
+        state.setdefault("completed_at", None)
+        return state
+
+    def get_daily_challenge(
+        self, uid: str, challenge_date: str, challenge_size: int,
+    ) -> dict:
+        state = self._ensure_daily_challenge(uid, challenge_date, challenge_size)
+        return {
+            "answered": list(state["answered"]),
+            "score": int(state.get("score", 0) or 0),
+            "completed_at": state.get("completed_at"),
+        }
+
+    def submit_daily_challenge_answer(
+        self,
+        uid: str,
+        challenge_date: str,
+        animal_index: int,
+        points_awarded: int,
+        challenge_size: int,
+    ) -> tuple[int, int, bool, datetime | None]:
+        state = self._ensure_daily_challenge(uid, challenge_date, challenge_size)
+        answered = state["answered"]
+        if animal_index >= len(answered):
+            raise ValueError("invalid challenge/index")
+
+        points_now = 0
+        if not answered[animal_index]:
+            answered[animal_index] = True
+            points_now = points_awarded
+            state["score"] = int(state.get("score", 0) or 0) + points_now
+
+        completed = all(answered)
+        if completed and state.get("completed_at") is None:
+            state["completed_at"] = datetime.now(timezone.utc)
+
+        return points_now, int(state.get("score", 0) or 0), completed, state.get("completed_at")
+
+    def get_daily_challenge_leaderboard(self, challenge_date: str) -> list[dict]:
+        rows: list[dict] = []
+        for uid, by_date in self._daily_challenges.items():
+            state = by_date.get(challenge_date)
+            if state is None:
+                continue
+            rows.append({
+                "user_id": uid,
+                "score": int(state.get("score", 0) or 0),
+                "completed_at": state.get("completed_at"),
+            })
+        return rows
+
 
 # ---------------------------------------------------------------------------
 # Firestore implementation
@@ -330,9 +429,19 @@ class FirestoreUserStore(UserStore):
     """Firestore-backed store using ``users/{uid}`` documents."""
 
     COLLECTION = "users"
+    CHALLENGE_COLLECTION = "challenges"
 
     def _ref(self, uid: str) -> DocumentReference:
         return get_firestore_client().collection(self.COLLECTION).document(uid)
+
+    def _challenge_ref(self, uid: str, challenge_date: str) -> DocumentReference:
+        return (
+            get_firestore_client()
+            .collection(self.CHALLENGE_COLLECTION)
+            .document(uid)
+            .collection("dates")
+            .document(challenge_date)
+        )
 
     def create_user(
         self,
@@ -553,6 +662,99 @@ class FirestoreUserStore(UserStore):
             return 0
         raw = snap.to_dict().get("progress", {})
         return sum(1 for bools in raw.values() if bools and all(bools))
+
+    def get_daily_challenge(
+        self, uid: str, challenge_date: str, challenge_size: int,
+    ) -> dict:
+        snap = self._challenge_ref(uid, challenge_date).get()
+        if not snap.exists:
+            return {
+                "answered": [False] * challenge_size,
+                "score": 0,
+                "completed_at": None,
+            }
+
+        data = snap.to_dict() or {}
+        answered = data.get("answered", [])
+        if len(answered) != challenge_size:
+            if len(answered) < challenge_size:
+                answered = answered + [False] * (challenge_size - len(answered))
+            else:
+                answered = answered[:challenge_size]
+
+        return {
+            "answered": answered,
+            "score": int(data.get("score", 0) or 0),
+            "completed_at": data.get("completed_at"),
+        }
+
+    def submit_daily_challenge_answer(
+        self,
+        uid: str,
+        challenge_date: str,
+        animal_index: int,
+        points_awarded: int,
+        challenge_size: int,
+    ) -> tuple[int, int, bool, datetime | None]:
+        ref = self._challenge_ref(uid, challenge_date)
+        db = get_firestore_client()
+
+        @firestore_transaction
+        def _update(transaction: Transaction) -> tuple[int, int, bool, datetime | None]:
+            snap = ref.get(transaction=transaction)
+            data = snap.to_dict() if snap.exists else {}
+            answered = data.get("answered", [False] * challenge_size)
+            if len(answered) != challenge_size:
+                if len(answered) < challenge_size:
+                    answered = answered + [False] * (challenge_size - len(answered))
+                else:
+                    answered = answered[:challenge_size]
+
+            if animal_index >= len(answered):
+                raise ValueError("invalid challenge/index")
+
+            points_now = 0
+            score = int(data.get("score", 0) or 0)
+            if not answered[animal_index]:
+                answered[animal_index] = True
+                points_now = points_awarded
+                score += points_now
+
+            completed = all(answered)
+            completed_at = data.get("completed_at")
+            if completed and completed_at is None:
+                completed_at = datetime.now(timezone.utc)
+
+            transaction.set(ref, {
+                "answered": answered,
+                "score": score,
+                "completed_at": completed_at,
+            }, merge=True)
+            return points_now, score, completed, completed_at
+
+        return _update(db.transaction())
+
+    def get_daily_challenge_leaderboard(self, challenge_date: str) -> list[dict]:
+        rows: list[dict] = []
+        users = get_firestore_client().collection(self.CHALLENGE_COLLECTION).stream()
+        for user_doc in users:
+            date_doc = (
+                get_firestore_client()
+                .collection(self.CHALLENGE_COLLECTION)
+                .document(user_doc.id)
+                .collection("dates")
+                .document(challenge_date)
+                .get()
+            )
+            if not date_doc.exists:
+                continue
+            data = date_doc.to_dict() or {}
+            rows.append({
+                "user_id": user_doc.id,
+                "score": int(data.get("score", 0) or 0),
+                "completed_at": data.get("completed_at"),
+            })
+        return rows
 
 
 def firestore_transaction(func):

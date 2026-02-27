@@ -43,6 +43,8 @@ tags:
     description: Quiz levels and their animals
   - name: Quiz
     description: Answer submission and scoring
+  - name: Challenge
+    description: Daily challenge gameplay and ranking
   - name: Users
     description: User progress and profile
   - name: Leaderboard
@@ -186,6 +188,79 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+
+  /challenge/today:
+    get:
+      tags: [Challenge]
+      summary: Get today's daily challenge
+      operationId: getChallengeToday
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Today's deterministic challenge
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChallengeTodayResponse"
+
+  /challenge/answer:
+    post:
+      tags: [Challenge]
+      summary: Submit an answer for today's daily challenge
+      operationId: submitChallengeAnswer
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChallengeAnswerRequest"
+      responses:
+        "200":
+          description: Challenge answer result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnswerResponse"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /challenge/leaderboard:
+    get:
+      tags: [Challenge]
+      summary: Get daily challenge leaderboard
+      operationId: getChallengeLeaderboard
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: date
+          in: query
+          schema:
+            type: string
+            default: today
+          description: Challenge date in YYYY-MM-DD format or 'today'
+      responses:
+        "200":
+          description: Daily challenge ranking
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  date:
+                    type: string
+                  entries:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ChallengeLeaderboardEntry"
+                  total:
+                    type: integer
 
   /users/me/progress:
     get:
@@ -433,6 +508,20 @@ components:
           type: string
           description: The user's guess (case-insensitive comparison)
 
+    ChallengeAnswerRequest:
+      type: object
+      required: [animalIndex, answer]
+      properties:
+        animalIndex:
+          type: integer
+          description: Zero-based index within today's challenge animal list
+        answer:
+          type: string
+          description: The user's guess (case-insensitive comparison)
+        adRevealed:
+          type: boolean
+          default: false
+
     AnswerResponse:
       type: object
       properties:
@@ -472,6 +561,23 @@ components:
           streakBonusCoins,
         ]
 
+    ChallengeTodayResponse:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        animals:
+          type: array
+          items:
+            $ref: "#/components/schemas/Animal"
+        completed:
+          type: boolean
+        score:
+          type: integer
+          nullable: true
+      required: [date, animals, completed]
+
     LevelProgress:
       type: object
       properties:
@@ -507,6 +613,27 @@ components:
           example: 3
       required:
         [rank, userId, username, totalPoints, levelsCompleted, currentStreak]
+
+    ChallengeLeaderboardEntry:
+      type: object
+      properties:
+        rank:
+          type: integer
+        userId:
+          type: string
+        username:
+          type: string
+        score:
+          type: integer
+        completedAt:
+          type: string
+          format: date-time
+          nullable: true
+        photoUrl:
+          type: string
+          format: uri
+          nullable: true
+      required: [rank, userId, username, score]
 
     ErrorResponse:
       type: object

@@ -157,3 +157,25 @@ def get_level_ids() -> list[int]:
     """Return all level IDs."""
     raw_levels = _load_quiz_levels()
     return [lvl["id"] for lvl in raw_levels]
+
+
+def get_flat_animals(locale: str = DEFAULT_LOCALE) -> list[dict]:
+    """Return all quiz animals flattened across levels.
+
+    Each entry contains ``level_id``, ``animal_index`` and ``animal`` (QuizAnimal).
+    """
+    flat: list[dict] = []
+    for level in _load_quiz_levels():
+        for idx, raw in enumerate(level["animals"]):
+            flat.append({
+                "level_id": level["id"],
+                "animal_index": idx,
+                "animal": QuizAnimal(
+                    id=raw["id"],
+                    name=_translate_animal_name(raw["id"], raw["name"], locale),
+                    image_url=raw["imageUrl"],
+                    hints=_translate_hints(raw["id"], locale),
+                    fun_facts=_translate_fun_facts(raw["id"], locale),
+                ),
+            })
+    return flat

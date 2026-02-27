@@ -11,6 +11,7 @@ from fastapi.testclient import TestClient
 
 from app.api.v1.endpoints.animals import limiter as animals_limiter
 from app.api.v1.endpoints.auth import limiter as auth_limiter
+from app.api.v1.endpoints.challenge import limiter as challenge_limiter
 from app.api.v1.endpoints.leaderboard import limiter as leaderboard_limiter
 from app.api.v1.endpoints.levels import limiter as levels_limiter
 from app.api.v1.endpoints.quiz import limiter as quiz_limiter
@@ -30,6 +31,7 @@ def _reset_rate_limiters() -> None:
     for limiter in (
         animals_limiter,
         auth_limiter,
+        challenge_limiter,
         levels_limiter,
         quiz_limiter,
         users_limiter,
@@ -882,3 +884,100 @@ class TestLeaderboard:
     def test_leaderboard_no_auth(self):
         resp = client.get("/api/v1/leaderboard")
         assert resp.status_code in (401, 403)
+
+
+# ---------------------------------------------------------------------------
+# Daily Challenge
+# ---------------------------------------------------------------------------
+
+class TestDailyChallenge:
+    """Daily challenge endpoint tests."""
+
+    def test_get_today_returns_fixed_10_animals(self):
+        headers = _register_and_header()
+        resp = client.get("/api/v1/challenge/today", headers=headers)
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "date" in data
+        assert len(data["animals"]) == 10
+        assert data["completed"] is False
+        assert data["score"] is None
+
+    def test_today_is_deterministic_same_date(self):
+        headers_a = _register_and_header(username="challenge-a")
+        headers_b = _register_and_header(username="challenge-b")
+        resp_a = client.get("/api/v1/challenge/today", headers=headers_a)
+        resp_b = client.get("/api/v1/challenge/today", headers=headers_b)
+        ids_a = [a["id"] for a in resp_a.json()["animals"]]
+        ids_b = [a["id"] for a in resp_b.json()["animals"]]
+        assert ids_a == ids_b
+
+    def test_answer_correct_updates_score_without_coins(self):
+        headers = _register_and_header()
+        today = client.get("/api/v1/challenge/today", headers=headers).json()
+        first_name = today["animals"][0]["name"]
+
+        resp = client.post("/api/v1/challenge/answer", headers=headers, json={
+            "animalIndex": 0,
+            "answer": first_name,
+        })
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["correct"] is True
+        assert data["coinsAwarded"] == 0
+        assert data["pointsAwarded"] == 20
+        assert data["streakBonusCoins"] == 0
+
+    def test_answer_same_index_twice_awards_points_once(self):
+        headers = _register_and_header()
+        today = client.get("/api/v1/challenge/today", headers=headers).json()
+        first_name = today["animals"][0]["name"]
+
+        first = client.post("/api/v1/challenge/answer", headers=headers, json={
+            "animalIndex": 0,
+            "answer": first_name,
+        })
+        second = client.post("/api/v1/challenge/answer", headers=headers, json={
+            "animalIndex": 0,
+            "answer": first_name,
+        })
+        assert first.json()["pointsAwarded"] == 20
+        assert second.json()["pointsAwarded"] == 0
+
+    def test_completing_all_animals_marks_completed(self):
+        headers = _register_and_header()
+        today = client.get("/api/v1/challenge/today", headers=headers).json()
+        for idx, animal in enumerate(today["animals"]):
+            client.post("/api/v1/challenge/answer", headers=headers, json={
+                "animalIndex": idx,
+                "answer": animal["name"],
+            })
+
+        after = client.get("/api/v1/challenge/today", headers=headers)
+        assert after.status_code == 200
+        data = after.json()
+        assert data["completed"] is True
+        assert data["score"] == 200
+
+    def test_challenge_leaderboard_sorted_by_score(self):
+        headers_a = _register_and_header(username="daily_a")
+        headers_b = _register_and_header(username="daily_b")
+
+        animals = client.get("/api/v1/challenge/today", headers=headers_a).json()["animals"]
+        for idx in range(2):
+            client.post("/api/v1/challenge/answer", headers=headers_a, json={
+                "animalIndex": idx,
+                "answer": animals[idx]["name"],
+            })
+
+        client.post("/api/v1/challenge/answer", headers=headers_b, json={
+            "animalIndex": 0,
+            "answer": animals[0]["name"],
+        })
+
+        resp = client.get("/api/v1/challenge/leaderboard?date=today", headers=headers_a)
+        assert resp.status_code == 200
+        entries = resp.json()["entries"]
+        assert len(entries) >= 2
+        scores = [e["score"] for e in entries]
+        assert scores == sorted(scores, reverse=True)

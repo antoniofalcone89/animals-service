@@ -13,6 +13,7 @@ from slowapi.middleware import SlowAPIMiddleware
 
 from app.api.v1.endpoints.animals import limiter, router as animals_router
 from app.api.v1.endpoints.auth import router as auth_router
+from app.api.v1.endpoints.challenge import router as challenge_router
 from app.api.v1.endpoints.leaderboard import router as leaderboard_router
 from app.api.v1.endpoints.levels import router as levels_router
 from app.api.v1.endpoints.quiz import router as quiz_router
@@ -74,6 +75,7 @@ async def log_requests(request: Request, call_next) -> Response:
 # New endpoints use Bearer auth via FastAPI dependencies.
 _BEARER_AUTH_PREFIXES = (
     "/api/v1/auth",
+    "/api/v1/challenge",
     "/api/v1/levels",
     "/api/v1/quiz",
     "/api/v1/users",
@@ -109,6 +111,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 # Register routes
 app.include_router(animals_router, prefix="/api/v1", tags=["animals"])
 app.include_router(auth_router, prefix="/api/v1", tags=["Auth"])
+app.include_router(challenge_router, prefix="/api/v1", tags=["Challenge"])
 app.include_router(levels_router, prefix="/api/v1", tags=["Levels"])
 app.include_router(quiz_router, prefix="/api/v1", tags=["Quiz"])
 app.include_router(users_router, prefix="/api/v1", tags=["Users"])

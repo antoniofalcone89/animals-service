@@ -125,3 +125,37 @@ class StreakResponse(BaseModel):
 
     current_streak: int = Field(0, description="Current daily streak in days")
     last_activity_date: Optional[str] = Field(None, description="Last streak activity date as ISO date (YYYY-MM-DD)")
+
+
+class ChallengeTodayResponse(BaseModel):
+    """Response schema for today's daily challenge."""
+
+    model_config = ConfigDict(populate_by_name=True, alias_generator=to_camel)
+
+    date: str = Field(..., description="Challenge date in YYYY-MM-DD format")
+    animals: list[QuizAnimal] = Field(..., description="Daily challenge animals")
+    completed: bool = Field(False, description="Whether the user completed today's challenge")
+    score: Optional[int] = Field(None, description="Final challenge score (null until completed)")
+
+
+class ChallengeAnswerRequest(BaseModel):
+    """Request schema for submitting a daily challenge answer."""
+
+    model_config = ConfigDict(populate_by_name=True, alias_generator=to_camel)
+
+    animal_index: int = Field(..., ge=0, description="Zero-based index within today's challenge animal list")
+    answer: str = Field(..., description="The user's guess (case-insensitive)")
+    ad_revealed: bool = Field(False, description="True when player watched an ad to reveal the answer")
+
+
+class ChallengeLeaderboardEntry(BaseModel):
+    """A single entry in the daily challenge leaderboard."""
+
+    model_config = ConfigDict(populate_by_name=True, alias_generator=to_camel)
+
+    rank: int = Field(..., description="Rank position")
+    user_id: str = Field(..., description="User ID")
+    username: str = Field(..., description="Display name")
+    score: int = Field(..., description="Daily challenge score")
+    completed_at: Optional[str] = Field(None, description="Completion timestamp in ISO format")
+    photo_url: Optional[str] = Field(None, description="Profile photo URL")

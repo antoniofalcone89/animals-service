@@ -32,7 +32,7 @@ Authorization: Bearer <firebase_id_token>
    - 409 = profile already exists (returning user, this is fine - proceed)
        |
        v
-4. GET /api/v1/auth/me  -->  load user profile (id, username, email, totalCoins, createdAt)
+4. GET /api/v1/auth/me  -->  load user profile (id, username, email, totalCoins, score, currentStreak, createdAt)
        |
        v
 5. App is ready. Load levels, show quiz, etc.
@@ -71,6 +71,10 @@ POST /api/v1/auth/register
   "username": "alice",
   "email": "alice@example.com",
   "totalCoins": 0,
+  "score": 0,
+  "photoUrl": null,
+  "currentStreak": 0,
+  "lastActivityDate": null,
   "createdAt": "2025-01-15T10:30:00Z"
 }
 ```
@@ -104,6 +108,10 @@ GET /api/v1/auth/me
   "username": "alice",
   "email": "alice@example.com",
   "totalCoins": 120,
+  "score": 340,
+  "photoUrl": "https://example.com/avatar.png",
+  "currentStreak": 5,
+  "lastActivityDate": "2026-02-27",
   "createdAt": "2025-01-15T10:30:00Z"
 }
 ```
@@ -205,7 +213,7 @@ GET /api/v1/levels/{levelId}
 
 ### 5. Submit Quiz Answer
 
-Submit the user's guess for an animal. The backend checks correctness, awards coins on first correct guess, and persists the result to Firestore atomically.
+Submit the user's guess for an animal. The backend checks correctness, awards coins on first correct guess, applies daily streak bonus on first correct answer of the day, and persists the result atomically.
 
 ```
 POST /api/v1/quiz/answer
@@ -227,8 +235,13 @@ POST /api/v1/quiz/answer
 ```json
 {
   "correct": true,
-  "coinsAwarded": 10,
-  "totalCoins": 130
+  "coinsAwarded": 12,
+  "totalCoins": 132,
+  "pointsAwarded": 20,
+  "correctAnswer": "Dog",
+  "currentStreak": 1,
+  "lastActivityDate": "2026-02-27",
+  "streakBonusCoins": 2
 }
 ```
 
@@ -237,7 +250,12 @@ POST /api/v1/quiz/answer
 {
   "correct": true,
   "coinsAwarded": 0,
-  "totalCoins": 130
+  "totalCoins": 132,
+  "pointsAwarded": 0,
+  "correctAnswer": "Dog",
+  "currentStreak": 1,
+  "lastActivityDate": "2026-02-27",
+  "streakBonusCoins": 0
 }
 ```
 Note: `coinsAwarded` is 0 because the user already guessed this animal before. No double-earning.
@@ -248,10 +266,14 @@ Note: `coinsAwarded` is 0 because the user already guessed this animal before. N
   "correct": false,
   "coinsAwarded": 0,
   "totalCoins": 120,
-  "correctAnswer": "Dog"
+  "pointsAwarded": 0,
+  "correctAnswer": "Dog",
+  "currentStreak": 3,
+  "lastActivityDate": "2026-02-26",
+  "streakBonusCoins": 0
 }
 ```
-Note: `correctAnswer` is **only present when the answer is wrong**. When correct, this field is omitted entirely.
+Note: `correctAnswer` is always included.
 
 **Response 400:**
 ```json
@@ -335,6 +357,10 @@ PATCH /api/v1/users/me/profile
   "username": "new_name",
   "email": "alice@example.com",
   "totalCoins": 120,
+  "score": 340,
+  "photoUrl": "https://example.com/avatar.png",
+  "currentStreak": 5,
+  "lastActivityDate": "2026-02-27",
   "createdAt": "2025-01-15T10:30:00Z"
 }
 ```
@@ -343,7 +369,7 @@ PATCH /api/v1/users/me/profile
 
 ### 9. Leaderboard
 
-Returns a paginated global leaderboard ranked by total coins (descending).
+Returns a paginated global leaderboard ranked by total points (descending).
 
 ```
 GET /api/v1/leaderboard?limit=50&offset=0
@@ -361,18 +387,118 @@ GET /api/v1/leaderboard?limit=50&offset=0
       "rank": 1,
       "userId": "firebase-uid-xyz",
       "username": "topplayer",
-      "totalCoins": 500,
-      "levelsCompleted": 3
+      "totalPoints": 980,
+      "levelsCompleted": 3,
+      "photoUrl": "https://example.com/top.png",
+      "currentStreak": 12
     },
     {
       "rank": 2,
       "userId": "firebase-uid-abc",
       "username": "alice",
-      "totalCoins": 120,
-      "levelsCompleted": 0
+      "totalPoints": 340,
+      "levelsCompleted": 0,
+      "photoUrl": null,
+      "currentStreak": 5
     }
   ],
   "total": 42
+}
+```
+
+---
+
+### 10. Daily Challenge
+
+Daily Challenge gives the same 10 animals to all users for the same UTC day.
+
+#### 10.1 Get today's challenge
+
+```
+GET /api/v1/challenge/today
+```
+
+**Response 200:**
+```json
+{
+  "date": "2026-02-27",
+  "animals": [
+    {
+      "id": 61,
+      "name": "Lion",
+      "imageUrl": "/static/images/Lion.png",
+      "hints": ["..."],
+      "funFacts": ["..."]
+    }
+    // ... 9 more
+  ],
+  "completed": false,
+  "score": null
+}
+```
+
+- `date`: challenge date used for deterministic selection
+- `animals`: fixed list of 10 animals for that date
+- `completed`: `true` only when all 10 entries have been answered correctly
+- `score`: final score when completed, otherwise `null`
+
+#### 10.2 Submit challenge answer
+
+```
+POST /api/v1/challenge/answer
+```
+
+**Request:**
+```json
+{
+  "animalIndex": 0,
+  "answer": "Lion",
+  "adRevealed": false
+}
+```
+
+**Response 200 (correct, first time for that index):**
+```json
+{
+  "correct": true,
+  "coinsAwarded": 0,
+  "totalCoins": 120,
+  "pointsAwarded": 20,
+  "correctAnswer": "Lion",
+  "currentStreak": 3,
+  "lastActivityDate": "2026-02-27",
+  "streakBonusCoins": 0
+}
+```
+
+Notes:
+- Challenge answers do not award coins.
+- Re-answering the same `animalIndex` does not award points again.
+- `adRevealed: true` awards 3 points instead of 20.
+
+#### 10.3 Get challenge leaderboard
+
+```
+GET /api/v1/challenge/leaderboard?date=today
+```
+
+`date` can be `today` or a specific `YYYY-MM-DD`.
+
+**Response 200:**
+```json
+{
+  "date": "2026-02-27",
+  "entries": [
+    {
+      "rank": 1,
+      "userId": "firebase-uid-xyz",
+      "username": "topplayer",
+      "score": 200,
+      "completedAt": "2026-02-27T09:12:34.000000+00:00",
+      "photoUrl": "https://example.com/p.png"
+    }
+  ],
+  "total": 1
 }
 ```
 
@@ -388,6 +514,9 @@ Firestore collection: users/{uid}
   "username": "alice",
   "email": "alice@example.com",
   "total_coins": 120,
+  "total_points": 340,
+  "current_streak": 5,
+  "last_activity_date": "2026-02-27",
   "created_at": <timestamp>,
   "progress": {
     "1": [true, false, true, ...],   // 20 bools per level
@@ -399,8 +528,8 @@ Firestore collection: users/{uid}
 ```
 
 - 6 levels, 20 animals each = 120 animals total
-- 10 coins awarded per correct first-time guess
-- Maximum possible coins: 1200 (120 animals x 10 coins)
+- Base 10 coins are awarded per correct first-time level answer
+- First correct answer of each day adds streak bonus (`min(currentStreak * 2, 20)`)
 - Progress and coins are updated atomically on answer submission (no partial writes)
 
 ---
@@ -444,6 +573,9 @@ All errors follow this format:
 | Profile/settings | `GET /auth/me` | On navigation to profile |
 | Edit username | `PATCH /users/me/profile` | On save |
 | Leaderboard | `GET /leaderboard` | On navigation to leaderboard |
+| Daily challenge card | `GET /challenge/today` | On home load / refresh |
+| Daily challenge answer | `POST /challenge/answer` | On each challenge submission |
+| Daily challenge ranking | `GET /challenge/leaderboard?date=today` | On challenge leaderboard tab |
 | Coin display (header) | `GET /users/me/coins` | Periodic refresh or pull-to-refresh |
 | Progress overview | `GET /users/me/progress` | On navigation to progress screen |
 
