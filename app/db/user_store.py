@@ -736,21 +736,22 @@ class FirestoreUserStore(UserStore):
 
     def get_daily_challenge_leaderboard(self, challenge_date: str) -> list[dict]:
         rows: list[dict] = []
-        users = get_firestore_client().collection(self.CHALLENGE_COLLECTION).stream()
-        for user_doc in users:
-            date_doc = (
-                get_firestore_client()
-                .collection(self.CHALLENGE_COLLECTION)
-                .document(user_doc.id)
-                .collection("dates")
-                .document(challenge_date)
-                .get()
-            )
-            if not date_doc.exists:
+        db = get_firestore_client()
+        # Stream all date docs across all users; filter by date in Python.
+        # Path structure: challenges/{uid}/dates/{date}
+        for doc in db.collection_group("dates").stream():
+            path_parts = doc.reference.path.split("/")
+            if (
+                len(path_parts) != 4
+                or path_parts[0] != self.CHALLENGE_COLLECTION
+                or path_parts[2] != "dates"
+                or path_parts[3] != challenge_date
+            ):
                 continue
-            data = date_doc.to_dict() or {}
+            uid = path_parts[1]
+            data = doc.to_dict() or {}
             rows.append({
-                "user_id": user_doc.id,
+                "user_id": uid,
                 "score": int(data.get("score", 0) or 0),
                 "completed_at": data.get("completed_at"),
             })

@@ -57,14 +57,17 @@ POST /api/v1/auth/register
 ```
 
 **Request:**
+
 ```json
 {
   "username": "alice"
 }
 ```
+
 - `username`: string, 2-30 characters, required
 
 **Response 201:**
+
 ```json
 {
   "id": "firebase-uid-abc123",
@@ -80,6 +83,7 @@ POST /api/v1/auth/register
 ```
 
 **Response 409 (already registered):**
+
 ```json
 {
   "detail": {
@@ -102,6 +106,7 @@ GET /api/v1/auth/me
 ```
 
 **Response 200:**
+
 ```json
 {
   "id": "firebase-uid-abc123",
@@ -117,6 +122,7 @@ GET /api/v1/auth/me
 ```
 
 **Response 404** (if register was never called):
+
 ```json
 {
   "detail": {
@@ -139,6 +145,7 @@ GET /api/v1/levels
 ```
 
 **Response 200:**
+
 ```json
 {
   "levels": [
@@ -172,6 +179,7 @@ GET /api/v1/levels/{levelId}
 ```
 
 **Response 200:**
+
 ```json
 {
   "id": 1,
@@ -198,6 +206,7 @@ GET /api/v1/levels/{levelId}
 ```
 
 **Response 404:**
+
 ```json
 {
   "detail": {
@@ -220,6 +229,7 @@ POST /api/v1/quiz/answer
 ```
 
 **Request:**
+
 ```json
 {
   "levelId": 1,
@@ -227,11 +237,13 @@ POST /api/v1/quiz/answer
   "answer": "Dog"
 }
 ```
+
 - `levelId`: integer, the level ID (1-6)
 - `animalIndex`: integer, zero-based index of the animal within the level (0-19)
 - `answer`: string, the user's guess (comparison is **case-insensitive** and **whitespace-trimmed** server-side)
 
 **Response 200 (correct, first time):**
+
 ```json
 {
   "correct": true,
@@ -246,6 +258,7 @@ POST /api/v1/quiz/answer
 ```
 
 **Response 200 (correct, already guessed):**
+
 ```json
 {
   "correct": true,
@@ -258,9 +271,11 @@ POST /api/v1/quiz/answer
   "streakBonusCoins": 0
 }
 ```
+
 Note: `coinsAwarded` is 0 because the user already guessed this animal before. No double-earning.
 
 **Response 200 (wrong answer):**
+
 ```json
 {
   "correct": false,
@@ -273,9 +288,11 @@ Note: `coinsAwarded` is 0 because the user already guessed this animal before. N
   "streakBonusCoins": 0
 }
 ```
+
 Note: `correctAnswer` is always included.
 
 **Response 400:**
+
 ```json
 {
   "detail": {
@@ -298,20 +315,148 @@ GET /api/v1/users/me/progress
 ```
 
 **Response 200:**
+
 ```json
 {
   "levels": {
-    "1": [true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
-    "2": [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
-    "3": [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
-    "4": [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
-    "5": [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
-    "6": [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
+    "1": [
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "2": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "3": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "4": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "5": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "6": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
   }
 }
 ```
 
 Use this to compute:
+
 - Per-level progress: count `true` values / total in each array
 - Level completion: a level is complete when every value is `true`
 - Overall progress: sum of all `true` values across all levels
@@ -327,6 +472,7 @@ GET /api/v1/users/me/coins
 ```
 
 **Response 200:**
+
 ```json
 {
   "totalCoins": 120
@@ -344,6 +490,7 @@ PATCH /api/v1/users/me/profile
 ```
 
 **Request:**
+
 ```json
 {
   "username": "new_name"
@@ -351,6 +498,7 @@ PATCH /api/v1/users/me/profile
 ```
 
 **Response 200:**
+
 ```json
 {
   "id": "firebase-uid-abc123",
@@ -376,10 +524,12 @@ GET /api/v1/leaderboard?limit=50&offset=0
 ```
 
 **Query params:**
+
 - `limit`: max entries (default 50, max 100)
 - `offset`: pagination offset (default 0)
 
 **Response 200:**
+
 ```json
 {
   "entries": [
@@ -419,6 +569,7 @@ GET /api/v1/challenge/today
 ```
 
 **Response 200:**
+
 ```json
 {
   "date": "2026-02-27",
@@ -449,6 +600,7 @@ POST /api/v1/challenge/answer
 ```
 
 **Request:**
+
 ```json
 {
   "animalIndex": 0,
@@ -458,6 +610,7 @@ POST /api/v1/challenge/answer
 ```
 
 **Response 200 (correct, first time for that index):**
+
 ```json
 {
   "correct": true,
@@ -472,6 +625,7 @@ POST /api/v1/challenge/answer
 ```
 
 Notes:
+
 - Challenge answers do not award coins.
 - Re-answering the same `animalIndex` does not award points again.
 - `adRevealed: true` awards 3 points instead of 20.
@@ -485,6 +639,7 @@ GET /api/v1/challenge/leaderboard?date=today
 `date` can be `today` or a specific `YYYY-MM-DD`.
 
 **Response 200:**
+
 ```json
 {
   "date": "2026-02-27",
@@ -549,35 +704,35 @@ All errors follow this format:
 }
 ```
 
-| HTTP Status | Code | Meaning |
-|---|---|---|
-| 401 | - | Invalid/expired token. Refresh and retry. |
-| 404 | `user_not_found` | Profile not registered. Call POST /auth/register. |
-| 404 | `level_not_found` | Invalid level ID. |
-| 409 | `profile_exists` | Register called twice. Safe to ignore, proceed normally. |
-| 400 | `invalid_request` | Bad levelId or animalIndex in answer submission. |
-| 422 | - | Validation error (e.g. username too short). Body has pydantic details. |
-| 429 | - | Rate limited (100 requests/minute per IP). |
+| HTTP Status | Code              | Meaning                                                                |
+| ----------- | ----------------- | ---------------------------------------------------------------------- |
+| 401         | -                 | Invalid/expired token. Refresh and retry.                              |
+| 404         | `user_not_found`  | Profile not registered. Call POST /auth/register.                      |
+| 404         | `level_not_found` | Invalid level ID.                                                      |
+| 409         | `profile_exists`  | Register called twice. Safe to ignore, proceed normally.               |
+| 400         | `invalid_request` | Bad levelId or animalIndex in answer submission.                       |
+| 422         | -                 | Validation error (e.g. username too short). Body has pydantic details. |
+| 429         | -                 | Rate limited (100 requests/minute per IP).                             |
 
 ---
 
 ## Recommended Flutter API Call Map
 
-| Screen / Action | API Call | When |
-|---|---|---|
-| App startup after sign-in | `POST /auth/register` then `GET /auth/me` | Once per session start |
-| Home screen | `GET /levels` | On navigation to home |
-| Level screen | `GET /levels/{id}` | When user taps into a level |
-| Quiz guess | `POST /quiz/answer` | On each answer submission |
-| After correct answer | Update local state from response `totalCoins` + mark animal guessed | No extra API call needed |
-| Profile/settings | `GET /auth/me` | On navigation to profile |
-| Edit username | `PATCH /users/me/profile` | On save |
-| Leaderboard | `GET /leaderboard` | On navigation to leaderboard |
-| Daily challenge card | `GET /challenge/today` | On home load / refresh |
-| Daily challenge answer | `POST /challenge/answer` | On each challenge submission |
-| Daily challenge ranking | `GET /challenge/leaderboard?date=today` | On challenge leaderboard tab |
-| Coin display (header) | `GET /users/me/coins` | Periodic refresh or pull-to-refresh |
-| Progress overview | `GET /users/me/progress` | On navigation to progress screen |
+| Screen / Action           | API Call                                                            | When                                |
+| ------------------------- | ------------------------------------------------------------------- | ----------------------------------- |
+| App startup after sign-in | `POST /auth/register` then `GET /auth/me`                           | Once per session start              |
+| Home screen               | `GET /levels`                                                       | On navigation to home               |
+| Level screen              | `GET /levels/{id}`                                                  | When user taps into a level         |
+| Quiz guess                | `POST /quiz/answer`                                                 | On each answer submission           |
+| After correct answer      | Update local state from response `totalCoins` + mark animal guessed | No extra API call needed            |
+| Profile/settings          | `GET /auth/me`                                                      | On navigation to profile            |
+| Edit username             | `PATCH /users/me/profile`                                           | On save                             |
+| Leaderboard               | `GET /leaderboard`                                                  | On navigation to leaderboard        |
+| Daily challenge card      | `GET /challenge/today`                                              | On home load / refresh              |
+| Daily challenge answer    | `POST /challenge/answer`                                            | On each challenge submission        |
+| Daily challenge ranking   | `GET /challenge/leaderboard?date=today`                             | On challenge leaderboard tab        |
+| Coin display (header)     | `GET /users/me/coins`                                               | Periodic refresh or pull-to-refresh |
+| Progress overview         | `GET /users/me/progress`                                            | On navigation to progress screen    |
 
 ### Optimistic updates
 
