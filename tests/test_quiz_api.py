@@ -972,6 +972,103 @@ class TestResetUserData:
         assert resp.status_code in (401, 403)
 
 
+class TestAccuracyStats:
+    """Accuracy profile stats tests exposed by GET /api/v1/auth/me."""
+
+    def test_me_has_accuracy_fields(self):
+        headers = _register_and_header(username="acc-user")
+        resp = client.get("/api/v1/auth/me", headers=headers)
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["totalAnswers"] == 0
+        assert data["totalCorrect"] == 0
+        assert data["totalHintsUsed"] == 0
+        assert data["totalLettersUsed"] == 0
+
+    def test_total_answers_increments_on_any_attempt(self):
+        headers = _register_and_header(username="acc-attempts")
+        client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Tigre",
+        })
+        client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Cane",
+        })
+        resp = client.get("/api/v1/auth/me", headers=headers)
+        assert resp.status_code == 200
+        assert resp.json()["totalAnswers"] == 2
+
+    def test_total_correct_only_on_first_time(self):
+        headers = _register_and_header(username="acc-correct")
+        client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Cane",
+        })
+        client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Cane",
+        })
+        resp = client.get("/api/v1/auth/me", headers=headers)
+        assert resp.status_code == 200
+        assert resp.json()["totalCorrect"] == 1
+
+    def test_total_hints_used_increments(self):
+        headers = _register_and_header(username="acc-hints")
+        client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Cane",
+        })
+        client.post("/api/v1/quiz/buy-hint", headers=headers, json={
+            "levelId": 1, "animalIndex": 1,
+        })
+        resp = client.get("/api/v1/auth/me", headers=headers)
+        assert resp.status_code == 200
+        assert resp.json()["totalHintsUsed"] == 1
+
+    def test_total_letters_used_increments(self):
+        headers = _register_and_header(username="acc-letters")
+        for idx in range(3):
+            client.post("/api/v1/quiz/answer", headers=headers, json={
+                "levelId": 1, "animalIndex": idx, "answer": "wrong",
+            })
+            client.post("/api/v1/quiz/answer", headers=headers, json={
+                "levelId": 1, "animalIndex": idx, "answer": ["Cane", "Gatto", "Gallina"][idx],
+            })
+        client.post("/api/v1/quiz/reveal-letter", headers=headers, json={
+            "levelId": 1, "animalIndex": 4,
+        })
+        resp = client.get("/api/v1/auth/me", headers=headers)
+        assert resp.status_code == 200
+        assert resp.json()["totalLettersUsed"] == 1
+
+    def test_reset_clears_accuracy_stats(self):
+        headers = _register_and_header(username="acc-reset")
+        client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Tigre",
+        })
+        client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Cane",
+        })
+        client.post("/api/v1/quiz/buy-hint", headers=headers, json={
+            "levelId": 1, "animalIndex": 1,
+        })
+        for idx in (1, 2):
+            client.post("/api/v1/quiz/answer", headers=headers, json={
+                "levelId": 1, "animalIndex": idx, "answer": "wrong",
+            })
+            client.post("/api/v1/quiz/answer", headers=headers, json={
+                "levelId": 1, "animalIndex": idx, "answer": ["Gatto", "Gallina"][idx - 1],
+            })
+        client.post("/api/v1/quiz/reveal-letter", headers=headers, json={
+            "levelId": 1, "animalIndex": 4,
+        })
+
+        reset_resp = client.post("/api/v1/users/me/reset", headers=headers)
+        assert reset_resp.status_code == 200
+
+        me = client.get("/api/v1/auth/me", headers=headers).json()
+        assert me["totalAnswers"] == 0
+        assert me["totalCorrect"] == 0
+        assert me["totalHintsUsed"] == 0
+        assert me["totalLettersUsed"] == 0
+
+
 # ---------------------------------------------------------------------------
 # Leaderboard
 # ---------------------------------------------------------------------------

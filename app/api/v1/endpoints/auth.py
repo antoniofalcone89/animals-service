@@ -97,4 +97,8 @@ async def get_current_user(
         photo_url=user_data.get("photo_url") or auth_service.get_user_photo_url(user_id),
         current_streak=int(user_data.get("current_streak", 0) or 0),
         last_activity_date=user_data.get("last_activity_date"),
+        total_answers=int(user_data.get("total_answers", 0) or 0),
+        total_correct=int(user_data.get("total_correct", 0) or 0),
+        total_hints_used=int(user_data.get("total_hints_used", 0) or 0),
+        total_letters_used=int(user_data.get("total_letters_used", 0) or 0),
     )

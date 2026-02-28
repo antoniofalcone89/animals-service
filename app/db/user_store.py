@@ -8,6 +8,7 @@ import abc
 import logging
 from datetime import date, datetime, timedelta, timezone
 
+from google.cloud import firestore
 from google.cloud.firestore_v1 import DocumentReference, Transaction
 
 from app.db.firestore import get_firestore_client, is_mock_mode
@@ -213,6 +214,10 @@ class InMemoryUserStore(UserStore):
             "photo_url": photo_url,
             "current_streak": 0,
             "last_activity_date": None,
+            "total_answers": 0,
+            "total_correct": 0,
+            "total_hints_used": 0,
+            "total_letters_used": 0,
         }
         self._users[uid] = user_data
         logger.info("Created user profile for %s", uid)
@@ -276,6 +281,7 @@ class InMemoryUserStore(UserStore):
                 )
                 user_data["current_streak"] = next_streak
                 user_data["last_activity_date"] = next_date
+                user_data["total_correct"] = int(user_data.get("total_correct", 0) or 0) + 1
 
                 if was_first_correct_today:
                     streak_bonus_coins = min(next_streak * 2, 20)
@@ -328,6 +334,9 @@ class InMemoryUserStore(UserStore):
             raise ValueError("insufficient_coins")
         self._coins[uid] = current_coins - cost
         level_hints[animal_index] = current_count + 1
+        user_data = self._users.get(uid)
+        if user_data is not None:
+            user_data["total_hints_used"] = int(user_data.get("total_hints_used", 0) or 0) + 1
         return level_hints[animal_index], self._coins[uid]
 
     def get_hints(self, uid: str) -> dict[int, list[int]]:
@@ -358,6 +367,9 @@ class InMemoryUserStore(UserStore):
             raise ValueError("insufficient_coins")
         self._coins[uid] = current_coins - cost
         level_letters[animal_index] = current_count + 1
+        user_data = self._users.get(uid)
+        if user_data is not None:
+            user_data["total_letters_used"] = int(user_data.get("total_letters_used", 0) or 0) + 1
         return level_letters[animal_index], self._coins[uid]
 
     def get_letters(self, uid: str) -> dict[int, list[int]]:
@@ -480,6 +492,10 @@ class InMemoryUserStore(UserStore):
         user_data["consecutive_no_hint_correct"] = 0
         user_data["total_coins"] = 0
         user_data["total_points"] = 0
+        user_data["total_answers"] = 0
+        user_data["total_correct"] = 0
+        user_data["total_hints_used"] = 0
+        user_data["total_letters_used"] = 0
         return True
 
 
@@ -527,6 +543,10 @@ class FirestoreUserStore(UserStore):
             "photo_url": photo_url,
             "current_streak": 0,
             "last_activity_date": None,
+            "total_answers": 0,
+            "total_correct": 0,
+            "total_hints_used": 0,
+            "total_letters_used": 0,
             "progress": progress,
         }
         ref.set(doc)
@@ -624,6 +644,7 @@ class FirestoreUserStore(UserStore):
                 "total_points": total_points,
                 "current_streak": next_streak,
                 "last_activity_date": next_date,
+                "total_correct": firestore.Increment(1),
             })
             return coins_awarded, total_coins, total_points, next_streak, next_date, streak_bonus_coins
 
@@ -668,6 +689,7 @@ class FirestoreUserStore(UserStore):
             transaction.update(ref, {
                 f"hints.{level_key}": level_hints,
                 "total_coins": new_total,
+                "total_hints_used": firestore.Increment(1),
             })
             return level_hints[animal_index], new_total
 
@@ -706,6 +728,7 @@ class FirestoreUserStore(UserStore):
             transaction.update(ref, {
                 f"letters.{level_key}": level_letters,
                 "total_coins": new_total,
+                "total_letters_used": firestore.Increment(1),
             })
             return level_letters[animal_index], new_total
 
@@ -877,6 +900,10 @@ class FirestoreUserStore(UserStore):
             "last_activity_date": None,
             "achievements": {},
             "consecutive_no_hint_correct": 0,
+            "total_answers": 0,
+            "total_correct": 0,
+            "total_hints_used": 0,
+            "total_letters_used": 0,
         })
 
         db = get_firestore_client()

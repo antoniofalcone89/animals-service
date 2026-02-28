@@ -36,6 +36,10 @@ class User(BaseModel):
     photo_url: Optional[str] = Field(None, description="Profile photo URL")
     current_streak: int = Field(0, description="Current daily streak in days")
     last_activity_date: Optional[str] = Field(None, description="Last streak activity date as ISO date (YYYY-MM-DD)")
+    total_answers: int = Field(0, description="Total answer attempts (correct + wrong)")
+    total_correct: int = Field(0, description="Total first-time correct answers")
+    total_hints_used: int = Field(0, description="Total hints purchased across all levels")
+    total_letters_used: int = Field(0, description="Total letter reveals across all levels")
 
 
 class ErrorDetail(BaseModel):

@@ -91,6 +91,11 @@ def submit_answer(
     last_activity_date = user_data.get("last_activity_date")
     new_achievements: list[str] = []
 
+    store.update_user(
+        user_id,
+        total_answers=int(user_data.get("total_answers", 0) or 0) + 1,
+    )
+
     if is_correct and not level_progress[animal_index]:
         hints = store.get_hints(user_id)
         letters = store.get_letters(user_id)
