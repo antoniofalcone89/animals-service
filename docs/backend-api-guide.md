@@ -515,6 +515,35 @@ PATCH /api/v1/users/me/profile
 
 ---
 
+### 8.1 Reset User Game Data
+
+Reset gameplay state for the current user. Useful for “start over” UX from profile/settings.
+
+```
+POST /api/v1/users/me/reset
+```
+
+**Response 200:**
+
+```json
+{
+  "success": true
+}
+```
+
+This reset clears user gameplay data, including:
+
+- level progress
+- points and coins
+- streak fields
+- hints/letters revealed
+- unlocked achievements/badges
+- daily challenge progress
+
+Profile identity fields (username, email, createdAt, photoUrl) are preserved.
+
+---
+
 ### 9. Leaderboard
 
 Returns a paginated global leaderboard ranked by total points (descending).
@@ -727,6 +756,7 @@ All errors follow this format:
 | After correct answer      | Update local state from response `totalCoins` + mark animal guessed | No extra API call needed            |
 | Profile/settings          | `GET /auth/me`                                                      | On navigation to profile            |
 | Edit username             | `PATCH /users/me/profile`                                           | On save                             |
+| Reset account progress    | `POST /users/me/reset`                                              | On explicit user confirmation       |
 | Leaderboard               | `GET /leaderboard`                                                  | On navigation to leaderboard        |
 | Daily challenge card      | `GET /challenge/today`                                              | On home load / refresh              |
 | Daily challenge answer    | `POST /challenge/answer`                                            | On each challenge submission        |

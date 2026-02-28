@@ -349,6 +349,27 @@ paths:
               schema:
                 $ref: "#/components/schemas/User"
 
+  /users/me/reset:
+    post:
+      tags: [Users]
+      summary: Reset all current user gameplay data
+      operationId: resetUserGameData
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Reset applied
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "401":
+          description: User not found or not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
   /leaderboard:
     get:
       tags: [Leaderboard]
@@ -395,6 +416,14 @@ components:
         In mock mode (dev/test), any non-empty string is accepted.
 
   schemas:
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+      required: [success]
+
     User:
       type: object
       properties:

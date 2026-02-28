@@ -163,3 +163,19 @@ async def update_profile(
         current_streak=int(user_data.get("current_streak", 0) or 0),
         last_activity_date=user_data.get("last_activity_date"),
     )
+
+
+@router.post(
+    "/me/reset",
+    summary="Reset all current user gameplay data",
+)
+@limiter.limit(settings.RATE_LIMIT)
+async def reset_user_game_data(
+    request: Request,
+    user_id: str = Depends(get_current_user_id),
+) -> dict:
+    """Reset levels, badges, points, coins, streak, and challenge progress for current user."""
+    reset_applied = get_store().reset_user_game_data(user_id)
+    if not reset_applied:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found")
+    return {"success": True}

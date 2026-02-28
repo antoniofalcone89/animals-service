@@ -169,6 +169,13 @@ class UserStore(abc.ABC):
     def get_achievements_count(self, uid: str) -> int:
         """Return count of unlocked achievements for a user."""
 
+    @abc.abstractmethod
+    def reset_user_game_data(self, uid: str) -> bool:
+        """Reset gameplay state (levels, badges, points, and related counters).
+
+        Returns ``True`` when user exists and reset is applied, else ``False``.
+        """
+
 
 # ---------------------------------------------------------------------------
 # In-memory implementation (mock / test mode)
@@ -448,6 +455,32 @@ class InMemoryUserStore(UserStore):
 
     def get_achievements_count(self, uid: str) -> int:
         return len(self._achievements.get(uid, {}))
+
+    def reset_user_game_data(self, uid: str) -> bool:
+        user_data = self._users.get(uid)
+        if user_data is None:
+            return False
+
+        self._progress[uid] = _empty_progress()
+        self._coins[uid] = 0
+        self._points[uid] = 0
+        self._hints[uid] = {
+            lid: [0] * get_level_animal_count(lid)
+            for lid in get_level_ids()
+        }
+        self._letters[uid] = {
+            lid: [0] * get_level_animal_count(lid)
+            for lid in get_level_ids()
+        }
+        self._daily_challenges.pop(uid, None)
+        self._achievements.pop(uid, None)
+
+        user_data["current_streak"] = 0
+        user_data["last_activity_date"] = None
+        user_data["consecutive_no_hint_correct"] = 0
+        user_data["total_coins"] = 0
+        user_data["total_points"] = 0
+        return True
 
 
 # ---------------------------------------------------------------------------
@@ -823,6 +856,42 @@ class FirestoreUserStore(UserStore):
                 "completed_at": data.get("completed_at"),
             })
         return rows
+
+    def reset_user_game_data(self, uid: str) -> bool:
+        ref = self._ref(uid)
+        snap = ref.get()
+        if not snap.exists:
+            return False
+
+        progress = {str(lid): [False] * get_level_animal_count(lid) for lid in get_level_ids()}
+        hints = {str(lid): [0] * get_level_animal_count(lid) for lid in get_level_ids()}
+        letters = {str(lid): [0] * get_level_animal_count(lid) for lid in get_level_ids()}
+
+        ref.update({
+            "progress": progress,
+            "hints": hints,
+            "letters": letters,
+            "total_coins": 0,
+            "total_points": 0,
+            "current_streak": 0,
+            "last_activity_date": None,
+            "achievements": {},
+            "consecutive_no_hint_correct": 0,
+        })
+
+        db = get_firestore_client()
+        batch = db.batch()
+        count = 0
+        for doc in db.collection(self.CHALLENGE_COLLECTION).document(uid).collection("dates").stream():
+            batch.delete(doc.reference)
+            count += 1
+            if count % 400 == 0:
+                batch.commit()
+                batch = db.batch()
+        if count % 400 != 0:
+            batch.commit()
+
+        return True
 
 
 def firestore_transaction(func):

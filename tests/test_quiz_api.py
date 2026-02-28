@@ -697,12 +697,10 @@ class TestPointsScoring:
     def test_correct_answer_points_one_hint(self):
         """1 hint used: 15 points."""
         headers = _register_and_header()
-        # Earn coins first, then buy a hint for animal 5
         self._earn_coins(headers, 1)
         client.post("/api/v1/quiz/buy-hint", headers=headers, json={
             "levelId": 1, "animalIndex": 5,
         })
-        # Now answer animal 5 correctly
         resp = client.post("/api/v1/quiz/answer", headers=headers, json={
             "levelId": 1, "animalIndex": 5, "answer": "wrong",
         })
@@ -715,16 +713,13 @@ class TestPointsScoring:
     def test_correct_answer_points_two_assists(self):
         """1 hint + 1 letter = 2 assists: 10 points."""
         headers = _register_and_header()
-        # Earn enough coins (4 correct = 40 coins)
         self._earn_coins(headers, 4)
-        # Buy a hint and reveal a letter for animal 5
         client.post("/api/v1/quiz/buy-hint", headers=headers, json={
             "levelId": 1, "animalIndex": 5,
         })
         client.post("/api/v1/quiz/reveal-letter", headers=headers, json={
             "levelId": 1, "animalIndex": 5,
         })
-        # Answer animal 5
         resp = client.post("/api/v1/quiz/answer", headers=headers, json={
             "levelId": 1, "animalIndex": 5, "answer": "wrong",
         })
@@ -737,14 +732,11 @@ class TestPointsScoring:
     def test_correct_answer_points_three_plus_assists(self):
         """3+ assists: 5 points."""
         headers = _register_and_header()
-        # Earn enough coins (4 correct = 40 coins)
         self._earn_coins(headers, 4)
-        # Buy 3 hints for animal 5 (costs 5+10+20=35)
         for _ in range(3):
             client.post("/api/v1/quiz/buy-hint", headers=headers, json={
                 "levelId": 1, "animalIndex": 5,
             })
-        # Answer animal 5
         resp = client.post("/api/v1/quiz/answer", headers=headers, json={
             "levelId": 1, "animalIndex": 5, "answer": "wrong",
         })
@@ -782,6 +774,128 @@ class TestPointsScoring:
         assert resp.json()["pointsAwarded"] == 0
 
 
+class TestComboBonus:
+    """Combo multiplier tests for POST /api/v1/quiz/answer."""
+
+    def _earn_coins(self, headers: dict, count: int) -> None:
+        for idx in range(count):
+            resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+                "levelId": 1, "animalIndex": idx, "answer": "wrong",
+            })
+            correct_name = resp.json()["correctAnswer"]
+            client.post("/api/v1/quiz/answer", headers=headers, json={
+                "levelId": 1, "animalIndex": idx, "answer": correct_name,
+            })
+
+    def test_no_combo_defaults_to_1x(self):
+        headers = _register_and_header()
+        resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1,
+            "animalIndex": 0,
+            "answer": "Cane",
+        })
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["pointsAwarded"] == 20
+        assert data["comboMultiplier"] == 1.0
+
+    def test_combo_1x_unchanged(self):
+        headers = _register_and_header()
+        resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1,
+            "animalIndex": 0,
+            "answer": "Cane",
+            "comboMultiplier": 1.0,
+        })
+        assert resp.status_code == 200
+        assert resp.json()["pointsAwarded"] == 20
+
+    def test_combo_doubles_points(self):
+        headers = _register_and_header()
+        resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1,
+            "animalIndex": 0,
+            "answer": "Cane",
+            "comboMultiplier": 2.0,
+        })
+        assert resp.status_code == 200
+        assert resp.json()["pointsAwarded"] == 40
+
+    def test_combo_with_assists(self):
+        headers = _register_and_header()
+        self._earn_coins(headers, 1)
+        client.post("/api/v1/quiz/buy-hint", headers=headers, json={
+            "levelId": 1, "animalIndex": 5,
+        })
+        resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1,
+            "animalIndex": 5,
+            "answer": "wrong",
+        })
+        correct_name = resp.json()["correctAnswer"]
+        resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1,
+            "animalIndex": 5,
+            "answer": correct_name,
+            "comboMultiplier": 2.0,
+        })
+        assert resp.status_code == 200
+        assert resp.json()["pointsAwarded"] == 30
+
+    def test_combo_rounds_correctly(self):
+        headers = _register_and_header()
+        resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1,
+            "animalIndex": 0,
+            "answer": "Cane",
+            "comboMultiplier": 1.5,
+        })
+        assert resp.status_code == 200
+        assert resp.json()["pointsAwarded"] == 30
+
+    def test_combo_out_of_range_rejected(self):
+        headers = _register_and_header()
+        resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1,
+            "animalIndex": 0,
+            "answer": "Cane",
+            "comboMultiplier": 2.1,
+        })
+        assert resp.status_code == 422
+
+    def test_combo_below_1_rejected(self):
+        headers = _register_and_header()
+        resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1,
+            "animalIndex": 0,
+            "answer": "Cane",
+            "comboMultiplier": 0.5,
+        })
+        assert resp.status_code == 422
+
+    def test_combo_response_echoes_multiplier(self):
+        headers = _register_and_header()
+        resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1,
+            "animalIndex": 0,
+            "answer": "Cane",
+            "comboMultiplier": 1.7,
+        })
+        assert resp.status_code == 200
+        assert resp.json()["comboMultiplier"] == 1.7
+
+    def test_wrong_answer_combo_ignored(self):
+        headers = _register_and_header()
+        resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1,
+            "animalIndex": 0,
+            "answer": "Tigre",
+            "comboMultiplier": 2.0,
+        })
+        assert resp.status_code == 200
+        assert resp.json()["pointsAwarded"] == 0
+
+
 class TestUserPoints:
     """GET /api/v1/users/me/points tests."""
 
@@ -811,6 +925,51 @@ class TestUpdateProfile:
         })
         assert resp.status_code == 200
         assert resp.json()["username"] == "newname"
+
+
+class TestResetUserData:
+    """POST /api/v1/users/me/reset tests."""
+
+    def test_reset_clears_progress_badges_and_points(self):
+        headers = _register_and_header(username="reset-user")
+
+        # Build state: points/progress/streak/achievements/challenge score.
+        client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Cane",
+        })
+        today = client.get("/api/v1/challenge/today", headers=headers).json()
+        client.post("/api/v1/challenge/answer", headers=headers, json={
+            "animalIndex": 0,
+            "answer": today["animals"][0]["name"],
+        })
+
+        reset_resp = client.post("/api/v1/users/me/reset", headers=headers)
+        assert reset_resp.status_code == 200
+        assert reset_resp.json()["success"] is True
+
+        points_resp = client.get("/api/v1/users/me/points", headers=headers)
+        coins_resp = client.get("/api/v1/users/me/coins", headers=headers)
+        streak_resp = client.get("/api/v1/users/me/streak", headers=headers)
+        progress_resp = client.get("/api/v1/users/me/progress", headers=headers)
+        achievements_resp = client.get("/api/v1/users/me/achievements", headers=headers)
+        challenge_after = client.get("/api/v1/challenge/today", headers=headers)
+
+        assert points_resp.json()["totalPoints"] == 0
+        assert coins_resp.json()["totalCoins"] == 0
+        assert streak_resp.json()["currentStreak"] == 0
+        assert streak_resp.json()["lastActivityDate"] is None
+        assert achievements_resp.json()["unlocked"] == []
+
+        level_1 = progress_resp.json()["levels"]["1"]
+        assert all(a["guessed"] is False for a in level_1)
+
+        challenge_body = challenge_after.json()
+        assert challenge_body["completed"] is False
+        assert challenge_body["score"] is None
+
+    def test_reset_requires_auth(self):
+        resp = client.post("/api/v1/users/me/reset")
+        assert resp.status_code in (401, 403)
 
 
 # ---------------------------------------------------------------------------

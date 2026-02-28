@@ -14,18 +14,26 @@ logger = logging.getLogger(__name__)
 COINS_PER_CORRECT = 10
 
 
-def _calculate_points(ad_revealed: bool, hints_used: int, letters_used: int) -> int:
+def _calculate_points(
+    ad_revealed: bool,
+    hints_used: int,
+    letters_used: int,
+    combo_multiplier: float = 1.0,
+) -> int:
     """Calculate points for a correct answer based on assists used."""
     if ad_revealed:
-        return 3
-    total_assists = hints_used + letters_used
-    if total_assists == 0:
-        return 20
-    if total_assists == 1:
-        return 15
-    if total_assists == 2:
-        return 10
-    return 5
+        base_points = 3
+    else:
+        total_assists = hints_used + letters_used
+        if total_assists == 0:
+            base_points = 20
+        elif total_assists == 1:
+            base_points = 15
+        elif total_assists == 2:
+            base_points = 10
+        else:
+            base_points = 5
+    return max(1, round(base_points * combo_multiplier))
 
 
 def _levenshtein(a: str, b: str) -> int:
@@ -57,6 +65,7 @@ def _is_fuzzy_match(guess: str, correct: str) -> bool:
 def submit_answer(
     user_id: str, level_id: int, animal_index: int, answer: str,
     locale: str = "it", ad_revealed: bool = False,
+    combo_multiplier: float = 1.0,
 ) -> AnswerResponse | None:
     """Check an answer and update progress / coins / points.
 
@@ -87,7 +96,12 @@ def submit_answer(
         letters = store.get_letters(user_id)
         hints_used = hints.get(level_id, [0] * len(level_progress))[animal_index]
         letters_used = letters.get(level_id, [0] * len(level_progress))[animal_index]
-        points_awarded = _calculate_points(ad_revealed, hints_used, letters_used)
+        points_awarded = _calculate_points(
+            ad_revealed,
+            hints_used,
+            letters_used,
+            combo_multiplier,
+        )
         coins_awarded, total_coins, _, current_streak, last_activity_date, streak_bonus_coins = store.submit_answer_update(
             user_id, level_id, animal_index, COINS_PER_CORRECT, points_awarded,
         )
@@ -113,6 +127,7 @@ def submit_answer(
         current_streak=current_streak,
         last_activity_date=last_activity_date,
         streak_bonus_coins=streak_bonus_coins,
+        combo_multiplier=combo_multiplier,
         new_achievements=new_achievements,
     )
 

@@ -38,6 +38,7 @@ async def post_answer(
     result = submit_answer(
         user_id, body.level_id, body.animal_index, body.answer,
         locale=locale, ad_revealed=body.ad_revealed,
+        combo_multiplier=body.combo_multiplier,
     )
     if result is None:
         raise HTTPException(

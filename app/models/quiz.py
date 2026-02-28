@@ -51,6 +51,12 @@ class AnswerRequest(BaseModel):
     animal_index: int = Field(..., ge=0, description="Zero-based index of the animal within the level")
     answer: str = Field(..., description="The user's guess (case-insensitive)")
     ad_revealed: bool = Field(False, description="True when player watched an ad to reveal the answer")
+    combo_multiplier: float = Field(
+        1.0,
+        ge=1.0,
+        le=2.0,
+        description="Client-side combo multiplier (1.0–2.0). Validated server-side.",
+    )
 
 
 class AnswerResponse(BaseModel):
@@ -66,6 +72,7 @@ class AnswerResponse(BaseModel):
     current_streak: int = Field(0, description="Current daily streak in days")
     last_activity_date: Optional[str] = Field(None, description="Last streak activity date as ISO date (YYYY-MM-DD)")
     streak_bonus_coins: int = Field(0, description="Streak bonus coins granted on the first correct answer of the day")
+    combo_multiplier: float = Field(1.0, description="Combo multiplier applied to points for this answer")
     new_achievements: list[str] = Field(default_factory=list, description="Achievement IDs newly unlocked by this answer")
 
 
