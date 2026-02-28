@@ -981,3 +981,313 @@ class TestDailyChallenge:
         assert len(entries) >= 2
         scores = [e["score"] for e in entries]
         assert scores == sorted(scores, reverse=True)
+
+
+# ---------------------------------------------------------------------------
+# Achievements
+# ---------------------------------------------------------------------------
+
+class TestAchievements:
+    """GET /api/v1/users/me/achievements and achievement unlock tests."""
+
+    def test_get_achievements_empty(self):
+        """New user has no unlocked achievements."""
+        headers = _register_and_header()
+        resp = client.get("/api/v1/users/me/achievements", headers=headers)
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["unlocked"] == []
+        assert len(data["definitions"]) == 9  # all 9 achievement types
+
+    def test_get_achievements_no_auth(self):
+        resp = client.get("/api/v1/users/me/achievements")
+        assert resp.status_code in (401, 403)
+
+    def test_answer_response_has_new_achievements_field(self):
+        """AnswerResponse always includes newAchievements list."""
+        headers = _register_and_header()
+        resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 0, "answer": "wrong",
+        })
+        assert resp.status_code == 200
+        assert "newAchievements" in resp.json()
+
+    def test_first_correct_achievement_unlocked(self):
+        """first_correct achievement is awarded on the very first correct answer."""
+        headers = _register_and_header()
+        resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Cane",
+        })
+        assert resp.status_code == 200
+        assert "first_correct" in resp.json()["newAchievements"]
+
+        ach_resp = client.get("/api/v1/users/me/achievements", headers=headers)
+        unlocked_ids = [a["id"] for a in ach_resp.json()["unlocked"]]
+        assert "first_correct" in unlocked_ids
+
+    def test_first_correct_not_awarded_twice(self):
+        """first_correct should not appear in newAchievements on a second answer."""
+        headers = _register_and_header()
+        client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Cane",
+        })
+        resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 1, "answer": "Gatto",
+        })
+        assert "first_correct" not in resp.json()["newAchievements"]
+
+    def test_streak_7_achievement_unlocked(self):
+        """streak_7 is awarded when current_streak reaches 7."""
+        from app.db.user_store import get_store
+        headers = _register_and_header(username="streak7user")
+        token = _next_token()
+        _register(token, username="streak7direct")
+        h = _auth_header(token)
+
+        # Manually set streak to 6 and last_activity_date to yesterday
+        from datetime import date, timedelta
+        store = get_store()
+        store.update_user(token, current_streak=6, last_activity_date=(date.today() - timedelta(days=1)).isoformat())
+
+        resp = client.post("/api/v1/quiz/answer", headers=h, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Cane",
+        })
+        assert resp.status_code == 200
+        assert "streak_7" in resp.json()["newAchievements"]
+
+    def test_coins_500_achievement_unlocked(self):
+        """coins_500 is awarded when total_coins reaches 500."""
+        from app.db.user_store import get_store
+        token = _next_token()
+        _register(token, username="coinrich")
+        h = _auth_header(token)
+
+        # Give user 490 coins so next correct answer tips over 500
+        store = get_store()
+        store.ensure_progress(token)
+        store._coins[token] = 490  # InMemoryUserStore internal; direct set for test
+
+        resp = client.post("/api/v1/quiz/answer", headers=h, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Cane",
+        })
+        assert resp.status_code == 200
+        assert "coins_500" in resp.json()["newAchievements"]
+
+    def test_leaderboard_entry_has_achievements_count(self):
+        """Leaderboard entries include achievementsCount field."""
+        headers = _register_and_header()
+        client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Cane",
+        })
+        resp = client.get("/api/v1/leaderboard", headers=headers)
+        assert resp.status_code == 200
+        entry = resp.json()["entries"][0]
+        assert "achievementsCount" in entry
+        assert isinstance(entry["achievementsCount"], int)
+
+    def test_no_hints_10_achievement(self):
+        """no_hints_10 is awarded after 10 consecutive no-hint correct answers."""
+        # Use known correct Italian animal names to avoid submitting wrong answers
+        # (wrong answers would reset the consecutive counter)
+        correct_answers = ["Cane", "Gatto", "Gallina", "Mucca", "Pecora",
+                           "Maiale", "Cavallo", "Coniglio", "Anatra", "Topo"]
+        headers = _register_and_header()
+        for idx, name in enumerate(correct_answers):
+            resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+                "levelId": 1, "animalIndex": idx, "answer": name,
+            })
+        assert "no_hints_10" in resp.json()["newAchievements"]
+
+    def test_wrong_answer_resets_no_hints_counter(self):
+        """A wrong answer resets the consecutive no-hint counter."""
+        headers = _register_and_header()
+        # Answer 9 correctly without hints
+        for idx in range(9):
+            resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+                "levelId": 1, "animalIndex": idx, "answer": "wrong",
+            })
+            correct = resp.json()["correctAnswer"]
+            client.post("/api/v1/quiz/answer", headers=headers, json={
+                "levelId": 1, "animalIndex": idx, "answer": correct,
+            })
+        # Submit a wrong answer to reset the counter
+        client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 9, "answer": "wronganswer",
+        })
+        # Submit the 10th correct — counter starts from 1, not 10
+        resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 9, "answer": "wrong",
+        })
+        correct = resp.json()["correctAnswer"]
+        resp = client.post("/api/v1/quiz/answer", headers=headers, json={
+            "levelId": 1, "animalIndex": 9, "answer": correct,
+        })
+        assert "no_hints_10" not in resp.json()["newAchievements"]
+
+    def test_definitions_include_all_expected_ids(self):
+        """Achievement definitions include all 9 expected IDs."""
+        headers = _register_and_header()
+        resp = client.get("/api/v1/users/me/achievements", headers=headers)
+        ids = {d["id"] for d in resp.json()["definitions"]}
+        expected = {
+            "first_correct", "level_perfect", "level_speed",
+            "streak_7", "streak_30", "coins_500",
+            "all_levels", "daily_10", "no_hints_10",
+        }
+        assert ids == expected
+
+    def test_level_perfect_achievement(self):
+        """level_perfect is awarded when a level is completed with no hints or letters."""
+        from app.db.user_store import get_store
+        token = _next_token()
+        _register(token, username="perfectuser")
+        h = _auth_header(token)
+        store = get_store()
+        store.ensure_progress(token)
+
+        # Complete all animals in level 1 without hints
+        correct_answers = ["Cane", "Gatto", "Gallina", "Mucca", "Pecora",
+                           "Maiale", "Cavallo", "Coniglio", "Anatra", "Topo",
+                           "Orso", "Leone", "Tigre", "Elefante", "Giraffa",
+                           "Zebra", "Scimmia", "Pinguino", "Delfino", "Squalo"]
+        last_resp = None
+        for idx, name in enumerate(correct_answers):
+            last_resp = client.post("/api/v1/quiz/answer", headers=h, json={
+                "levelId": 1, "animalIndex": idx, "answer": name,
+            })
+            if not last_resp.json().get("correct"):
+                # Get correct name from response and retry
+                correct = last_resp.json()["correctAnswer"]
+                last_resp = client.post("/api/v1/quiz/answer", headers=h, json={
+                    "levelId": 1, "animalIndex": idx, "answer": correct,
+                })
+
+        ach_resp = client.get("/api/v1/users/me/achievements", headers=h)
+        unlocked_ids = [a["id"] for a in ach_resp.json()["unlocked"]]
+        assert "level_perfect" in unlocked_ids
+
+    def test_level_perfect_not_awarded_with_hints(self):
+        """level_perfect is NOT awarded when hints were used during the level."""
+        from app.db.user_store import get_store
+        token = _next_token()
+        _register(token, username="hintuser")
+        h = _auth_header(token)
+        store = get_store()
+        store.ensure_progress(token)
+
+        # Answer animal 0 correctly to earn coins
+        client.post("/api/v1/quiz/answer", headers=h, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Cane",
+        })
+        # Buy a hint for animal 1
+        client.post("/api/v1/quiz/buy-hint", headers=h, json={
+            "levelId": 1, "animalIndex": 1,
+        })
+        # Complete the rest of level 1 (use correct answers for remaining animals)
+        for idx in range(1, 20):
+            resp = client.post("/api/v1/quiz/answer", headers=h, json={
+                "levelId": 1, "animalIndex": idx, "answer": "wrong",
+            })
+            correct = resp.json()["correctAnswer"]
+            client.post("/api/v1/quiz/answer", headers=h, json={
+                "levelId": 1, "animalIndex": idx, "answer": correct,
+            })
+
+        ach_resp = client.get("/api/v1/users/me/achievements", headers=h)
+        unlocked_ids = [a["id"] for a in ach_resp.json()["unlocked"]]
+        assert "level_perfect" not in unlocked_ids
+
+    def test_streak_30_achievement(self):
+        """streak_30 is awarded when current_streak reaches 30."""
+        from app.db.user_store import get_store
+        from datetime import date, timedelta
+        token = _next_token()
+        _register(token, username="streak30user")
+        h = _auth_header(token)
+        store = get_store()
+        store.update_user(token, current_streak=29, last_activity_date=(date.today() - timedelta(days=1)).isoformat())
+
+        resp = client.post("/api/v1/quiz/answer", headers=h, json={
+            "levelId": 1, "animalIndex": 0, "answer": "Cane",
+        })
+        assert resp.status_code == 200
+        assert "streak_30" in resp.json()["newAchievements"]
+
+    def test_all_levels_achievement(self):
+        """all_levels is awarded when every level is at least 80% complete."""
+        from app.db.user_store import get_store
+        from app.services.level_service import get_level_ids, get_level_animal_count
+        token = _next_token()
+        _register(token, username="alllevelsuser")
+        h = _auth_header(token)
+        store = get_store()
+        store.ensure_progress(token)
+
+        # Pre-set levels 2–6 (or all non-level-1 levels) to 80%+ completion
+        level_ids = get_level_ids()
+        for lid in level_ids:
+            if lid == 1:
+                continue
+            count = get_level_animal_count(lid)
+            needed = int(count * 0.8)
+            bools = [True] * needed + [False] * (count - needed)
+            store._progress[token][lid] = bools
+
+        # Complete level 1 via API (20 animals)
+        for idx in range(20):
+            resp = client.post("/api/v1/quiz/answer", headers=h, json={
+                "levelId": 1, "animalIndex": idx, "answer": "wrong",
+            })
+            correct = resp.json()["correctAnswer"]
+            client.post("/api/v1/quiz/answer", headers=h, json={
+                "levelId": 1, "animalIndex": idx, "answer": correct,
+            })
+
+        ach_resp = client.get("/api/v1/users/me/achievements", headers=h)
+        unlocked_ids = [a["id"] for a in ach_resp.json()["unlocked"]]
+        assert "all_levels" in unlocked_ids
+
+    def test_daily_10_achievement(self):
+        """daily_10 is awarded after completing 10 daily challenges."""
+        from app.db.user_store import get_store
+        token = _next_token()
+        _register(token, username="daily10user")
+        h = _auth_header(token)
+        store = get_store()
+        store.update_user(token, daily_challenges_completed=9)
+
+        # Complete one daily challenge
+        today = client.get("/api/v1/challenge/today", headers=h).json()
+        for idx, animal in enumerate(today["animals"]):
+            client.post("/api/v1/challenge/answer", headers=h, json={
+                "animalIndex": idx,
+                "answer": animal["name"],
+            })
+
+        ach_resp = client.get("/api/v1/users/me/achievements", headers=h)
+        unlocked_ids = [a["id"] for a in ach_resp.json()["unlocked"]]
+        assert "daily_10" in unlocked_ids
+
+    def test_report_level_speed_achievement(self):
+        """POST /users/me/achievements/report with level_speed unlocks it once."""
+        headers = _register_and_header()
+        resp = client.post("/api/v1/users/me/achievements/report", headers=headers, json={
+            "achievementId": "level_speed",
+        })
+        assert resp.status_code == 200
+        assert resp.json()["unlocked"] is True
+
+        # Second call — already unlocked
+        resp2 = client.post("/api/v1/users/me/achievements/report", headers=headers, json={
+            "achievementId": "level_speed",
+        })
+        assert resp2.status_code == 200
+        assert resp2.json()["unlocked"] is False
+
+    def test_report_invalid_achievement_rejected(self):
+        """POST /users/me/achievements/report with an unknown ID returns 400."""
+        headers = _register_and_header()
+        resp = client.post("/api/v1/users/me/achievements/report", headers=headers, json={
+            "achievementId": "first_correct",
+        })
+        assert resp.status_code == 400

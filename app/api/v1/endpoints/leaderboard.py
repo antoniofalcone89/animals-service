@@ -46,6 +46,7 @@ async def leaderboard(
             completed,
             user_data.get("photo_url"),
             int(user_data.get("current_streak", 0) or 0),
+            int(user_data.get("achievements_count", 0) or 0),
         ))
 
     # Sort by points descending
@@ -63,7 +64,8 @@ async def leaderboard(
             levels_completed=completed,
             photo_url=photo_url,
             current_streak=current_streak,
+            achievements_count=achievements_count,
         ).model_dump(by_alias=True)
-        for i, (uid, username, points, completed, photo_url, current_streak) in enumerate(page)
+        for i, (uid, username, points, completed, photo_url, current_streak, achievements_count) in enumerate(page)
     ]
     return {"entries": entries, "total": total}

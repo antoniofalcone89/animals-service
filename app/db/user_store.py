@@ -157,6 +157,18 @@ class UserStore(abc.ABC):
     def get_daily_challenge_leaderboard(self, challenge_date: str) -> list[dict]:
         """Return leaderboard rows for a specific challenge date."""
 
+    @abc.abstractmethod
+    def unlock_achievement(self, uid: str, achievement_id: str) -> bool:
+        """Unlock an achievement. Returns True if newly unlocked, False if already set."""
+
+    @abc.abstractmethod
+    def get_achievements(self, uid: str) -> list[dict]:
+        """Return list of ``{id, unlocked_at}`` for all unlocked achievements."""
+
+    @abc.abstractmethod
+    def get_achievements_count(self, uid: str) -> int:
+        """Return count of unlocked achievements for a user."""
+
 
 # ---------------------------------------------------------------------------
 # In-memory implementation (mock / test mode)
@@ -173,6 +185,7 @@ class InMemoryUserStore(UserStore):
         self._hints: dict[str, dict[int, list[int]]] = {}
         self._letters: dict[str, dict[int, list[int]]] = {}
         self._daily_challenges: dict[str, dict[str, dict]] = {}
+        self._achievements: dict[str, dict[str, datetime]] = {}
 
     def create_user(
         self,
@@ -216,6 +229,7 @@ class InMemoryUserStore(UserStore):
                 "total_coins": self._coins.get(uid, 0),
                 "total_points": self._points.get(uid, 0),
                 "progress": self._ensure_progress(uid),
+                "achievements_count": len(self._achievements.get(uid, {})),
             }
         return result
 
@@ -420,6 +434,21 @@ class InMemoryUserStore(UserStore):
             })
         return rows
 
+    def unlock_achievement(self, uid: str, achievement_id: str) -> bool:
+        achs = self._achievements.setdefault(uid, {})
+        if achievement_id in achs:
+            return False
+        achs[achievement_id] = datetime.now(timezone.utc)
+        logger.info("Achievement unlocked for %s: %s", uid, achievement_id)
+        return True
+
+    def get_achievements(self, uid: str) -> list[dict]:
+        achs = self._achievements.get(uid, {})
+        return [{"id": k, "unlockedAt": v.isoformat()} for k, v in achs.items()]
+
+    def get_achievements_count(self, uid: str) -> int:
+        return len(self._achievements.get(uid, {}))
+
 
 # ---------------------------------------------------------------------------
 # Firestore implementation
@@ -494,9 +523,9 @@ class FirestoreUserStore(UserStore):
         for doc in get_firestore_client().collection(self.COLLECTION).stream():
             data = doc.to_dict()
             data["id"] = doc.id
-            # Normalise progress keys to int for callers that expect int keys
             raw_progress = data.get("progress", {})
             data["progress"] = {int(k): v for k, v in raw_progress.items()}
+            data["achievements_count"] = len(data.get("achievements", {}))
             result[doc.id] = data
         return result
 
@@ -733,6 +762,44 @@ class FirestoreUserStore(UserStore):
             return points_now, score, completed, completed_at
 
         return _update(db.transaction())
+
+    def unlock_achievement(self, uid: str, achievement_id: str) -> bool:
+        ref = self._ref(uid)
+        db = get_firestore_client()
+
+        @firestore_transaction
+        def _unlock(transaction: Transaction) -> bool:
+            snap = ref.get(transaction=transaction)
+            data = snap.to_dict() if snap.exists else {}
+            achievements = data.get("achievements", {})
+            if achievement_id in achievements:
+                return False
+            now = datetime.now(timezone.utc)
+            transaction.update(ref, {f"achievements.{achievement_id}": now})
+            logger.info("Achievement unlocked for %s: %s", uid, achievement_id)
+            return True
+
+        return _unlock(db.transaction())
+
+    def get_achievements(self, uid: str) -> list[dict]:
+        snap = self._ref(uid).get()
+        if not snap.exists:
+            return []
+        data = snap.to_dict() or {}
+        achievements = data.get("achievements", {})
+        return [
+            {
+                "id": k,
+                "unlockedAt": v.isoformat() if isinstance(v, datetime) else str(v),
+            }
+            for k, v in achievements.items()
+        ]
+
+    def get_achievements_count(self, uid: str) -> int:
+        snap = self._ref(uid).get()
+        if not snap.exists:
+            return 0
+        return len((snap.to_dict() or {}).get("achievements", {}))
 
     def get_daily_challenge_leaderboard(self, challenge_date: str) -> list[dict]:
         rows: list[dict] = []

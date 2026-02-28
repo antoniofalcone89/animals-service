@@ -5,6 +5,7 @@ import logging
 from app.config import settings
 from app.db.user_store import get_store
 from app.models.quiz import AnswerResponse, BuyHintResponse, RevealLetterResponse
+from app.services.achievement_service import evaluate_answer_achievements
 from app.services.level_service import get_animal_name_at, get_level_detail
 
 logger = logging.getLogger(__name__)
@@ -79,6 +80,7 @@ def submit_answer(
     user_data = store.get_user(user_id) or {}
     current_streak = int(user_data.get("current_streak", 0) or 0)
     last_activity_date = user_data.get("last_activity_date")
+    new_achievements: list[str] = []
 
     if is_correct and not level_progress[animal_index]:
         hints = store.get_hints(user_id)
@@ -89,6 +91,18 @@ def submit_answer(
         coins_awarded, total_coins, _, current_streak, last_activity_date, streak_bonus_coins = store.submit_answer_update(
             user_id, level_id, animal_index, COINS_PER_CORRECT, points_awarded,
         )
+        updated_progress = store.ensure_progress(user_id)
+        new_achievements = evaluate_answer_achievements(
+            uid=user_id,
+            hints_used=hints_used,
+            letters_used=letters_used,
+            level_id=level_id,
+            total_coins=total_coins,
+            current_streak=current_streak,
+            progress=updated_progress,
+        )
+    elif not is_correct:
+        store.update_user(user_id, consecutive_no_hint_correct=0)
 
     return AnswerResponse(
         correct=is_correct,
@@ -99,6 +113,7 @@ def submit_answer(
         current_streak=current_streak,
         last_activity_date=last_activity_date,
         streak_bonus_coins=streak_bonus_coins,
+        new_achievements=new_achievements,
     )
 
 

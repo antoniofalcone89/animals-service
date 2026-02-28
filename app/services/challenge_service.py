@@ -10,6 +10,7 @@ from app.models.quiz import (
     ChallengeTodayResponse,
 )
 from app.services import auth_service
+from app.services.achievement_service import evaluate_daily_challenge_achievement
 from app.services.quiz_service import _is_fuzzy_match
 from app.services.level_service import get_flat_animals
 
@@ -61,14 +62,18 @@ def submit_challenge_answer(
 
     points_awarded = 3 if ad_revealed else 20
     points_now = 0
+    completed = False
+    new_achievements: list[str] = []
     if is_correct:
-        points_now, _, _, _ = get_store().submit_daily_challenge_answer(
+        points_now, _, completed, _ = get_store().submit_daily_challenge_answer(
             user_id,
             challenge_date,
             animal_index,
             points_awarded,
             len(animals),
         )
+        if completed and points_now > 0:
+            new_achievements = evaluate_daily_challenge_achievement(user_id)
 
     user_data = get_store().get_user(user_id) or {}
     total_coins = get_store().get_coins(user_id)
@@ -82,6 +87,7 @@ def submit_challenge_answer(
         current_streak=int(user_data.get("current_streak", 0) or 0),
         last_activity_date=user_data.get("last_activity_date"),
         streak_bonus_coins=0,
+        new_achievements=new_achievements,
     )
 
 

@@ -66,6 +66,7 @@ class AnswerResponse(BaseModel):
     current_streak: int = Field(0, description="Current daily streak in days")
     last_activity_date: Optional[str] = Field(None, description="Last streak activity date as ISO date (YYYY-MM-DD)")
     streak_bonus_coins: int = Field(0, description="Streak bonus coins granted on the first correct answer of the day")
+    new_achievements: list[str] = Field(default_factory=list, description="Achievement IDs newly unlocked by this answer")
 
 
 class BuyHintRequest(BaseModel):
@@ -104,6 +105,15 @@ class RevealLetterResponse(BaseModel):
     letters_revealed: int = Field(..., description="Number of letters now revealed for this animal")
 
 
+class AchievementEntry(BaseModel):
+    """A single unlocked achievement."""
+
+    model_config = ConfigDict(populate_by_name=True, alias_generator=to_camel)
+
+    id: str = Field(..., description="Achievement ID")
+    unlocked_at: str = Field(..., description="ISO timestamp when the achievement was unlocked")
+
+
 class LeaderboardEntry(BaseModel):
     """A single entry on the leaderboard."""
 
@@ -116,6 +126,7 @@ class LeaderboardEntry(BaseModel):
     levels_completed: int = Field(..., description="Number of levels fully completed")
     photo_url: Optional[str] = Field(None, description="Profile photo URL")
     current_streak: int = Field(0, description="Current daily streak in days")
+    achievements_count: int = Field(0, description="Number of achievements unlocked")
 
 
 class StreakResponse(BaseModel):

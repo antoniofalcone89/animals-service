@@ -7,10 +7,14 @@ from slowapi import Limiter
 from slowapi.util import get_remote_address
 
 from app.config import settings
+from app.db.user_store import get_store
 from app.dependencies import get_current_user_id, get_locale
 from app.models.auth import ApiErrorResponse, UpdateProfileRequest, User
 from app.models.quiz import StreakResponse
 from app.services import auth_service
+from app.services.achievement_service import get_achievement_definitions
+
+CLIENT_SIDE_ACHIEVEMENTS: frozenset[str] = frozenset({"level_speed"})
 from app.services.quiz_service import get_user_coins, get_user_points, get_user_progress
 
 logger = logging.getLogger(__name__)
@@ -81,6 +85,48 @@ async def user_points(
     """Return the user's total points count."""
     total = get_user_points(user_id)
     return {"totalPoints": total}
+
+
+@router.get(
+    "/me/achievements",
+    summary="Get current user's achievements",
+)
+@limiter.limit(settings.RATE_LIMIT)
+async def user_achievements(
+    request: Request,
+    user_id: str = Depends(get_current_user_id),
+) -> dict:
+    """Return unlocked achievements and all achievement definitions."""
+    store = get_store()
+    unlocked = store.get_achievements(user_id)
+    definitions = get_achievement_definitions()
+    return {"unlocked": unlocked, "definitions": definitions}
+
+
+@router.post(
+    "/me/achievements/report",
+    summary="Report a client-side achievement",
+)
+@limiter.limit(settings.RATE_LIMIT)
+async def report_achievement(
+    request: Request,
+    body: dict,
+    user_id: str = Depends(get_current_user_id),
+) -> dict:
+    """Unlock a client-reported achievement from a server-approved whitelist.
+
+    Only achievements in CLIENT_SIDE_ACHIEVEMENTS are accepted.
+    Returns ``{"unlocked": true}`` if newly unlocked, ``{"unlocked": false}`` if already had it.
+    """
+    achievement_id = body.get("achievementId")
+    if achievement_id not in CLIENT_SIDE_ACHIEVEMENTS:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={"error": {"code": "invalid_achievement", "message": "Achievement ID not reportable"}},
+        )
+    store = get_store()
+    newly_unlocked = store.unlock_achievement(user_id, achievement_id)
+    return {"unlocked": newly_unlocked}
 
 
 @router.patch(
